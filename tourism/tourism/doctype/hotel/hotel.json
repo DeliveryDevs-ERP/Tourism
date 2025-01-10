@@ -1,24 +1,139 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format: {name1} - {area}",
  "creation": "2025-01-01 12:36:11.096926",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_6mrw"
+  "name1",
+  "star",
+  "supplier",
+  "column_break_ygwo",
+  "city",
+  "area",
+  "latitude",
+  "longitude",
+  "distance_from_airport",
+  "contact_detail_tab",
+  "contact_section",
+  "phone_number",
+  "email",
+  "contact_person",
+  "room_details_tab",
+  "section_break_oetk",
+  "room_details"
  ],
  "fields": [
   {
-   "fieldname": "section_break_6mrw",
-   "fieldtype": "Section Break"
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "star",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Star",
+   "options": "\n1\n2\n3\n4\n5",
+   "reqd": 1
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "City",
+   "options": "City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_ygwo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Area",
+   "options": "Area",
+   "reqd": 1
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Phone",
+   "label": "Phone Number"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude"
+  },
+  {
+   "fieldname": "contact_section",
+   "fieldtype": "Section Break",
+   "label": "Contact"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude"
+  },
+  {
+   "fieldname": "distance_from_airport",
+   "fieldtype": "Float",
+   "label": "Distance from Airport"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "section_break_oetk",
+   "fieldtype": "Section Break",
+   "label": "Room Information"
+  },
+  {
+   "fieldname": "room_details",
+   "fieldtype": "Table",
+   "label": "Room Details",
+   "options": "Hotel Detail cdt",
+   "reqd": 1
+  },
+  {
+   "fieldname": "contact_person",
+   "fieldtype": "Table",
+   "label": "Contact Person",
+   "options": "Hotel contact cdt",
+   "reqd": 1
+  },
+  {
+   "fieldname": "contact_detail_tab",
+   "fieldtype": "Tab Break",
+   "label": "Contact Detail"
+  },
+  {
+   "fieldname": "room_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Room Details"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-01 12:36:11.096926",
+ "modified": "2025-01-08 05:05:08.872041",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

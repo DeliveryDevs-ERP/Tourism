@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-02 05:29:10.731852",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "day",
+  "city",
+  "type",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "day",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Day",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "City",
+   "link_filters": "[[\"City\",\"name\",\"=\",\"All\"]]",
+   "options": "City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "type",
+   "options": "\nNormal\nArrival\nDeparture\nCity -to- City\nNormal Without Transport"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Description",
+   "max_height": "5000px",
+   "print_width": "5",
+   "reqd": 1,
+   "width": "5"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-01-08 10:39:22.975799",
+ "modified_by": "Administrator",
+ "module": "Tourism",
+ "name": "Package itinerary cdt",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
