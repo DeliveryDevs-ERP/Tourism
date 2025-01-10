@@ -102,57 +102,6 @@ function fetch_rate_type_amount(frm, cdt, cdn) {
 }
 
 
-// frappe.ui.form.on('Package Hotel cdt', {
-//     hotel: function(frm, cdt, cdn) {
-//     // fetch_room_details(frm, cdt, cdn);
-//     },
-// });
-
-// function fetch_room_details(frm, cdt, cdn) {
-//     console.log("Fetch rooms called ");
-//     var child = locals[cdt][cdn];
-//     if (child.hotel) {
-//         frappe.call({
-//             method: "tourism.tourism.doctype.package.GetHotels.fetch_hotel_room_details",
-//             args: {
-//                 hotel_name: child.hotel,
-//                 star: child.star
-//             },
-//             callback: function(r) {
-//                 if (r.message) {
-//                     let incompleteRow = !child.room_type || !child.rate_type || !child.rate;
-                    
-//                     // Remove the triggering row if incomplete
-//                     if (incompleteRow) {
-//                         frm.fields_dict['hotels'].grid.grid_rows.forEach(function(row) {
-//                             if (row.doc.name === cdn && incompleteRow) {
-//                                 row.remove();
-//                             }
-//                         });
-//                     }
-
-//                     // Add fetched room details as new rows
-//                     r.message.forEach(function(room) {
-//                         var new_child = frappe.model.add_child(frm.doc, 'Package Hotel', 'hotels');
-//                         frappe.model.set_value(new_child.doctype, new_child.name, 'hotel', child.hotel);
-//                         frappe.model.set_value(new_child.doctype, new_child.name, 'star', child.star);
-//                         frappe.model.set_value(new_child.doctype, new_child.name, 'room_type', room.room_type);
-//                         frappe.model.set_value(new_child.doctype, new_child.name, 'rate_type', room.rate_type);
-//                         frappe.model.set_value(new_child.doctype, new_child.name, 'rate', room.rate);
-//                     });
-
-//                     // Refresh the field to update the grid, adding a slight delay for DOM updates
-//                     setTimeout(function() {
-//                         frm.refresh_field('hotels');
-//                     }, 100); // Delay of 100ms
-//                 }
-//             }
-//         });
-//     }
-// }
-
-
-
 function fetch_package_clauses(frm) {
     let cities = frm.doc.locations.map(location => location.city_of_stay);
     cities.push('All');
