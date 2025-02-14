@@ -8,14 +8,20 @@
  "field_order": [
   "locations",
   "hotels",
+  "visa_requirements_tab",
+  "visa_types",
+  "section_break_ndvu",
+  "fetch_visa_requirements",
+  "column_break_hvkq",
+  "section_break_qrib",
+  "requirements",
+  "charges",
   "tab_3_tab",
   "fetch_package_clauses",
   "column_break_vzea",
-  "fetch_optional_package_clauses",
   "package_clauses_section",
   "package_includes",
   "package_excludes",
-  "optional_clauses",
   "itinerary_tab",
   "section_break_qccz",
   "create_itinerary",
@@ -54,12 +60,6 @@
    "label": "Package Clauses"
   },
   {
-   "fieldname": "optional_clauses",
-   "fieldtype": "Table",
-   "label": "Optional Clauses",
-   "options": "Package clause opt cdt"
-  },
-  {
    "fieldname": "itinerary_tab",
    "fieldtype": "Tab Break",
    "label": "Itinerary"
@@ -84,11 +84,6 @@
    "label": "Fetch Package Clauses"
   },
   {
-   "fieldname": "fetch_optional_package_clauses",
-   "fieldtype": "Button",
-   "label": "Fetch Optional Package Clauses"
-  },
-  {
    "fieldname": "column_break_vzea",
    "fieldtype": "Column Break"
   },
@@ -104,11 +99,51 @@
   {
    "fieldname": "section_break_wqhc",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "visa_requirements_tab",
+   "fieldtype": "Tab Break",
+   "label": "Visa Requirements"
+  },
+  {
+   "fieldname": "visa_types",
+   "fieldtype": "Table",
+   "label": "Visa Types",
+   "options": "Package loc visa cdt"
+  },
+  {
+   "fieldname": "fetch_visa_requirements",
+   "fieldtype": "Button",
+   "label": "Fetch Visa Requirements And Charges"
+  },
+  {
+   "fieldname": "requirements",
+   "fieldtype": "Table",
+   "label": "Requirements",
+   "options": "Package visa req cdt"
+  },
+  {
+   "fieldname": "section_break_ndvu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_hvkq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_qrib",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "charges",
+   "fieldtype": "Table",
+   "label": "Charges",
+   "options": "Package visa charges cdt"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-08 10:42:23.199809",
+ "modified": "2025-02-03 10:41:24.067783",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Package",

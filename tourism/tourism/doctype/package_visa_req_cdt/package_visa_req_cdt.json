@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "prompt",
- "creation": "2025-01-01 12:48:03.804091",
+ "creation": "2025-02-03 04:09:14.184277",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "country",
-  "short_name"
+  "visa_type",
+  "requirements"
  ],
  "fields": [
   {
@@ -18,33 +19,27 @@
    "options": "Country"
   },
   {
-   "fieldname": "short_name",
+   "fieldname": "visa_type",
    "fieldtype": "Data",
-   "label": "Short Name"
+   "in_list_view": 1,
+   "label": "Visa type"
+  },
+  {
+   "fieldname": "requirements",
+   "fieldtype": "Text Editor",
+   "in_list_view": 1,
+   "label": "Requirements"
   }
  ],
  "index_web_pages_for_search": 1,
+ "istable": 1,
  "links": [],
- "modified": "2025-01-31 09:42:52.964099",
+ "modified": "2025-02-03 10:32:32.979664",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "City",
- "naming_rule": "Set by user",
+ "name": "Package visa req cdt",
  "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
+ "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

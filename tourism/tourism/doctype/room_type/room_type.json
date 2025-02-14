@@ -6,17 +6,20 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_lu1t"
+  "uom"
  ],
  "fields": [
   {
-   "fieldname": "section_break_lu1t",
-   "fieldtype": "Section Break"
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "UOM",
+   "options": "UOM"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-01 12:57:54.930443",
+ "modified": "2025-02-11 07:48:24.611557",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Room Type",

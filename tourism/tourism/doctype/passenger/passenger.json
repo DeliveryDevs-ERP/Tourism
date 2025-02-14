@@ -96,13 +96,13 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "Passive",
+   "default": "Active",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Passive\nOpen\nReplied"
+   "options": "Active\nInactive"
   },
   {
    "fieldname": "designation",
@@ -214,7 +214,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-10 10:04:21.697686",
+ "modified": "2025-02-14 09:34:46.745465",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Passenger",
@@ -350,5 +350,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "full_name"
+ "title_field": "first_name",
+ "translated_doctype": 1
 }

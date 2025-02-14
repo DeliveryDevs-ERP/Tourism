@@ -1,37 +1,38 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-01-01 13:52:05.172651",
+ "creation": "2025-02-03 08:51:21.440972",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "day",
-  "city_of_stay"
+  "country",
+  "visa_type"
  ],
  "fields": [
   {
-   "fieldname": "day",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "No of Day(s)",
-   "non_negative": 1
-  },
-  {
-   "fieldname": "city_of_stay",
+   "fieldname": "country",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "City of Stay",
-   "options": "City"
+   "label": "Country",
+   "options": "Country",
+   "reqd": 1
+  },
+  {
+   "fieldname": "visa_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Visa Type",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-02-14 07:18:03.712900",
+ "modified": "2025-02-03 09:24:30.356836",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "Package stay cdt",
+ "name": "Package loc visa cdt",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

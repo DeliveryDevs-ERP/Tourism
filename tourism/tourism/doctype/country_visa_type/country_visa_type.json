@@ -1,42 +1,36 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "prompt",
- "creation": "2025-01-10 09:59:52.972057",
+ "autoname": "field:visa_type",
+ "creation": "2025-02-03 03:24:11.590621",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "initials",
-  "item_id",
-  "policies"
+  "visa_type",
+  "country"
  ],
  "fields": [
   {
-   "fieldname": "initials",
+   "description": "Add multiple Countries if required.",
+   "fieldname": "country",
+   "fieldtype": "Table MultiSelect",
+   "label": "Country ",
+   "options": "Country cdt"
+  },
+  {
+   "fieldname": "visa_type",
    "fieldtype": "Data",
-   "label": "Initials"
-  },
-  {
-   "fieldname": "policies",
-   "fieldtype": "Text Editor",
-   "label": "Policies"
-  },
-  {
-   "fieldname": "item_id",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Item ID",
-   "options": "Item",
-   "reqd": 1
+   "label": "Visa Type",
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-11 10:13:35.006790",
+ "modified": "2025-02-03 04:49:40.959539",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "Airline",
- "naming_rule": "Set by user",
+ "name": "Country visa type",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

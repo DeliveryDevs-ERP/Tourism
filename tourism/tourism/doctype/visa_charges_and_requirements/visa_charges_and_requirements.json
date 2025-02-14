@@ -1,25 +1,40 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "prompt",
- "creation": "2025-01-10 09:59:52.972057",
+ "autoname": "format:{country} - {visa_type}",
+ "creation": "2025-02-03 03:23:27.717371",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "initials",
+  "country",
+  "visa_type",
   "item_id",
-  "policies"
+  "requirements",
+  "charges"
  ],
  "fields": [
   {
-   "fieldname": "initials",
-   "fieldtype": "Data",
-   "label": "Initials"
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
   },
   {
-   "fieldname": "policies",
+   "fieldname": "visa_type",
+   "fieldtype": "Select",
+   "label": "Visa Type"
+  },
+  {
+   "description": "Enter requirements as bullet points.",
+   "fieldname": "requirements",
    "fieldtype": "Text Editor",
-   "label": "Policies"
+   "label": "Requirements"
+  },
+  {
+   "fieldname": "charges",
+   "fieldtype": "Table",
+   "label": "Charges",
+   "options": "visa charges cdt"
   },
   {
    "fieldname": "item_id",
@@ -32,11 +47,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-11 10:13:35.006790",
+ "modified": "2025-02-11 10:14:27.111959",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "Airline",
- "naming_rule": "Set by user",
+ "name": "Visa Charges and Requirements",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
