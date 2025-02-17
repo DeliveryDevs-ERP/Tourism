@@ -145,6 +145,8 @@ def make_quotation(source_name, target_doc=None):
                 "doctype": "Package stay cdt",
                 "field_map": {
                     "destination": "city_of_stay",
+                    "from_date" : "from_date",
+                    "to_date" : "to_date"
                 },
             },
         },
@@ -153,4 +155,3 @@ def make_quotation(source_name, target_doc=None):
     )
 
     return doclist
-
