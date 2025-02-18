@@ -12,6 +12,7 @@
   "item_id",
   "column_break_ygwo",
   "city",
+  "country",
   "area",
   "latitude",
   "longitude",
@@ -133,11 +134,19 @@
    "label": "Item ID",
    "options": "Item",
    "reqd": 1
+  },
+  {
+   "fetch_from": "city.country",
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-11 06:31:30.052540",
+ "modified": "2025-02-18 04:30:38.093315",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",
