@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "initials",
+  "digit_code",
   "item_id",
   "policies"
  ],
@@ -28,11 +29,16 @@
    "label": "Item ID",
    "options": "Item",
    "reqd": 1
+  },
+  {
+   "fieldname": "digit_code",
+   "fieldtype": "Data",
+   "label": "Digit Code"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-11 10:13:35.006790",
+ "modified": "2025-02-19 07:57:27.210626",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Airline",

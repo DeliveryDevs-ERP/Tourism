@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "locations",
+  "currency",
   "hotels",
   "visa_requirements_tab",
   "visa_types",
@@ -139,11 +140,19 @@
    "fieldtype": "Table",
    "label": "Charges",
    "options": "Package visa charges cdt"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-03 10:41:24.067783",
+ "modified": "2025-02-19 08:18:03.289868",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Package",

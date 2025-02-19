@@ -49,7 +49,8 @@
    "fieldname": "rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Rate"
+   "label": "Rate",
+   "options": "currency"
   },
   {
    "fetch_from": "hotel.city",
@@ -71,7 +72,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-09 10:42:11.941646",
+ "modified": "2025-02-19 08:13:04.961778",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Package Hotel cdt",

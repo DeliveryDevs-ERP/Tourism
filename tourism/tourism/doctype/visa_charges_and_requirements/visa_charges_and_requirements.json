@@ -9,6 +9,7 @@
   "country",
   "visa_type",
   "item_id",
+  "currency",
   "requirements",
   "charges"
  ],
@@ -43,11 +44,18 @@
    "label": "Item ID",
    "options": "Item",
    "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-11 10:14:27.111959",
+ "modified": "2025-02-19 09:24:13.405567",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Visa Charges and Requirements",

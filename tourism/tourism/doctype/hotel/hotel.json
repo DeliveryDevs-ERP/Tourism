@@ -24,6 +24,7 @@
   "contact_person",
   "room_details_tab",
   "section_break_oetk",
+  "currency",
   "room_details"
  ],
  "fields": [
@@ -46,6 +47,7 @@
    "fieldname": "city",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "City",
    "options": "City",
    "reqd": 1
@@ -139,14 +141,22 @@
    "fetch_from": "city.country",
    "fieldname": "country",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Country",
    "options": "Country",
    "read_only": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-18 04:30:38.093315",
+ "modified": "2025-02-19 09:22:23.867903",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",
