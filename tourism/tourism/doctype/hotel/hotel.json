@@ -110,15 +110,13 @@
    "fieldname": "room_details",
    "fieldtype": "Table",
    "label": "Room Details",
-   "options": "Hotel Detail cdt",
-   "reqd": 1
+   "options": "Hotel Detail cdt"
   },
   {
    "fieldname": "contact_person",
    "fieldtype": "Table",
    "label": "Contact Person",
-   "options": "Hotel contact cdt",
-   "reqd": 1
+   "options": "Hotel contact cdt"
   },
   {
    "fieldname": "contact_detail_tab",
@@ -150,13 +148,12 @@
    "fieldname": "currency",
    "fieldtype": "Link",
    "label": "Currency",
-   "options": "Currency",
-   "reqd": 1
+   "options": "Currency"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-19 09:22:23.867903",
+ "modified": "2025-02-19 10:42:28.567035",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",
