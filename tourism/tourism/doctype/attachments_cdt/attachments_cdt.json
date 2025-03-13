@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-03-10 07:35:49.734997",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "attachment_type",
+  "attachment"
+ ],
+ "fields": [
+  {
+   "fieldname": "attachment_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Attachment Type",
+   "options": "\nCNIC Front\nCNIC Back\nPassport",
+   "reqd": 1
+  },
+  {
+   "fieldname": "attachment",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Attachment",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-03-10 07:36:52.063804",
+ "modified_by": "Administrator",
+ "module": "Tourism",
+ "name": "Attachments cdt",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

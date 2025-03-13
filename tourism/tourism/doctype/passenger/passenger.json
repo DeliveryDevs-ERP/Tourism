@@ -15,6 +15,7 @@
   "last_name",
   "full_name",
   "email_id",
+  "nationality",
   "address",
   "date_of_birth",
   "cb00",
@@ -26,11 +27,13 @@
   "company_name",
   "image",
   "section_break_znct",
-  "cnic",
   "passport_number",
+  "cnic",
   "column_break_ljth",
   "passport_issue_date",
   "passport_expire_date",
+  "section_break_kvqd",
+  "attachments",
   "sb_01",
   "email_ids",
   "phone_nos",
@@ -208,13 +211,28 @@
    "fieldname": "table_dqlb",
    "fieldtype": "Table",
    "options": "Passenger Travel history cdt"
+  },
+  {
+   "fieldname": "section_break_kvqd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "attachments",
+   "fieldtype": "Table",
+   "label": "Attachments",
+   "options": "Attachments cdt"
+  },
+  {
+   "fieldname": "nationality",
+   "fieldtype": "Data",
+   "label": "Nationality"
   }
  ],
  "icon": "fa fa-user",
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-14 09:34:46.745465",
+ "modified": "2025-03-13 07:30:48.361975",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Passenger",
