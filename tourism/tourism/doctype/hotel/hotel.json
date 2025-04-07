@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format: {name1} - {area}",
+ "autoname": "format:{name1} - {city}",
  "creation": "2025-01-01 12:36:11.096926",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -61,8 +61,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Area",
-   "options": "Area",
-   "reqd": 1
+   "options": "Area"
   },
   {
    "fieldname": "phone_number",
@@ -153,7 +152,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-19 10:42:28.567035",
+ "modified": "2025-04-07 05:52:30.417558",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",

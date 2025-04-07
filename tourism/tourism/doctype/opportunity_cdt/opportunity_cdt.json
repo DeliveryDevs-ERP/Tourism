@@ -9,6 +9,7 @@
   "destination",
   "from_date",
   "to_date",
+  "days",
   "hotel",
   "hotel_category"
  ],
@@ -46,12 +47,18 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Hotel Star"
+  },
+  {
+   "fieldname": "days",
+   "fieldtype": "Int",
+   "in_standard_filter": 1,
+   "label": "Number of Days"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-07 00:50:12.609681",
+ "modified": "2025-04-07 05:56:40.313864",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Opportunity cdt",

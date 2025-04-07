@@ -146,7 +146,8 @@ def make_quotation(source_name, target_doc=None):
                 "field_map": {
                     "destination": "city_of_stay",
                     "from_date" : "from_date",
-                    "to_date" : "to_date"
+                    "to_date" : "to_date",
+                    "days": "day"
                 },
             },
         },
