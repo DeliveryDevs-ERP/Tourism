@@ -30,26 +30,36 @@ def filter_packages_by_city(*args, **kwargs):
 
 
 @frappe.whitelist()
-def get_hotels_based_on_city(*args, **kwargs):
-    """Retrieve hotels that match any city from the given list of cities."""
-    txt = kwargs.get('txt', '')
-    searchfield = kwargs.get('searchfield', None)
-    start = int(kwargs.get('start', 0))
-    page_len = int(kwargs.get('page_len', 20))
-    filters = kwargs.get('filters', {})
-    cities = args[5].get('cities')    
+def get_hotels_based_on_city(doctype, txt, searchfield, start, page_len, filters):
+    """Retrieve hotels that match any city from the given list of cities and support search."""
+    cities = filters.get('cities')
+
+    if not cities or not isinstance(cities, list):
+        frappe.throw("Please provide a valid list of cities in the filters.")
+
     try:
-        if cities:
-            return frappe.db.sql(f"""
-            SELECT `name`, `name1`
-        FROM `tabHotel`
-        WHERE `city` IN ({', '.join(['%s'] * len(cities))})
-            """, (cities),
-            )
-    
+        # Base query
+        sql_query = """
+            SELECT name, name1
+            FROM `tabHotel`
+            WHERE city IN ({placeholders})
+        """.format(placeholders=", ".join(["%s"] * len(cities)))
+
+        values = list(cities)
+
+        # Optional search condition
+        if txt and searchfield:
+            sql_query += f" AND {searchfield} LIKE %s"
+            values.append(f"%{txt}%")
+
+        sql_query += " ORDER BY name LIMIT %s OFFSET %s"
+        values.extend([page_len, start])
+
+        return frappe.db.sql(sql_query, values)
+
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Failed to execute SQL query in get_hotels_based_on_city")
-        frappe.throw(("Error fetching container data: {0}").format(str(e)))
+        frappe.throw(f"Error fetching hotel data: {str(e)}")
 
 
 @frappe.whitelist()
