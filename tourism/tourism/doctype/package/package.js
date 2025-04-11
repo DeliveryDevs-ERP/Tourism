@@ -96,6 +96,19 @@ frappe.ui.form.on('Package Hotel cdt', {
     }
 });
 
+frappe.ui.form.on('Package clause cdt', {
+    package_includes_add: function(frm, cdt, cdn){
+        // let row = locals[cdt][cdn];
+        // console.log(row);
+        frappe.model.set_value(cdt, cdn, 'type', 'Include');
+        },
+    package_excludes_add: function(frm, cdt, cdn){
+        // let row = locals[cdt][cdn];
+        // console.log(row);
+        frappe.model.set_value(cdt, cdn, 'type', 'Exclude');
+        },
+});
+
 frappe.ui.form.on('Package loc visa cdt', {
     country: function(frm, cdt, cdn) {
         // console.log("Country Trigger");
