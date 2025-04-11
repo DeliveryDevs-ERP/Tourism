@@ -37,6 +37,7 @@
    "options": "\nNormal\nArrival\nDeparture\nCity -to- City\nNormal Without Transport"
   },
   {
+   "description": "(must enter fullstop \".\" at end of each sentence)",
    "fieldname": "description",
    "fieldtype": "Text",
    "in_list_view": 1,
@@ -50,7 +51,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-08 10:39:22.975799",
+ "modified": "2025-04-11 05:06:48.198157",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Package itinerary cdt",
