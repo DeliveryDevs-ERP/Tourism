@@ -9,7 +9,9 @@
   "day",
   "city_of_stay",
   "from_date",
-  "to_date"
+  "to_date",
+  "hotel",
+  "star"
  ],
  "fields": [
   {
@@ -35,12 +37,23 @@
    "fieldname": "to_date",
    "fieldtype": "Date",
    "label": "To Date"
+  },
+  {
+   "fieldname": "hotel",
+   "fieldtype": "Link",
+   "label": "Hotel",
+   "options": "Hotel"
+  },
+  {
+   "fieldname": "star",
+   "fieldtype": "Int",
+   "label": "Star"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-02-17 06:41:48.309324",
+ "modified": "2025-04-16 09:45:08.795537",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Package stay cdt",

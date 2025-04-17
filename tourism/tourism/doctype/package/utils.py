@@ -147,7 +147,9 @@ def make_quotation(source_name, target_doc=None):
                     "destination": "city_of_stay",
                     "from_date" : "from_date",
                     "to_date" : "to_date",
-                    "days": "day"
+                    "days": "day",
+                    "hotel":"hotel",
+                    "hotel_category": "star" 
                 },
             },
         },
