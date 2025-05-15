@@ -17,6 +17,8 @@
   "latitude",
   "longitude",
   "distance_from_airport",
+  "section_break_zhib",
+  "location",
   "contact_detail_tab",
   "contact_section",
   "phone_number",
@@ -77,6 +79,7 @@
   {
    "fieldname": "latitude",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Latitude"
   },
   {
@@ -87,6 +90,7 @@
   {
    "fieldname": "longitude",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Longitude"
   },
   {
@@ -148,11 +152,20 @@
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency"
+  },
+  {
+   "fieldname": "section_break_zhib",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-10 23:32:05.222264",
+ "modified": "2025-05-13 03:54:49.306679",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",

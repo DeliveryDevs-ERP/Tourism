@@ -27,6 +27,108 @@ def filter_packages_by_city(*args, **kwargs):
         """
         return frappe.db.sql(query, city_of_stay)
 
+import frappe
+import json
+from collections import defaultdict
+
+# @frappe.whitelist()
+# def filter_packages_by_city(doctype=None, txt=None, searchfield=None, start=0, page_len=20, filters=None):
+#     """
+#     Return Package names that exactly match a list of city-day pairs.
+#     Each package must contain all given city-day pairs — no more, no less.
+#     """
+
+#     if isinstance(filters, str):
+#         filters = json.loads(filters)
+
+#     city_day_pairs = filters.get('city_day_pairs', [])
+
+#     if not city_day_pairs or not isinstance(city_day_pairs, list):
+#         frappe.throw("Please provide a valid list of city-day pairs.")
+
+#     # Convert each pair to a tuple (city, day)
+#     required_pairs = set((item['city'], int(item['day'])) for item in city_day_pairs)
+
+#     # Fetch all stay rows
+#     all_stays = frappe.get_all(
+#         'Package stay cdt',
+#         filters={'parenttype': 'Package'},
+#         fields=['parent', 'city_of_stay', 'day']
+#     )
+    
+
+#     # Group by package
+#     packages = defaultdict(list)
+#     for row in all_stays:
+#         packages[row['parent']].append((row['city_of_stay'], int(row['day'])))
+
+#     # Find matching packages
+#     matching_packages = []
+#     for parent, stays in packages.items():
+#         if set(stays) == required_pairs and len(stays) == len(required_pairs):
+#             matching_packages.append(parent)
+#     if txt:
+#         matching_packages = [p for p in matching_packages if txt.lower() in p.lower()]
+#     return [(p, p) for p in matching_packages]
+
+# import frappe
+# import json
+
+# @frappe.whitelist()
+# def filter_packages_by_city(doctype=None, txt=None, searchfield=None, start=0, page_len=20, filters=None):
+#     """
+#     Pure SQL version: Return Package names that exactly match a list of city-day pairs.
+#     """
+
+#     if isinstance(filters, str):
+#         filters = json.loads(filters)
+
+#     city_day_pairs = filters.get('city_day_pairs', [])
+
+#     if not city_day_pairs or not isinstance(city_day_pairs, list):
+#         frappe.throw("Please provide a valid list of city-day pairs.")
+
+#     # Build WHERE clause from input
+#     where_clauses = []
+#     values = []
+
+#     for pair in city_day_pairs:
+#         where_clauses.append("(city_of_stay = %s AND day = %s)")
+#         values.extend([pair["city"], int(pair["day"])])
+
+#     total_pairs = len(city_day_pairs)
+#     where_clause_sql = " OR ".join(where_clauses)
+
+#     # Optional txt filtering
+#     txt_filter = ""
+#     if txt:
+#         txt_filter = "AND p.name LIKE %s"
+#         values.append(f"%{txt}%")
+
+#     # Final SQL query
+#     query = f"""
+#         SELECT p.name, p.name
+#         FROM `tabPackage` p
+#         WHERE p.name IN (
+#             SELECT ps.parent
+#             FROM `tabPackage stay cdt` ps
+#             WHERE ps.parenttype = 'Package' AND ({where_clause_sql})
+#             GROUP BY ps.parent
+#             HAVING COUNT(DISTINCT CONCAT(ps.city_of_stay, '-', ps.day)) = {total_pairs}
+#                AND COUNT(*) = (
+#                    SELECT COUNT(*)
+#                    FROM `tabPackage stay cdt` inner_ps
+#                    WHERE inner_ps.parent = ps.parent AND inner_ps.parenttype = 'Package'
+#                )
+#         )
+#         {txt_filter}
+#         ORDER BY p.name
+#         LIMIT %s OFFSET %s
+#     """
+
+#     values.extend([page_len, start])
+
+#     return [(r[0], r[1]) for r in frappe.db.sql(query, values)]
 
 
 @frappe.whitelist()
@@ -146,28 +248,57 @@ def fetch_clauses(cities):
         
 
 @frappe.whitelist()
-def get_Itinerary(cities_day, num_of_cities):
+def get_Itinerary(cities_day):
     try:
-        cities_day = json.loads(cities_day)[0]  
-        total_days = cities_day['All']  
+        cities_day = json.loads(cities_day)  # Expecting dict like {"Dubai": 2, "London": 1}
         response = []
-        itineraries = frappe.get_all('Tour Itinerary',
-                                     filters={'day': ['<=', total_days]},
-                                     fields=['*'])
-        
-        for itinerary in itineraries:
-            if int(num_of_cities) == 1:
-                if itinerary.get('type') != "City-to-City":
-                    response.append(itinerary)
-            else:
-                response.append(itinerary)
+
+        for city, max_day in cities_day.items():
+            itineraries = frappe.get_all(
+                'Tour Itinerary',
+                filters={
+                    'city': city,
+                    'day': ['<=', max_day]
+                },
+                fields=['*']
+            )
+            response.extend(itineraries)
 
         response.sort(key=lambda x: x['day'])
+
         arrivals = [item for item in response if item.get('type') == "Arrival"]
         departures = [item for item in response if item.get('type') == "Departure"]
         others = [item for item in response if item.get('type') not in ["Arrival", "Departure"]]
-        response = arrivals + others + departures
-        return response
+
+        ordered_response = arrivals + others + departures
+        def extract_suffix(item):
+            try:
+                return int(item['name'].split('-')[-1])
+            except:
+                return 0
+        ordered_response.sort(key=lambda x: (x['day'], extract_suffix(x)))
+        city_order = {city: idx for idx, city in enumerate(cities_day.keys())}
+        ordered_response.sort(key=lambda x: city_order.get(x.get('city'), float('inf')))
+        
+        seen = {}  # { "Dubai": set(1, 2), "London": set(1) }
+        global_day = 1
+
+        for item in ordered_response:
+            city = item['city']
+            day = item['day']
+
+            if city not in seen:
+                seen[city] = {}
+
+            if day not in seen[city]:
+                seen[city][day] = global_day
+                global_day += 1
+
+            # Reassign the global day
+            item['day'] = seen[city][day]
+
+        # frappe.errprint(f"ordered_response : {ordered_response}")
+        return ordered_response
 
     except Exception as e:
         frappe.log_error(f"Error in get_Itinerary: {str(e)}", "Get Itinerary Error")

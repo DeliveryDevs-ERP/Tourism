@@ -1,13 +1,34 @@
 // Copyright (c) 2025, OsamaASidd and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on('Package', {
+frappe.ui.form.on('Costing', {
+
+    onload: function(frm) {
+    if (frm.doc.opportunity) {
+            if (frm.is_new()) {
+                if (frm.doc.hotels && frm.doc.hotels.length === 0) {
+                    create_hotel_rows(frm);
+                    fetch_package_clauses(frm);
+                    Create_Itinerary(frm);
+                }
+
+                if (frm.doc.proposal) {
+                    frm.set_value("proposal", null);
+                }
+            }
+        }
+    },
+
+
+    onload_post_render: function(frm) {
+        bind_hotel_room_type_click_handler(frm);
+    },
 
     validate: function(frm) {
         if (frm.doc.locations.length > 0 && frm.doc.visa_types.length === 0){
             let cities = frm.doc.locations.map(location => location.city_of_stay);
             frappe.call({
-                method: "tourism.tourism.doctype.package.GetHotels.fetch_countries",
+                method: "tourism.tourism.doctype.costing.GetHotels.fetch_countries",
                 args: { cities: cities },
                 callback: function(r) {
                     if (r.message) {
@@ -26,7 +47,7 @@ frappe.ui.form.on('Package', {
         else if (frm.doc.locations.length > 0 && frm.doc.visa_types.length > 0){
             let cities = frm.doc.locations.map(location => location.city_of_stay);
             frappe.call({
-                method: "tourism.tourism.doctype.package.GetHotels.fetch_countries",
+                method: "tourism.tourism.doctype.costing.GetHotels.fetch_countries",
                 args: { cities: cities },
                 callback: function(r) {
                     if (r.message) {
@@ -50,6 +71,29 @@ frappe.ui.form.on('Package', {
 
 
     refresh(frm) {
+
+        if (frm.doc.opportunity) {
+            frm.add_custom_button(__('Proposal'), function() {
+                frappe.call({
+                    method: "tourism.tourism.doctype.costing.utils.make_quotation_from_costing",
+                    args: {
+                        source_name: frm.doc.opportunity,
+                        costing_name: frm.doc.name
+                    },
+                    callback: function(r) {
+                        if (r.message) {
+                            frappe.model.sync(r.message);
+                            frappe.set_route("Form", r.message.doctype, r.message.name);
+                        }
+                    }
+                });
+            }, __('Create'));
+    }
+
+
+        if (frm.doc.opportunity) {
+            bind_hotel_room_type_click_handler(frm);
+        }
         frm.get_field('visa_types').grid.cannot_add_rows = true; 
         frm.fields_dict['hotels'].grid.get_field('hotel').get_query = function(doc, cdt, cdn) {
             let cities = [];
@@ -59,7 +103,7 @@ frappe.ui.form.on('Package', {
                 });
             }
             return {
-                query: 'tourism.tourism.doctype.package.GetHotels.get_hotels_based_on_city',
+                query: 'tourism.tourism.doctype.costing.GetHotels.get_hotels_based_on_city',
                 filters: { 
                     'cities':cities
                 }
@@ -86,9 +130,37 @@ frappe.ui.form.on('Package', {
 
 });
 
-frappe.ui.form.on('Package Hotel cdt', {
+frappe.ui.form.on('Costing Hotel cdt', {
     hotel: function(frm, cdt, cdn) {
         set_room_query(frm, cdt, cdn);
+        const row = locals[cdt][cdn];
+        if (row.city) {
+            const matched_location = frm.doc.locations.find(loc => loc.city_of_stay === row.city);
+            if (matched_location) {
+                frappe.model.set_value(cdt, cdn, 'days', matched_location.day);
+            }
+        }
+    },
+
+    days: function(frm, cdt, cdn) {
+        set_room_query(frm, cdt, cdn);
+    },
+
+    rate: function(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        const rate = parseFloat(row.rate) || 0;
+        const days = parseFloat(row.days) || 0;
+        const cost = rate * days;
+        frappe.model.set_value(cdt, cdn, 'cost', cost);
+    },
+
+    margin: function(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        const rate = parseFloat(row.rate) || 0;
+        const margin = parseFloat(row.margin) || 0;
+        const days = parseFloat(row.days) || 0;
+        const cost = rate * days * (1 + margin/100);
+        frappe.model.set_value(cdt, cdn, 'cost', cost);
     },
 
     room_type: function(frm, cdt, cdn) {
@@ -96,7 +168,7 @@ frappe.ui.form.on('Package Hotel cdt', {
     }
 });
 
-frappe.ui.form.on('Package clause cdt', {
+frappe.ui.form.on('Costing clause cdt', {
     package_includes_add: function(frm, cdt, cdn){
         // let row = locals[cdt][cdn];
         // console.log(row);
@@ -109,16 +181,23 @@ frappe.ui.form.on('Package clause cdt', {
         },
 });
 
+frappe.ui.form.on('Costing Itinerary cdt', {
+    margin: function(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        const amount = parseFloat(row.amount) || 0;
+        const margin = parseFloat(row.margin) || 0;
+        const cost = amount * (1 + margin/100);
+        frappe.model.set_value(cdt, cdn, 'cost', cost);
+    }
+});
+
 frappe.ui.form.on('Package loc visa cdt', {
     country: function(frm, cdt, cdn) {
-        // console.log("Country Trigger");
         set_visa_query(frm, cdt, cdn);
     },
     visa_types_remove: function(frm, cdt, cdn) {
-        // console.log("Country Trigger");
         set_visa_query(frm, cdt, cdn);
     },
-
 });
 
 
@@ -127,7 +206,7 @@ function set_visa_query(frm, cdt, cdn) {
     var child = locals[cdt][cdn];
     if (child.country) {
         frappe.call({
-            method: "tourism.tourism.doctype.package.GetHotels.fetch_country_visa_types",
+            method: "tourism.tourism.doctype.costing.GetHotels.fetch_country_visa_types",
             args: {
                 country: child.country,
             },
@@ -152,7 +231,7 @@ function set_room_query(frm, cdt, cdn) {
     var child = locals[cdt][cdn];
     if (child.hotel) {
         frappe.call({
-            method: "tourism.tourism.doctype.package.GetHotels.fetch_hotel_room_details",
+            method: "tourism.tourism.doctype.costing.GetHotels.fetch_hotel_room_details",
             args: {
                 hotel_name: child.hotel,
                 star: child.star
@@ -180,7 +259,7 @@ function fetch_rate_type_amount(frm, cdt, cdn) {
     var child = locals[cdt][cdn];
     if (child.room_type && child.hotel) {
         frappe.call({
-            method: "tourism.tourism.doctype.package.GetHotels.fetch_hotel_room_details",
+            method: "tourism.tourism.doctype.costing.GetHotels.fetch_hotel_room_details",
             args: {
                 hotel_name: child.hotel,
                 star: child.star
@@ -206,7 +285,7 @@ function fetch_package_clauses(frm) {
     cities.push('All');
 
     frappe.call({
-        method: "tourism.tourism.doctype.package.GetHotels.fetch_clauses",
+        method: "tourism.tourism.doctype.costing.GetHotels.fetch_clauses",
         args: { cities: cities },
         callback: function(r) {
             if (r.message) {
@@ -219,7 +298,7 @@ function fetch_package_clauses(frm) {
                 // Populate new data based on fetched clauses
                 r.message.forEach(clause => {
                     const table = clause.type === 'Include' ? 'package_includes' : 'package_excludes';
-                    const new_child = frappe.model.add_child(frm.doc, 'Package Clause', table);
+                    const new_child = frappe.model.add_child(frm.doc, 'Costing Clause', table);
                     frappe.model.set_value(new_child.doctype, new_child.name, 'city', clause.city);
                     frappe.model.set_value(new_child.doctype, new_child.name, 'type', clause.type);
                     frappe.model.set_value(new_child.doctype, new_child.name, 'description', clause.description);
@@ -239,7 +318,7 @@ function fetch_package_clauses(frm) {
 //     cities.push('All');
 
 //     frappe.call({
-//         method: "tourism.tourism.doctype.package.GetHotels.fetch_Opt_clauses",
+//         method: "tourism.tourism.doctype.costing.GetHotels.fetch_Opt_clauses",
 //         args: { cities: cities },
 //         callback: function(r) {
 //             if (r.message) {
@@ -250,7 +329,7 @@ function fetch_package_clauses(frm) {
 //                 // Populate new data based on fetched clauses
 //                 r.message.forEach(clause => {
 //                     const table = 'optional_clauses';
-//                     const new_child = frappe.model.add_child(frm.doc, 'Package Optional', table);
+//                     const new_child = frappe.model.add_child(frm.doc, 'Costing Optional', table);
 //                     frappe.model.set_value(new_child.doctype, new_child.name, 'city', clause.city);
 //                     frappe.model.set_value(new_child.doctype, new_child.name, 'description', clause.description);
 //                     frappe.model.set_value(new_child.doctype, new_child.name, 'rate', clause.rate);
@@ -262,45 +341,39 @@ function fetch_package_clauses(frm) {
 //         }
 //     });
 // }
-
 function Create_Itinerary(frm) {
     let locations = frm.doc.locations;
-    let total_days = 0;
+
+    // Build a dictionary of city-day pairs
+    let cities_day = {};
     locations.forEach(location => {
-        total_days += location.day; // Correct use of accumulating total days
+        if (location.city_of_stay) {
+            cities_day[location.city_of_stay] = location.day;
+        }
     });
 
-    // Properly declaring and using the array with a dictionary for total days
-    let cities_day = [{ 'All': total_days }]; // Correct initialization and assignment
-
-    let num_of_cities = locations.length;
-
-    // JSON.stringify is applied correctly to cities_day now
     frappe.call({
-        method: "tourism.tourism.doctype.package.GetHotels.get_Itinerary",
+        method: "tourism.tourism.doctype.costing.GetHotels.get_Itinerary",
         args: {
-            cities_day: JSON.stringify(cities_day), // Ensure cities_day is an array of objects
-            num_of_cities: num_of_cities
+            cities_day: JSON.stringify(cities_day)
         },
         callback: function(r) {
             if (r.message) {
                 console.log("Fetched Itinerary : ", r.message);
 
-                // Clear existing data in child tables
                 frappe.model.clear_table(frm.doc, 'tour_itinerary');
 
-                // Populate new data based on fetched clauses
                 r.message.forEach(clause => {
-                    const table = 'tour_itinerary';
-                    const new_child = frappe.model.add_child(frm.doc, 'Tour Itinerary', table);
+                    const new_child = frappe.model.add_child(frm.doc, 'Tour Itinerary', 'tour_itinerary');
                     frappe.model.set_value(new_child.doctype, new_child.name, 'day', clause.day);
                     frappe.model.set_value(new_child.doctype, new_child.name, 'city', clause.city);
                     frappe.model.set_value(new_child.doctype, new_child.name, 'type', clause.type);
                     frappe.model.set_value(new_child.doctype, new_child.name, 'description', clause.description);
+                    frappe.model.set_value(new_child.doctype, new_child.name, 'amount', clause.amount);
+                    frappe.model.set_value(new_child.doctype, new_child.name, 'cost', clause.amount);
                 });
 
                 frm.refresh_field('tour_itinerary');
-
             } else {
                 console.log("No itinerary was fetched.");
             }
@@ -309,6 +382,41 @@ function Create_Itinerary(frm) {
 }
 
 
+
+function create_hotel_rows(frm) { 
+    let hotels = frm.doc.locations
+        .filter(location => location.hotel && location.star) // only keep if both exist
+        .map(location => {
+            return {
+                city: location.city_of_stay,
+                hotel: location.hotel,
+                star: location.star,
+                day: location.day
+            };
+        });
+
+    // console.log("hotels", hotels);
+
+    if (hotels.length > 0) {
+        frm.clear_table('hotels');
+
+        hotels.sort(function(a, b) {
+            return a.idx - b.idx;
+        });
+
+        hotels.forEach(function(hotel) {
+            var child = frm.add_child('hotels');
+            frappe.model.set_value(child.doctype, child.name, 'option', 1);
+            frappe.model.set_value(child.doctype, child.name, 'hotel', hotel.hotel);
+            frappe.model.set_value(child.doctype, child.name, 'star', hotel.star);
+            frappe.model.set_value(child.doctype, child.name, 'days', hotel.day);
+            frappe.model.set_value(child.doctype, child.name, 'city', hotel.city);
+            frappe.model.set_value(child.doctype, child.name, 'onload_', 1);
+        });
+
+        frm.refresh_field('hotels');
+    }
+}
 
 function fetch_visa_details(frm) {
     let countryVisaMap = {};
@@ -319,7 +427,7 @@ function fetch_visa_details(frm) {
 
     console.log("countryVisaMap ",countryVisaMap);
     frappe.call({
-        method: "tourism.tourism.doctype.package.GetHotels.fetch_visa_details",
+        method: "tourism.tourism.doctype.costing.GetHotels.fetch_visa_details",
         args: { countryVisaMap: countryVisaMap },
         callback: function(r) {
             if (r.message) {
@@ -350,6 +458,56 @@ function fetch_visa_details(frm) {
                 frm.refresh_field('requirements');
                 frm.refresh_field('charges');
             }
+        }
+    });
+}
+
+
+
+function bind_hotel_room_type_click_handler(frm) {
+    const grid = frm.fields_dict['hotels'].grid;
+
+    grid.wrapper.off('focus.room_type_click');
+
+    grid.wrapper.on('focus.room_type_click', 'input[data-fieldname="room_type"]', function (e) {
+        const $input = $(this);
+        const $row = $input.closest('.grid-row');
+        const rowname = $row.attr('data-name');
+
+        const row = locals['Costing Hotel cdt'] && locals['Costing Hotel cdt'][rowname];
+        // if (!row) {
+        //     // console.warn('Row not found:', rowname);
+        //     return;
+        // }
+
+        if (row.hotel && row.star) {
+            frappe.call({
+                method: "tourism.tourism.doctype.costing.GetHotels.fetch_hotel_room_details",
+                args: {
+                    hotel_name: row.hotel,
+                    star: row.star
+                },
+                callback: function (r) {
+                    if (r.message) {
+                        const grid_row = grid.get_row(rowname);
+                        const options = r.message.map(room => room.room_type);
+                        grid_row.get_field('room_type').get_query = function () {
+                            return {
+                                filters: [['name', 'in', options]]
+                            };
+                        };
+                        grid.refresh_row(rowname);
+                        setTimeout(() => {
+                            if (grid_row.grid_form) {
+                                const field = grid_row.grid_form.fields_dict['room_type'];
+                                if (field && field.refresh) {
+                                    field.refresh(); 
+                                }
+                            }
+                        }, 5); 
+                    }
+                }
+            });
         }
     });
 }

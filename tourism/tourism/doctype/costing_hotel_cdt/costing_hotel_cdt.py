@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class Package(Document):
+class CostingHotelcdt(Document):
 	pass

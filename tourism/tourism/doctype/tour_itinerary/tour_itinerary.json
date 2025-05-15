@@ -1,7 +1,8 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
- "autoname": "format:{city} - {type} - {destination_city}{day}",
+ "autoname": "format:TI-{city}-{day}-{######}",
  "creation": "2025-01-01 13:14:51.326745",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -10,7 +11,8 @@
   "type",
   "destination_city",
   "day",
-  "description"
+  "description",
+  "amount"
  ],
  "fields": [
   {
@@ -22,11 +24,10 @@
    "reqd": 1
   },
   {
-   "default": "Normal",
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "Normal\nArrival\nDeparture\nCity -to- City\nNormal Without Transport",
+   "options": "\nNormal\nArrival\nDeparture\nCity -to- City\nNormal Without Transport",
    "reqd": 1
   },
   {
@@ -38,9 +39,8 @@
    "non_negative": 1
   },
   {
-   "description": "Must have full stop (.) at the end of each sentence/clause.",
    "fieldname": "description",
-   "fieldtype": "Small Text",
+   "fieldtype": "Long Text",
    "label": "Description"
   },
   {
@@ -50,11 +50,17 @@
    "label": "Destination City",
    "mandatory_depends_on": "eval: doc.type === \"City -to- City\";",
    "options": "City"
+  },
+  {
+   "default": "0",
+   "fieldname": "amount",
+   "fieldtype": "Float",
+   "label": "Amount"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-09 09:27:35.464611",
+ "modified": "2025-05-15 06:19:07.461176",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Tour Itinerary",

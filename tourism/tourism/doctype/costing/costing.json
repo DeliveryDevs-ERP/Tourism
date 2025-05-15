@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "prompt",
+ "autoname": "format:CST-{YYYY}-{#########}",
  "creation": "2025-01-01 13:47:56.962161",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -9,6 +9,10 @@
   "locations",
   "currency",
   "hotels",
+  "section_break_qsli",
+  "opportunity",
+  "column_break_tcgm",
+  "proposal",
   "visa_requirements_tab",
   "visa_types",
   "section_break_ndvu",
@@ -27,7 +31,17 @@
   "section_break_qccz",
   "create_itinerary",
   "section_break_wqhc",
-  "tour_itinerary"
+  "tour_itinerary",
+  "costing_misc_tab",
+  "pax_quantity",
+  "section_break_hcwu",
+  "extra",
+  "optional",
+  "section_break_rmyc",
+  "markup",
+  "misc",
+  "staff_cost",
+  "final_markup"
  ],
  "fields": [
   {
@@ -41,7 +55,7 @@
    "fieldname": "hotels",
    "fieldtype": "Table",
    "label": "Hotel(s)",
-   "options": "Package Hotel cdt"
+   "options": "Costing Hotel cdt"
   },
   {
    "fieldname": "package_includes",
@@ -70,7 +84,7 @@
    "fieldtype": "Table",
    "label": "Tour Itinerary",
    "max_height": "50000em",
-   "options": "Package itinerary cdt",
+   "options": "Costing Itinerary cdt",
    "print_width": "5000",
    "width": "5000"
   },
@@ -148,15 +162,95 @@
    "label": "Currency",
    "options": "Currency",
    "reqd": 1
+  },
+  {
+   "fieldname": "costing_misc_tab",
+   "fieldtype": "Tab Break",
+   "label": "Costing Misc"
+  },
+  {
+   "allow_bulk_edit": 1,
+   "fieldname": "extra",
+   "fieldtype": "Table",
+   "label": "Extra",
+   "options": "Costing Extra cdt"
+  },
+  {
+   "allow_bulk_edit": 1,
+   "fieldname": "optional",
+   "fieldtype": "Table",
+   "label": "Optional",
+   "options": "Costing Optional cdt"
+  },
+  {
+   "fieldname": "markup",
+   "fieldtype": "Currency",
+   "label": "MARKUP T365",
+   "options": "currency"
+  },
+  {
+   "fieldname": "misc",
+   "fieldtype": "Currency",
+   "label": "Misc",
+   "options": "currency"
+  },
+  {
+   "fieldname": "staff_cost",
+   "fieldtype": "Currency",
+   "label": "Staff Cost",
+   "options": "currency"
+  },
+  {
+   "fieldname": "final_markup",
+   "fieldtype": "Currency",
+   "label": "Markup",
+   "options": "currency"
+  },
+  {
+   "fieldname": "section_break_qsli",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "opportunity",
+   "fieldtype": "Link",
+   "label": "Opportunity ",
+   "options": "Opportunity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "proposal",
+   "fieldtype": "Link",
+   "label": "Proposal",
+   "options": "Quotation",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_tcgm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pax_quantity",
+   "fieldtype": "Int",
+   "label": "PAX Quantity",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "section_break_rmyc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_hcwu",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-19 08:18:03.289868",
+ "modified": "2025-05-14 19:18:17.877897",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "Package",
- "naming_rule": "Set by user",
+ "name": "Costing",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

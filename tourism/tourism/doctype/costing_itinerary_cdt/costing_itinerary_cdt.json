@@ -1,7 +1,8 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-01-02 05:29:10.731852",
+ "creation": "2025-05-08 05:16:07.999350",
+ "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -10,7 +11,9 @@
   "city",
   "type",
   "description",
-  "amount"
+  "amount",
+  "margin",
+  "cost"
  ],
  "fields": [
   {
@@ -53,15 +56,28 @@
    "in_list_view": 1,
    "label": "Amount",
    "options": "currency"
+  },
+  {
+   "fieldname": "margin",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Margin %"
+  },
+  {
+   "fieldname": "cost",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Cost",
+   "options": "currency"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-08 04:50:39.509996",
+ "modified": "2025-05-12 11:56:19.030551",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "Package itinerary cdt",
+ "name": "Costing Itinerary cdt",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",
