@@ -29,7 +29,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "City",
-   "link_filters": "[[\"City\",\"name\",\"=\",\"All\"]]",
+   "link_filters": "[]",
    "options": "City",
    "reqd": 1
   },
@@ -74,7 +74,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-12 11:56:19.030551",
+ "modified": "2025-05-16 07:39:19.990193",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing Itinerary cdt",

@@ -8,7 +8,9 @@
  "field_order": [
   "locations",
   "currency",
+  "section_break_kndz",
   "hotels",
+  "final",
   "section_break_qsli",
   "opportunity",
   "column_break_tcgm",
@@ -242,11 +244,21 @@
   {
    "fieldname": "section_break_hcwu",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_kndz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "final",
+   "fieldtype": "Table",
+   "label": "Final",
+   "options": "Costing Final cdt"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-14 19:18:17.877897",
+ "modified": "2025-05-16 09:41:40.144867",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",

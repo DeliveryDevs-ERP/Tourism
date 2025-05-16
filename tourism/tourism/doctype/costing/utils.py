@@ -64,7 +64,15 @@ def get_hotels_data(package_name):
             FROM `tabCosting Hotel cdt`
             WHERE `parenttype` = 'Costing' AND `parent` = %s
         """, (package_name,), as_dict=True)
-
+        
+@frappe.whitelist()
+def get_final_data(package_name):
+    if package_name:
+        return frappe.db.sql("""
+            SELECT *
+            FROM `tabCosting Final cdt`
+            WHERE `parenttype` = 'Costing' AND `parent` = %s
+        """, (package_name,), as_dict=True)
 
 @frappe.whitelist()
 def get_clause_data(package_name):

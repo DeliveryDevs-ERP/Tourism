@@ -17,6 +17,22 @@ frappe.ui.form.on('Costing', {
                 }
             }
         }
+        // console.log("on load called");
+        // frm.fields_dict['tour_itinerary'].grid.get_field('city').get_query = function(doc, cdt, cdn) {
+        //     let cities = [];
+        //     if (doc.locations && doc.locations.length > 0) {
+        //         cities = doc.locations.map(function(location) {
+        //             return location.city_of_stay;
+        //         });
+        //     }
+        //     return {
+        //         query: 'tourism.tourism.doctype.costing.GetHotels.get_hotels_based_on_city',
+        //         filters: { 
+        //             'cities':cities
+        //         }
+        //     };
+        // };
+
     },
 
 
@@ -89,6 +105,22 @@ frappe.ui.form.on('Costing', {
                 });
             }, __('Create'));
     }
+
+            // console.log("on refresh called");
+
+            // frm.fields_dict['tour_itinerary'].grid.get_field('city').get_query = function(doc, cdt, cdn) {
+            //     let cities = [];
+
+            //     if (doc.locations && doc.locations.length > 0) {
+            //         cities = doc.locations.map(location => location.city_of_stay).filter(Boolean);
+            //     }
+
+            //     return {
+            //         filters: [
+            //             ['name', 'in', cities]
+            //         ]
+            //     };
+            // };
 
 
         if (frm.doc.opportunity) {
