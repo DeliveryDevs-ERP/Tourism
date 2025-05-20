@@ -97,6 +97,7 @@
   {
    "fieldname": "tab_3_tab",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "Clauses"
   },
   {
@@ -124,6 +125,7 @@
   {
    "fieldname": "visa_requirements_tab",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "Visa Requirements"
   },
   {
@@ -278,7 +280,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-20 03:48:41.193777",
+ "modified": "2025-05-20 05:11:32.304128",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",
