@@ -392,13 +392,21 @@ function fetch_package_clauses(frm) {
 //     });
 // }
 function Create_Itinerary(frm) {
-    let locations = frm.doc.locations;
 
     // Build a dictionary of city-day pairs
     let cities_day = {};
-    locations.forEach(location => {
+    let locations = frm.doc.locations || [];
+
+    locations.forEach((location, index) => {
         if (location.city_of_stay) {
-            cities_day[location.city_of_stay] = location.day;
+            let day = location.day || 0;
+
+            // If it's the last city, add +1 to the day
+            if (index === locations.length - 1) {
+                day += 1;
+            }
+
+            cities_day[location.city_of_stay] = day;
         }
     });
 
