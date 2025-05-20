@@ -12,6 +12,7 @@ frappe.ui.form.on('Costing', {
     if (frm.doc.opportunity) {
             if (frm.is_new()) {
                 if (frm.doc.hotels && frm.doc.hotels.length === 0) {
+                    calculate_pax(frm);
                     create_hotel_rows(frm);
                     fetch_package_clauses(frm);
                     Create_Itinerary(frm);
@@ -594,4 +595,28 @@ function update_final_totals(frm) {
     }
 
     frm.refresh_field("final");
+}
+
+function calculate_pax(frm) {
+    if (!frm.doc.opportunity) return;
+
+    frappe.call({
+        method: "frappe.client.get",
+        args: {
+            doctype: "Opportunity",
+            name: frm.doc.opportunity
+        },
+        callback: function(r) {
+            if (r.message) {
+                const opp = r.message;
+                const passengers = parseInt(opp.custom_no_of_passengers) || 0;
+                const infants = parseInt(opp.custom_no_of_infants) || 0;
+                const children = parseInt(opp.custom_no_of_childs) || 0;
+
+                const total_pax = passengers + infants + children;
+
+                frm.set_value('pax_quantity', total_pax);
+            }
+        }
+    });
 }
