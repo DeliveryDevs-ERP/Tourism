@@ -6,10 +6,21 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "locations",
+  "pax_quantity",
+  "column_break_ughk",
   "currency",
-  "section_break_kndz",
+  "section_break_rmpt",
+  "locations",
+  "section_break_htuv",
   "hotels",
+  "extra",
+  "section_break_rmyc",
+  "markup",
+  "final_markup",
+  "column_break_vadk",
+  "misc",
+  "staff_cost",
+  "section_break_kndz",
   "final",
   "section_break_qsli",
   "opportunity",
@@ -35,15 +46,8 @@
   "section_break_wqhc",
   "tour_itinerary",
   "costing_misc_tab",
-  "pax_quantity",
   "section_break_hcwu",
-  "extra",
-  "optional",
-  "section_break_rmyc",
-  "markup",
-  "misc",
-  "staff_cost",
-  "final_markup"
+  "optional"
  ],
  "fields": [
   {
@@ -254,11 +258,27 @@
    "fieldtype": "Table",
    "label": "Final",
    "options": "Costing Final cdt"
+  },
+  {
+   "fieldname": "section_break_rmpt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_htuv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_vadk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ughk",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-16 09:41:40.144867",
+ "modified": "2025-05-20 03:48:41.193777",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",

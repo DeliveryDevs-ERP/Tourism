@@ -3,6 +3,11 @@
 
 frappe.ui.form.on('Costing', {
 
+    // markup: update_final_totals,
+    // final_markup: update_final_totals,
+    // staff_cost: update_final_totals,
+    // misc: update_final_totals,
+
     onload: function(frm) {
     if (frm.doc.opportunity) {
             if (frm.is_new()) {
@@ -184,6 +189,7 @@ frappe.ui.form.on('Costing Hotel cdt', {
         const days = parseFloat(row.days) || 0;
         const cost = rate * days;
         frappe.model.set_value(cdt, cdn, 'cost', cost);
+        // update_final_totals(frm);
     },
 
     margin: function(frm, cdt, cdn) {
@@ -193,6 +199,7 @@ frappe.ui.form.on('Costing Hotel cdt', {
         const days = parseFloat(row.days) || 0;
         const cost = rate * days * (1 + margin/100);
         frappe.model.set_value(cdt, cdn, 'cost', cost);
+        // update_final_totals(frm);
     },
 
     room_type: function(frm, cdt, cdn) {
@@ -214,12 +221,22 @@ frappe.ui.form.on('Costing clause cdt', {
 });
 
 frappe.ui.form.on('Costing Itinerary cdt', {
+    amount: function(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+        const amount = parseFloat(row.amount) || 0;
+        const margin = parseFloat(row.margin) || 0;
+        const cost = amount * (1 + margin/100);
+        frappe.model.set_value(cdt, cdn, 'cost', cost);
+        // update_final_totals(frm);
+    },
+
     margin: function(frm, cdt, cdn) {
         const row = locals[cdt][cdn];
         const amount = parseFloat(row.amount) || 0;
         const margin = parseFloat(row.margin) || 0;
         const cost = amount * (1 + margin/100);
         frappe.model.set_value(cdt, cdn, 'cost', cost);
+        // update_final_totals(frm);
     }
 });
 
@@ -542,4 +559,39 @@ function bind_hotel_room_type_click_handler(frm) {
             });
         }
     });
+}
+
+
+function update_final_totals(frm) {
+    let grouped = {};
+
+    frm.doc.final.forEach(row => {
+        grouped[`${row.option}||${row.room_type}`] = row;
+    });
+
+    let extra_total = (frm.doc.extra || []).reduce((acc, row) => acc + (parseFloat(row.amount) || 0), 0);
+
+    const hotel_grouped = {};
+    (frm.doc.hotels || []).forEach(hotel => {
+        const key = `${hotel.option}||${hotel.room_type}`;
+        if (!hotel_grouped[key]) hotel_grouped[key] = [];
+        hotel_grouped[key].push(hotel);
+    });
+
+    for (let key in grouped) {
+        const [option, room_type] = key.split("||");
+        const final_row = grouped[key];
+        const hotel_rows = hotel_grouped[key] || [];
+
+        let net_cost = hotel_rows.reduce((sum, row) => sum + (parseFloat(row.net_cost) || 0), 0);
+        let total_cost = net_cost + extra_total + (parseFloat(frm.doc.markup) || 0);
+        let grand_total = total_cost + (parseFloat(frm.doc.final_markup) || 0) + (parseFloat(frm.doc.staff_cost) || 0) + (parseFloat(frm.doc.misc) || 0);
+
+        final_row.net_cost = net_cost;
+        final_row.total_cost = total_cost;
+        final_row.grand_total = grand_total;
+        final_row.total_extra = frm.doc.pax_quantity ? extra_total / frm.doc.pax_quantity : 0;
+    }
+
+    frm.refresh_field("final");
 }

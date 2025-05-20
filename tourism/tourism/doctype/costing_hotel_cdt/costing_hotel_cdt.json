@@ -95,14 +95,16 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Hotel Cost",
-   "options": "currency"
+   "options": "currency",
+   "read_only": 1
   },
   {
    "fieldname": "net_cost",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Net Cost",
-   "options": "currency"
+   "options": "currency",
+   "read_only": 1
   },
   {
    "fieldname": "total_cost",
@@ -129,7 +131,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-12 12:04:17.220670",
+ "modified": "2025-05-20 03:43:34.528464",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing Hotel cdt",
