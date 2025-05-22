@@ -148,6 +148,7 @@
    "read_only": 1
   },
   {
+   "default": "USD",
    "fieldname": "currency",
    "fieldtype": "Link",
    "label": "Currency",
@@ -165,7 +166,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-13 03:54:49.306679",
+ "modified": "2025-05-22 12:25:03.210971",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",

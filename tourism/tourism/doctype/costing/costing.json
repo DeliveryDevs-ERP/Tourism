@@ -15,11 +15,8 @@
   "hotels",
   "extra",
   "section_break_rmyc",
-  "markup",
   "final_markup",
   "column_break_vadk",
-  "misc",
-  "staff_cost",
   "section_break_kndz",
   "final",
   "section_break_qsli",
@@ -41,6 +38,8 @@
   "package_includes",
   "package_excludes",
   "itinerary_tab",
+  "by_vendor_",
+  "vendor_cost",
   "section_break_qccz",
   "create_itinerary",
   "section_break_wqhc",
@@ -164,6 +163,7 @@
    "options": "Package visa charges cdt"
   },
   {
+   "default": "USD",
    "fieldname": "currency",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -189,24 +189,6 @@
    "fieldtype": "Table",
    "label": "Optional",
    "options": "Costing Optional cdt"
-  },
-  {
-   "fieldname": "markup",
-   "fieldtype": "Currency",
-   "label": "MARKUP T365",
-   "options": "currency"
-  },
-  {
-   "fieldname": "misc",
-   "fieldtype": "Currency",
-   "label": "Misc",
-   "options": "currency"
-  },
-  {
-   "fieldname": "staff_cost",
-   "fieldtype": "Currency",
-   "label": "Staff Cost",
-   "options": "currency"
   },
   {
    "fieldname": "final_markup",
@@ -276,11 +258,24 @@
   {
    "fieldname": "column_break_ughk",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "by_vendor_",
+   "fieldtype": "Check",
+   "label": "By Vendor ?"
+  },
+  {
+   "depends_on": "eval: doc.by_vendor_ === 1;",
+   "fieldname": "vendor_cost",
+   "fieldtype": "Table",
+   "label": "Vendor Cost",
+   "options": "Vendor Itinerary cdt"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-20 05:11:32.304128",
+ "modified": "2025-05-22 13:11:32.749189",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",

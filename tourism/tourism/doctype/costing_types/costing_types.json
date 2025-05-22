@@ -2,34 +2,24 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "prompt",
- "creation": "2025-01-01 12:57:47.994943",
+ "creation": "2025-05-22 12:35:31.340767",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "pax_quantity",
-  "uom"
+  "section_break_6iat"
  ],
  "fields": [
   {
-   "fieldname": "uom",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "UOM",
-   "options": "UOM"
-  },
-  {
-   "fieldname": "pax_quantity",
-   "fieldtype": "Int",
-   "label": "PAX Quantity",
-   "reqd": 1
+   "fieldname": "section_break_6iat",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-20 09:37:47.647530",
+ "modified": "2025-05-22 12:35:37.900645",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "Room Type",
+ "name": "Costing Types",
  "naming_rule": "Set by user",
  "owner": "Administrator",
  "permissions": [

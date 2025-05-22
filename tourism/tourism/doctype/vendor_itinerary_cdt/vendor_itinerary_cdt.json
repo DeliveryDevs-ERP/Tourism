@@ -1,37 +1,48 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-02-19 07:58:11.278099",
+ "creation": "2025-05-22 13:09:04.428287",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "source_city",
-  "no_of_passengers"
+  "city",
+  "vendor",
+  "amount"
  ],
  "fields": [
   {
-   "fieldname": "source_city",
+   "fieldname": "city",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Source City",
+   "label": "City",
    "options": "City",
    "reqd": 1
   },
   {
-   "fieldname": "no_of_passengers",
-   "fieldtype": "Int",
+   "fieldname": "vendor",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "No. of Passengers"
+   "label": "Vendor",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "currency"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-20 09:25:37.105081",
+ "modified": "2025-05-22 13:11:04.960692",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "Opportunity Source city cdt",
+ "name": "Vendor Itinerary cdt",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

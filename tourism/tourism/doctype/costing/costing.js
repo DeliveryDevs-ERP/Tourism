@@ -41,6 +41,14 @@ frappe.ui.form.on('Costing', {
 
     },
 
+    by_vendor_: function(frm) {
+    (frm.doc.tour_itinerary || []).forEach(row => {
+        row.amount = 0;
+        row.cost = 0;
+    });
+    frm.refresh_field('tour_itinerary');
+},
+
 
     onload_post_render: function(frm) {
         bind_hotel_room_type_click_handler(frm);
@@ -219,6 +227,42 @@ frappe.ui.form.on('Costing clause cdt', {
         // console.log(row);
         frappe.model.set_value(cdt, cdn, 'type', 'Exclude');
         },
+});
+
+frappe.ui.form.on('Costing Extra cdt', {
+
+    amount: function(frm, cdt, cdn){
+
+        const row = frappe.get_doc(cdt, cdn);
+
+        if (row.amount && row.pax) {
+            row.per_person_amount = row.amount /  row.pax;
+        }
+
+        frm.refresh_field("extra");
+    },
+
+    per_person_amount: function(frm, cdt, cdn){
+
+        const row = frappe.get_doc(cdt, cdn);
+
+        if (row.per_person_amount && row.pax) {
+            row.amount = row.per_person_amount * row.pax;
+        }
+
+        frm.refresh_field("extra");
+    },
+
+    extra_add: function(frm, cdt, cdn){
+
+        const row = frappe.get_doc(cdt, cdn);
+
+        if (frm.doc.pax_quantity) {
+            row.pax = frm.doc.pax_quantity;
+        }
+
+        frm.refresh_field("extra");
+    }
 });
 
 frappe.ui.form.on('Costing Itinerary cdt', {

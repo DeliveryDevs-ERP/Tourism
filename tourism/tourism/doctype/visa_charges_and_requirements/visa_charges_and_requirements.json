@@ -46,6 +46,7 @@
    "reqd": 1
   },
   {
+   "default": "PKR",
    "fieldname": "currency",
    "fieldtype": "Link",
    "label": "Currency",
@@ -55,7 +56,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-19 09:24:13.405567",
+ "modified": "2025-05-22 12:22:51.917047",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Visa Charges and Requirements",
