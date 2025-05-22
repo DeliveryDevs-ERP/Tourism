@@ -21,8 +21,10 @@
    "reqd": 1
   },
   {
+   "default": "Per Person",
    "fieldname": "rate_type",
    "fieldtype": "Link",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Rate type",
    "options": "UOM",
@@ -39,6 +41,7 @@
   {
    "fieldname": "room_rate",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Room Rate",
    "options": "currency",
    "reqd": 1
@@ -47,7 +50,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-20 09:36:06.905359",
+ "modified": "2025-05-22 13:57:54.523899",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel Detail cdt",
