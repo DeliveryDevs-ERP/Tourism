@@ -10,6 +10,7 @@ frappe.ui.form.on('Costing', {
 
     onload: function(frm) {
     if (frm.doc.opportunity) {
+        frm.set_value("currency", 'USD');
             if (frm.is_new()) {
                 if (frm.doc.hotels && frm.doc.hotels.length === 0) {
                     calculate_pax(frm);
@@ -46,7 +47,10 @@ frappe.ui.form.on('Costing', {
         row.amount = 0;
         row.cost = 0;
     });
+    const is_by_vendor = frm.doc.by_vendor_ === 1;
+    frm.set_df_property('create_itinerary', 'hidden', is_by_vendor);
     frm.refresh_field('tour_itinerary');
+    frm.refresh_field('create_itinerary');
 },
 
 

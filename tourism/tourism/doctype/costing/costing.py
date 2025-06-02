@@ -54,7 +54,7 @@ class Costing(Document):
         for (option, room_type), hotel_rows in grouped_hotels.items():
             total_net_cost = sum(row.net_cost or 0 for row in hotel_rows)
 
-            total_cost = total_net_cost + total_extra_cost
+            total_cost = total_net_cost + (total_extra_cost / self.pax_quantity)
             grand_total = total_cost + (self.final_markup or 0)
             
             hotel_names = ", ".join(filter(None, [row.hotel for row in hotel_rows]))
