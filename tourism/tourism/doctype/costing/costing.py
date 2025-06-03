@@ -31,7 +31,7 @@ class Costing(Document):
                 row.cost or 0 for row in self.tour_itinerary if row.city == hotel_city
                 )
             else:
-                city_itinerary_cost = sum(row.amount or 0 for row in self.vendor_cost if row.city == hotel_city)
+                city_itinerary_cost = sum(row.amount or 0 for row in self.vendor_cost if row.city == hotel_city) + sum( row.cost or 0 for row in self.tour_itinerary if row.city == hotel_city)
                 
                 
             net_total = city_itinerary_cost
@@ -46,7 +46,7 @@ class Costing(Document):
             key = (row.option, row.room_type)
             grouped_hotels[key].append(row)
         if len(self.extra) > 0:
-            total_extra_cost = sum(row.amount or 0 for row in self.extra)
+            total_extra_cost = sum(row.per_person_amount or 0 for row in self.extra)
         else:
             total_extra_cost = 0
         self.set("final", [])
@@ -54,7 +54,7 @@ class Costing(Document):
         for (option, room_type), hotel_rows in grouped_hotels.items():
             total_net_cost = sum(row.net_cost or 0 for row in hotel_rows)
 
-            total_cost = total_net_cost + (total_extra_cost / self.pax_quantity)
+            total_cost = total_net_cost + total_extra_cost
             grand_total = total_cost + (self.final_markup or 0)
             
             hotel_names = ", ".join(filter(None, [row.hotel for row in hotel_rows]))
@@ -67,7 +67,7 @@ class Costing(Document):
             new_row.hotels = hotel_names
             new_row.stars = stars
             if self.pax_quantity:
-                new_row.total_extra = total_extra_cost/ self.pax_quantity
+                new_row.total_extra = total_extra_cost
             else:
                 new_row.total_extra = 0
                 

@@ -103,6 +103,21 @@ frappe.ui.form.on('Costing', {
         }
     },
 
+    pax_quantity: function(frm) {
+        if (!frm.doc.pax_quantity || frm.doc.pax_quantity <= 0) return;
+
+        (frm.doc.extra || []).forEach(row => {
+            row.pax = frm.doc.pax_quantity;
+            if (row.amount && !row.per_person_amount) {
+                row.per_person_amount = row.amount / frm.doc.pax_quantity;
+            } else if (row.per_person_amount) {
+                row.amount = row.per_person_amount * frm.doc.pax_quantity;
+            }
+        });
+
+        frm.refresh_field("extra");
+    },
+
 
     refresh(frm) {
 
@@ -235,6 +250,9 @@ frappe.ui.form.on('Costing clause cdt', {
 
 frappe.ui.form.on('Costing Extra cdt', {
 
+
+
+
     amount: function(frm, cdt, cdn){
 
         const row = frappe.get_doc(cdt, cdn);
@@ -263,6 +281,19 @@ frappe.ui.form.on('Costing Extra cdt', {
 
         if (frm.doc.pax_quantity) {
             row.pax = frm.doc.pax_quantity;
+        }
+
+        frm.refresh_field("extra");
+    },
+
+
+    pax: function(frm, cdt, cdn) {
+        const row = frappe.get_doc(cdt, cdn);
+
+        if (row.amount && row.pax) {
+            row.per_person_amount = row.amount / row.pax;
+        } else if (row.per_person_amount && row.pax) {
+            row.amount = row.per_person_amount * row.pax;
         }
 
         frm.refresh_field("extra");

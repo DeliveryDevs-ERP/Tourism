@@ -32,8 +32,7 @@
    "fieldname": "pax",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "PAX",
-   "read_only": 1
+   "label": "PAX"
   },
   {
    "fieldname": "per_person_amount",
@@ -46,7 +45,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-22 12:37:37.016001",
+ "modified": "2025-06-03 04:05:46.331607",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing Extra cdt",
