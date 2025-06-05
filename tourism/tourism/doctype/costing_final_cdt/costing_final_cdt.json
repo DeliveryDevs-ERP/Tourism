@@ -10,6 +10,8 @@
   "room_type",
   "hotels",
   "stars",
+  "total_hotel",
+  "total_itinerary",
   "net_cost",
   "total_extra",
   "total_cost",
@@ -96,12 +98,30 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Stars"
+  },
+  {
+   "fieldname": "total_hotel",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Hotel",
+   "non_negative": 1,
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_itinerary",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Itinerary",
+   "non_negative": 1,
+   "options": "currency",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-20 10:21:06.045310",
+ "modified": "2025-06-05 06:37:24.488855",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing Final cdt",

@@ -9,12 +9,12 @@ class Costing(Document):
     
     def validate(self):
         iterary_sum = sum(row.cost or 0 for row in self.tour_itinerary)
-        if iterary_sum == 0 and not self.by_vendor_:
-            frappe.msgprint("WARNING: Iternary cost sum is 0")
+        # if iterary_sum == 0 and not self.by_vendor_:
+        #     # frappe.msgprint("WARNING: Iternary cost sum is 0")
             
         vendor_sum = sum(row.amount or 0 for row in self.vendor_cost)
-        if vendor_sum == 0 and self.by_vendor_:
-            frappe.msgprint("WARNING: Vendor cost sum is 0")
+        # if vendor_sum == 0 and self.by_vendor_:
+        #     # frappe.msgprint("WARNING: Vendor cost sum is 0")
             
         self.calculate_GT()
         self.calculate_Final()
@@ -53,6 +53,7 @@ class Costing(Document):
 
         for (option, room_type), hotel_rows in grouped_hotels.items():
             total_net_cost = sum(row.net_cost or 0 for row in hotel_rows)
+            total_hotel_cost = sum(row.cost or 0 for row in hotel_rows) # sum of hotel_cost after group by
 
             total_cost = total_net_cost + total_extra_cost
             grand_total = total_cost + (self.final_markup or 0)
@@ -72,6 +73,8 @@ class Costing(Document):
                 new_row.total_extra = 0
                 
             new_row.net_cost = total_net_cost
+            new_row.total_hotel = total_hotel_cost
+            new_row.total_itinerary = total_net_cost - total_hotel_cost
             new_row.item = hotel_item
             new_row.uom = row.rate_type
             new_row.total_cost = total_cost
