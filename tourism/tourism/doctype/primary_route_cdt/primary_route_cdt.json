@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-11 11:46:01.331610",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "city",
+  "flight_number",
+  "cl",
+  "departure_date",
+  "arrival_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "city",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "City",
+   "options": "City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "flight_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Flight Number"
+  },
+  {
+   "fieldname": "cl",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Cl"
+  },
+  {
+   "fieldname": "departure_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Departure date"
+  },
+  {
+   "fieldname": "arrival_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Arrival date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-11 12:45:05.218556",
+ "modified_by": "Administrator",
+ "module": "Tourism",
+ "name": "Primary route cdt",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

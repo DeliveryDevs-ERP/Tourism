@@ -1,0 +1,40 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-11 11:48:24.469345",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ticket_no",
+  "route_details"
+ ],
+ "fields": [
+  {
+   "fieldname": "ticket_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Ticket No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "route_details",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Route Details ",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-11 11:48:56.589807",
+ "modified_by": "Administrator",
+ "module": "Tourism",
+ "name": "Conjunction ticket cdt",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
