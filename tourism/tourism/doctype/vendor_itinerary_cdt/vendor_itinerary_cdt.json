@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "city",
+  "room_type",
   "vendor",
   "amount"
  ],
@@ -14,10 +15,10 @@
   {
    "fieldname": "city",
    "fieldtype": "Link",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "City",
-   "options": "City",
-   "reqd": 1
+   "options": "City"
   },
   {
    "fieldname": "vendor",
@@ -34,12 +35,19 @@
    "in_list_view": 1,
    "label": "Amount",
    "options": "currency"
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "label": "Room Type",
+   "options": "Room Type",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-22 13:11:04.960692",
+ "modified": "2025-06-12 08:58:28.322537",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Vendor Itinerary cdt",

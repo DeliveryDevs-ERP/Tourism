@@ -47,10 +47,19 @@ frappe.ui.form.on('Costing', {
         row.amount = 0;
         row.cost = 0;
     });
+    (frm.doc.hotels || []).forEach(row => {
+        row.rate = 0;
+        row.cost = 0;
+    });
     const is_by_vendor = frm.doc.by_vendor_ === 1;
     frm.set_df_property('create_itinerary', 'hidden', is_by_vendor);
     frm.refresh_field('tour_itinerary');
     frm.refresh_field('create_itinerary');
+
+    if (!is_by_vendor && (frm.doc.vendor_cost || []).length > 0) {
+            frm.clear_table('vendor_cost');
+            frm.refresh_field('vendor_cost');
+        }
 },
 
 
@@ -386,7 +395,7 @@ function set_room_query(frm, cdt, cdn) {
 
 function fetch_rate_type_amount(frm, cdt, cdn) {
     var child = locals[cdt][cdn];
-    if (child.room_type && child.hotel) {
+    if (child.room_type && child.hotel && frm.doc.by_vendor_ === 0) { // if by vendor is 1 then dont fetch rate.
         frappe.call({
             method: "tourism.tourism.doctype.costing.GetHotels.fetch_hotel_room_details",
             args: {

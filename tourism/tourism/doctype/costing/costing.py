@@ -8,35 +8,42 @@ from frappe.model.document import Document
 class Costing(Document):
     
     def validate(self):
+        if self.by_vendor_:
+            for row in self.hotels:
+                row.rate = 0
+                row.cost = 0
         iterary_sum = sum(row.cost or 0 for row in self.tour_itinerary)
         # if iterary_sum == 0 and not self.by_vendor_:
         #     # frappe.msgprint("WARNING: Iternary cost sum is 0")
-            
+        total_cities = len(self.locations)
         vendor_sum = sum(row.amount or 0 for row in self.vendor_cost)
         # if vendor_sum == 0 and self.by_vendor_:
         #     # frappe.msgprint("WARNING: Vendor cost sum is 0")
             
-        self.calculate_GT()
+        self.calculate_GT(iterary_sum, total_cities)
         self.calculate_Final()
 
-    def calculate_GT(self):
+    def calculate_GT(self, iterary_sum, total_cities): 
         total_extra_cost = sum(row.amount or 0 for row in self.extra)
         total_optional_cost = sum(row.amount or 0 for row in self.optional)
 
         for hotel_row in self.hotels:
             hotel_city = hotel_row.city
+            hotel_room_type = hotel_row.room_type
             city_itinerary_cost = 0
             if not self.by_vendor_:
                 city_itinerary_cost = sum(
                 row.cost or 0 for row in self.tour_itinerary if row.city == hotel_city
                 )
+                net_total = city_itinerary_cost
+                row_cost = hotel_row.cost or 0
+                hotel_row.net_cost = net_total + row_cost
             else:
-                city_itinerary_cost = sum(row.amount or 0 for row in self.vendor_cost if row.city == hotel_city) + sum( row.cost or 0 for row in self.tour_itinerary if row.city == hotel_city)
-                
-                
-            net_total = city_itinerary_cost
-            row_cost = hotel_row.cost or 0
-            hotel_row.net_cost = net_total + row_cost
+                # city_itinerary_cost = sum(row.amount or 0 for row in self.vendor_cost if row.city == hotel_city) + sum( row.cost or 0 for row in self.tour_itinerary if row.city == hotel_city)
+                # per city room type rate = vendor room type wise cost / city count + iterary_sum / city count
+                # matching against room type then allot net_total
+                room_type_rate = (sum(row.amount or 0 for row in self.vendor_cost if row.room_type == hotel_room_type) / total_cities) + (iterary_sum / total_cities)
+                hotel_row.net_cost =  room_type_rate
 
     def calculate_Final(self):
         from collections import defaultdict
