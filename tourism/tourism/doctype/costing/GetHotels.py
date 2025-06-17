@@ -280,8 +280,9 @@ def get_Itinerary(cities_day):
         city_order = {city: idx for idx, city in enumerate(cities_day.keys())}
         ordered_response.sort(key=lambda x: city_order.get(x.get('city'), float('inf')))
         
-        seen = {}  # { "Dubai": set(1, 2), "London": set(1) }
+        seen = {}
         global_day = 1
+        last_global_day = 0
 
         for item in ordered_response:
             city = item['city']
@@ -291,11 +292,18 @@ def get_Itinerary(cities_day):
                 seen[city] = {}
 
             if day not in seen[city]:
-                seen[city][day] = global_day
-                global_day += 1
+                if day == 1:
+                    seen[city][day] = last_global_day or global_day  # Reuse last if exists
+                else:
+                    global_day += 1
+                    seen[city][day] = global_day
+                    last_global_day = global_day
 
-            # Reassign the global day
             item['day'] = seen[city][day]
+
+            # Only update last_global_day after assigning
+            if day != 1:
+                last_global_day = seen[city][day]
 
         # frappe.errprint(f"ordered_response : {ordered_response}")
         return ordered_response

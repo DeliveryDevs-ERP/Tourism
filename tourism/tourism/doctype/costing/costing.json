@@ -205,7 +205,8 @@
    "fieldtype": "Link",
    "label": "Opportunity ",
    "options": "Opportunity",
-   "read_only": 1
+   "read_only": 1,
+   "search_index": 1
   },
   {
    "fieldname": "proposal",
@@ -275,7 +276,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-12 08:55:22.856876",
+ "modified": "2025-06-17 04:22:56.469359",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",

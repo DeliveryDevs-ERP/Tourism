@@ -18,7 +18,7 @@
    "fieldname": "day",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "No of Day(s)",
+   "label": "Nights",
    "non_negative": 1
   },
   {
@@ -53,7 +53,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-16 09:45:08.795537",
+ "modified": "2025-06-17 05:27:57.536579",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Package stay cdt",

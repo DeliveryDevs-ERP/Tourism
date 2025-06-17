@@ -52,7 +52,7 @@ frappe.ui.form.on('Costing', {
         row.cost = 0;
     });
     const is_by_vendor = frm.doc.by_vendor_ === 1;
-    frm.set_df_property('create_itinerary', 'hidden', is_by_vendor);
+    // frm.set_df_property('create_itinerary', 'hidden', is_by_vendor);
     frm.refresh_field('tour_itinerary');
     frm.refresh_field('create_itinerary');
 
@@ -489,12 +489,12 @@ function Create_Itinerary(frm) {
         if (location.city_of_stay) {
             let day = location.day || 0;
 
-            // If it's the last city, add +1 to the day
-            if (index === locations.length - 1) {
-                day += 1;
-            }
+            // If it's the last city, add +1 to the day // add 1 to all the cities
+            // if (index === locations.length - 1) {
+            //     day += 1;
+            // }
 
-            cities_day[location.city_of_stay] = day;
+            cities_day[location.city_of_stay] = day + 1;
         }
     });
 
