@@ -140,6 +140,9 @@ app_license = "mit"
 doc_events = {
     "Quotation": {
         "on_submit": "tourism.tourism.doctype.costing.utils.quotation_on_submit"
+    },
+    "Sales Invoice": {
+        "on_submit": "tourism.api.sales_invoice_on_submit"
     }
 }
 # Scheduled Tasks
