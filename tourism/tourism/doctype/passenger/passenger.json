@@ -185,7 +185,6 @@
    "fieldname": "cnic",
    "fieldtype": "Data",
    "label": "CNIC",
-   "reqd": 1,
    "unique": 1
   },
   {
@@ -232,7 +231,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-03-13 07:30:48.361975",
+ "modified": "2025-06-25 08:26:17.103085",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Passenger",
@@ -368,6 +367,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "first_name",
+ "title_field": "full_name",
  "translated_doctype": 1
 }

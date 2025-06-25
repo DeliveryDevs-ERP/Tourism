@@ -319,3 +319,23 @@ def quotation_on_submit(doc, method):
     if doc.custom_package:
         frappe.db.set_value("Costing", doc.custom_package, "proposal", doc.name)
         frappe.db.commit()
+
+@frappe.whitelist()
+def quotation_on_trash(doc, method):
+    try:
+        if doc.custom_package:
+            frappe.db.set_value("Costing", doc.custom_package, "proposal", None)
+        
+        # Now delete the Quotation safely
+        frappe.delete_doc(
+            doctype="Quotation",
+            name=doc.name,
+            ignore_permissions=True,
+            ignore_missing=True,
+            force=True,
+            ignore_on_trash=True,
+            ignore_links=True
+        )
+
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "Failed to unlink and delete Quotation on trash")

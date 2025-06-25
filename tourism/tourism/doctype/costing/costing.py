@@ -86,3 +86,6 @@ class Costing(Document):
             new_row.uom = row.rate_type
             new_row.total_cost = total_cost
             new_row.grand_total = grand_total
+
+    def on_trash(self):
+        frappe.delete_doc("Costing", self.name, ignore_permissions=True, ignore_missing=True, force=True, ignore_on_trash=True, ignore_links=True)

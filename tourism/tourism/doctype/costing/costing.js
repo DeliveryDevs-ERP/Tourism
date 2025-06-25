@@ -205,6 +205,11 @@ frappe.ui.form.on('Costing', {
 });
 
 frappe.ui.form.on('Costing Hotel cdt', {
+
+    hotels_add: function(frm, cdt, cdn) {
+        frappe.model.set_value(cdt, cdn, 'rate_type', 'Per Person');
+    },
+
     hotel: function(frm, cdt, cdn) {
         set_room_query(frm, cdt, cdn);
         const row = locals[cdt][cdn];
