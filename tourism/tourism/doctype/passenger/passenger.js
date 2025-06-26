@@ -12,23 +12,19 @@ frappe.ui.form.on("Passenger", {
                         },
                         callback: function(r) {
                             if (r.message) {
-                                frm.set_value('first_name', r.message.first_name);
-                                frm.set_value('last_name', r.message.last_name);
-                                frm.set_value('passport_number', r.message.passport_number);
-                                frm.set_value('cnic', r.message.cnic);
-                                frm.set_value('date_of_birth', r.message.date_of_birth);
-                                frm.set_value('nationality', r.message.nationality);
-                                frm.set_value('passport_expire_date', r.message.date_of_expiry);
-                                frm.set_value('gender', r.message.sex === 'M' ? 'Male' : 'Female'); 
+                                const parsed = r.message[0];
+                                const raw_text = r.message[1];
 
-                                frm.refresh_field('first_name');
-                                frm.refresh_field('last_name');
-                                frm.refresh_field('passport_number');
-                                frm.refresh_field('cnic');
-                                frm.refresh_field('nationality');
-                                frm.refresh_field('date_of_birth');
-                                frm.refresh_field('passport_expire_date');
-                                frm.refresh_field('gender');
+                                frm.set_value('first_name', parsed.first_name);
+                                frm.set_value('last_name', parsed.last_name);
+                                frm.set_value('passport_number', parsed.passport_number);
+                                frm.set_value('cnic', parsed.cnic);
+                                frm.set_value('date_of_birth', parsed.date_of_birth);
+                                frm.set_value('nationality', parsed.nationality);
+                                frm.set_value('passport_expire_date', parsed.date_of_expiry);
+                                frm.set_value('gender', parsed.sex === 'M' ? 'Male' : 'Female'); 
+                                frm.set_value('text', raw_text); 
+                                frm.refresh_fields();
 
                                 frappe.msgprint(__('Passport scanned successfully.'));
                             }
@@ -42,6 +38,5 @@ frappe.ui.form.on("Passenger", {
                 }
             });
         }
-
     },
 });

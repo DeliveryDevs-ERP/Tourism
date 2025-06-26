@@ -38,7 +38,10 @@
   "email_ids",
   "phone_nos",
   "travel_history_section",
-  "table_dqlb"
+  "table_dqlb",
+  "dev_tab",
+  "section_break_dimn",
+  "text"
  ],
  "fields": [
   {
@@ -225,13 +228,28 @@
    "fieldname": "nationality",
    "fieldtype": "Data",
    "label": "Nationality"
+  },
+  {
+   "fieldname": "section_break_dimn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "text",
+   "fieldtype": "Long Text",
+   "label": "Parser Preview",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dev_tab",
+   "fieldtype": "Tab Break",
+   "label": "Dev"
   }
  ],
  "icon": "fa fa-user",
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-25 08:26:17.103085",
+ "modified": "2025-06-26 05:33:48.009739",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Passenger",
