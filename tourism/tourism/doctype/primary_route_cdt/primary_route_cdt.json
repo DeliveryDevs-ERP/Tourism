@@ -10,7 +10,8 @@
   "flight_number",
   "cl",
   "departure_date",
-  "arrival_date"
+  "arrival_date",
+  "city_sn"
  ],
  "fields": [
   {
@@ -44,12 +45,19 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Arrival date"
+  },
+  {
+   "fetch_from": "city.short_name",
+   "fieldname": "city_sn",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "city SN"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-11 12:45:05.218556",
+ "modified": "2025-06-30 07:19:20.873138",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Primary route cdt",

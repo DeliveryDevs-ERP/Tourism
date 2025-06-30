@@ -3,7 +3,7 @@
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "field:passport_number",
+ "autoname": "field:cnic",
  "creation": "2025-01-10 09:41:11.687933",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -14,6 +14,7 @@
   "middle_name",
   "last_name",
   "full_name",
+  "full_name_pass",
   "email_id",
   "nationality",
   "address",
@@ -52,8 +53,7 @@
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
-   "in_global_search": 1,
-   "label": "First Name",
+   "label": "Given Names",
    "oldfieldname": "first_name",
    "oldfieldtype": "Data",
    "reqd": 1
@@ -61,20 +61,20 @@
   {
    "fieldname": "middle_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Middle Name"
   },
   {
    "bold": 1,
    "fieldname": "last_name",
    "fieldtype": "Data",
-   "label": "Last Name",
+   "label": "Surname",
    "oldfieldname": "last_name",
    "oldfieldtype": "Data"
   },
   {
    "fieldname": "full_name",
    "fieldtype": "Data",
-   "hidden": 1,
    "label": "Full Name",
    "read_only": 1
   },
@@ -181,13 +181,13 @@
    "fieldname": "passport_number",
    "fieldtype": "Data",
    "label": "Passport Number",
-   "reqd": 1,
    "unique": 1
   },
   {
    "fieldname": "cnic",
    "fieldtype": "Data",
    "label": "CNIC",
+   "reqd": 1,
    "unique": 1
   },
   {
@@ -243,13 +243,19 @@
    "fieldname": "dev_tab",
    "fieldtype": "Tab Break",
    "label": "Dev"
+  },
+  {
+   "fieldname": "full_name_pass",
+   "fieldtype": "Data",
+   "label": "Info",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-user",
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-26 05:33:48.009739",
+ "modified": "2025-06-30 06:48:13.993210",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Passenger",
@@ -385,6 +391,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "full_name",
+ "title_field": "full_name_pass",
  "translated_doctype": 1
 }
