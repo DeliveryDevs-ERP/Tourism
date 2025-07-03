@@ -28,7 +28,8 @@ def get_ticket_purchase_invoices(project):
             "custom_ticket_number",
             "custom_airline",
             "custom_net_fare",
-            "custom_route"
+            "custom_route",
+            "custom_sectors"
         ],
         limit_page_length=100
     )

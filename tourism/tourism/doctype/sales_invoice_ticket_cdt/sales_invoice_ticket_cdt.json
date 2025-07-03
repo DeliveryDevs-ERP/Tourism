@@ -13,7 +13,8 @@
   "net_fare",
   "route",
   "purchase_invoice",
-  "margin"
+  "margin",
+  "sector"
  ],
  "fields": [
   {
@@ -75,12 +76,18 @@
    "in_list_view": 1,
    "label": "Margin",
    "non_negative": 1
+  },
+  {
+   "fieldname": "sector",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Sector"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-20 04:37:42.753319",
+ "modified": "2025-07-03 07:09:55.357183",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Sales Invoice Ticket cdt",
