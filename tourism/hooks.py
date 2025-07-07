@@ -144,6 +144,9 @@ doc_events = {
     },
     "Sales Invoice": {
         "on_submit": "tourism.api.sales_invoice_on_submit"
+    },
+    "Purchase Invoice": {
+        "validate": "tourism.api.purchase_invoice_validate"
     }
 }
 # Scheduled Tasks
