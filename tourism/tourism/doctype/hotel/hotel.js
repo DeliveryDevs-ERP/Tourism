@@ -2,6 +2,24 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Hotel", {
+
+    onload(frm) {
+        if (frm.is_new() && (!frm.doc.room_details || frm.doc.room_details.length === 0)) {
+            const room_types = [
+                'Single Room',
+                'Double/Twin',
+                'Child with Extra Bed'
+            ];
+
+            room_types.forEach(type => {
+                const row = frm.add_child('room_details');
+                row.room_type = type;
+            });
+
+            frm.refresh_field('room_details');
+        }
+    },
+
 	refresh(frm) {
 
 	},

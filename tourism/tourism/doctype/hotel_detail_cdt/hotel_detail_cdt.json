@@ -31,6 +31,7 @@
    "reqd": 1
   },
   {
+   "default": "0",
    "fieldname": "rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -39,6 +40,7 @@
    "reqd": 1
   },
   {
+   "default": "0",
    "fieldname": "room_rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -50,7 +52,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-22 13:57:54.523899",
+ "modified": "2025-07-09 06:49:47.266604",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel Detail cdt",
