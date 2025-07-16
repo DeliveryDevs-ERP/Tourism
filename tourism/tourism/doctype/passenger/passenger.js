@@ -22,6 +22,7 @@ frappe.ui.form.on("Passenger", {
                                 frm.set_value('date_of_birth', parsed.date_of_birth);
                                 frm.set_value('nationality', parsed.nationality);
                                 frm.set_value('passport_expire_date', parsed.date_of_expiry);
+                                frm.set_value('passport_issue_date', parsed.date_of_issue);
                                 frm.set_value('gender', parsed.sex === 'M' ? 'Male' : 'Female'); 
                                 frm.set_value('text', raw_text); 
                                 frm.refresh_fields();
