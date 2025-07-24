@@ -113,7 +113,6 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Itinerary",
-   "non_negative": 1,
    "options": "currency",
    "read_only": 1
   }
@@ -121,7 +120,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-05 06:37:24.488855",
+ "modified": "2025-07-24 07:51:27.388877",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing Final cdt",
