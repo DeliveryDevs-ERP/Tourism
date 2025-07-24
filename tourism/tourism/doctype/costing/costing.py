@@ -91,5 +91,17 @@ class Costing(Document):
             new_row.total_cost = total_cost
             new_row.grand_total = grand_total
 
+
     def on_trash(self):
-        frappe.delete_doc("Costing", self.name, ignore_permissions=True, ignore_missing=True, force=True, ignore_on_trash=True, ignore_links=True)
+        # Step 1: Find the Quotation referencing this Costing
+        quotation = frappe.db.get_value(
+            "Quotation",
+            {"custom_package": self.name},
+            "name"
+        )
+
+        # Step 2: If a quotation is found, clear the custom_package field
+        if quotation:
+            quotation_doc = frappe.get_doc("Quotation", quotation)
+            quotation_doc.custom_package = None
+            quotation_doc.save(ignore_permissions=True)
