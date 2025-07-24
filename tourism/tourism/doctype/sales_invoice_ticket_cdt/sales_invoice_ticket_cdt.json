@@ -12,6 +12,7 @@
   "airline",
   "net_fare",
   "route",
+  "full_route",
   "purchase_invoice",
   "margin",
   "sector"
@@ -82,12 +83,18 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "Sector"
+  },
+  {
+   "fieldname": "full_route",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Route"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-03 07:09:55.357183",
+ "modified": "2025-07-24 08:36:29.874687",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Sales Invoice Ticket cdt",

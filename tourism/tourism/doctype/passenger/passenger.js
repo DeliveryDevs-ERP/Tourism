@@ -7,6 +7,8 @@ frappe.ui.form.on("Passenger", {
                 if (passportAttachment && passportAttachment.attachment) {
                     frappe.call({
                         method: 'ocr.ocr.doctype.file_manager.file_manager.scan_passport',
+                        freeze: true,
+                        freeze_message: __('Scanning passport, please wait...'),
                         args: {
                             file_url: passportAttachment.attachment
                         },

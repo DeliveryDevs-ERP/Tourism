@@ -29,6 +29,7 @@ def get_ticket_purchase_invoices(project):
             "custom_airline",
             "custom_net_fare",
             "custom_route",
+            "custom_full_route",
             "custom_sectors"
         ],
         limit_page_length=100
@@ -89,31 +90,23 @@ def purchase_invoice_validate(doc, method):
 
 
 @frappe.whitelist()
-def get_customer_primary_contact_details(customer):
+def get_customer_primary_contact_details(contact_person):
     """
     Fetch primary contact details and linked custom fields from the Contact associated with the given Customer.
     """
-    if not customer:
+    if not contact_person:
         return {}
 
     # Get the Contact linked to the Customer
-    contact_links = frappe.get_all(
-        "Dynamic Link",
-        filters={
-            "link_doctype": "Customer",
-            "link_name": customer,
-            "parenttype": "Contact"
-        },
-        fields=["parent"],
-        order_by="creation asc",
-        limit=1
+    contact = frappe.get_doc(
+        "Contact",contact_person
     )
 
-    if not contact_links:
-        return {}
+    # if not contact_links:
+    #     return {}
 
-    contact_name = contact_links[0].parent
-    contact = frappe.get_doc("Contact", contact_name)
+    # contact_name = contact_links[0].parent
+    # contact = frappe.get_doc("Contact", contact_name)
 
     # Find matching email from 'Contact Email' table inside doc
     email = ""

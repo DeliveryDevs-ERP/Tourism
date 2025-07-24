@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:{name1} - {city}",
+ "autoname": "format:HOTEL-{######}",
  "creation": "2025-01-01 12:36:11.096926",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -166,7 +166,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-22 12:25:03.210971",
+ "modified": "2025-07-24 09:09:15.536348",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Hotel",
@@ -186,7 +186,10 @@
    "write": 1
   }
  ],
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "name1",
+ "translated_doctype": 1
 }

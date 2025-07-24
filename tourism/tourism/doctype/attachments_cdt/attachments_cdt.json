@@ -12,10 +12,10 @@
  "fields": [
   {
    "fieldname": "attachment_type",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Attachment Type",
-   "options": "\nCNIC Front\nCNIC Back\nPassport",
+   "options": "Passenger Attachment Type",
    "reqd": 1
   },
   {
@@ -29,7 +29,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-03-10 07:36:52.063804",
+ "modified": "2025-07-24 09:03:08.036415",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Attachments cdt",
