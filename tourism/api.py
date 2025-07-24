@@ -86,3 +86,55 @@ def purchase_invoice_validate(doc, method):
                     frappe.throw(_(
                         "A Purchase Invoice for ticket {0} already exists (Invoice {1})."
                     ).format(ticket_no, dup[0].name))
+
+
+@frappe.whitelist()
+def get_customer_primary_contact_details(customer):
+    """
+    Fetch primary contact details and linked custom fields from the Contact associated with the given Customer.
+    """
+    if not customer:
+        return {}
+
+    # Get the Contact linked to the Customer
+    contact_links = frappe.get_all(
+        "Dynamic Link",
+        filters={
+            "link_doctype": "Customer",
+            "link_name": customer,
+            "parenttype": "Contact"
+        },
+        fields=["parent"],
+        order_by="creation asc",
+        limit=1
+    )
+
+    if not contact_links:
+        return {}
+
+    contact_name = contact_links[0].parent
+    contact = frappe.get_doc("Contact", contact_name)
+
+    # Find matching email from 'Contact Email' table inside doc
+    email = ""
+    if contact.email_ids:
+        for row in contact.email_ids:
+            if row.parent == contact.name:
+                email = row.email_id
+                break
+
+    # Find matching phone from 'Contact Phone' table inside doc
+    phone = ""
+    if contact.phone_nos:
+        for row in contact.phone_nos:
+            if row.parent == contact.name:
+                phone = row.phone
+                break
+
+    return {
+        "custom_designation": contact.get("custom_designation_link"),
+        "custom_department": contact.get("custom_department_link"),
+        "custom_branch": contact.get("custom_branch"),
+        "contact_email": email,
+        "contact_mobile": phone
+    }

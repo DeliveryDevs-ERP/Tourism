@@ -15,10 +15,12 @@
   "last_name",
   "full_name",
   "full_name_pass",
+  "father_name",
   "email_id",
   "nationality",
   "address",
   "date_of_birth",
+  "place_of_birth",
   "cb00",
   "status",
   "designation",
@@ -236,8 +238,7 @@
   {
    "fieldname": "text",
    "fieldtype": "Long Text",
-   "label": "Parser Preview",
-   "read_only": 1
+   "label": "Parser Preview"
   },
   {
    "fieldname": "dev_tab",
@@ -249,13 +250,23 @@
    "fieldtype": "Data",
    "label": "Info",
    "read_only": 1
+  },
+  {
+   "fieldname": "father_name",
+   "fieldtype": "Data",
+   "label": "Father Name"
+  },
+  {
+   "fieldname": "place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth"
   }
  ],
  "icon": "fa fa-user",
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-30 06:48:13.993210",
+ "modified": "2025-07-23 06:19:10.591492",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Passenger",
