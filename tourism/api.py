@@ -125,8 +125,8 @@ def get_customer_primary_contact_details(contact_person):
                 break
 
     return {
-        "custom_designation": contact.get("custom_designation_link"),
-        "custom_department": contact.get("custom_department_link"),
+        "custom_designation": contact.get("designation"),
+        "custom_department": contact.get("department"),
         "custom_branch": contact.get("custom_branch"),
         "contact_email": email,
         "contact_mobile": phone
