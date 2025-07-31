@@ -67,8 +67,14 @@ class Costing(Document):
             total_hotel_cost = sum(row.cost or 0 for row in hotel_rows) # sum of hotel_cost after group by
 
             total_cost = total_net_cost + total_extra_cost
-            grand_total = total_cost + (self.final_markup or 0)
-            
+            if self.selective_markup_ == 1:
+                # Apply selective markup if available for this room_type
+                markup_row = next((r for r in self.selective_markup if r.room_type == room_type), None)
+                markup_value = markup_row.markup if markup_row else 0
+                grand_total = total_cost + (markup_value or 0)
+            else:
+                grand_total = total_cost + (self.final_markup or 0)
+                
             hotel_names = ", ".join(filter(None, [row.hotel for row in hotel_rows]))
             stars = ", ".join(filter(None, [row.star for row in hotel_rows]))
             hotel_item = frappe.get_value("Hotel",row.hotel,"item_id")

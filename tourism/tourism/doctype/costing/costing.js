@@ -42,6 +42,38 @@ frappe.ui.form.on('Costing', {
 
     },
 
+    selective_markup_: function(frm) {
+        if (frm.doc.selective_markup_ === 1) {
+            frm.set_value("final_markup", 0);
+
+            // Disable add row button for child table
+            frm.fields_dict.selective_markup.grid.df.cannot_add_rows = true;
+            frm.fields_dict.selective_markup.grid.refresh();
+
+            // Clear existing rows
+            frm.clear_table("selective_markup");
+
+            // Collect unique room types from hotels table
+            if (frm.doc.hotels && frm.doc.hotels.length > 0) {
+                const roomTypeSet = new Set(
+                    frm.doc.hotels.map(h => h.room_type).filter(Boolean)  // Filter out null/undefined
+                );
+
+                // Add a row to selective_markup table for each unique room_type
+                roomTypeSet.forEach(roomType => {
+                    const child = frm.add_child("selective_markup");
+                    child.room_type = roomType;
+                });
+
+                frm.refresh_field("selective_markup");
+            }
+        } else {
+            // Optional: If unchecked, re-enable add row
+            frm.fields_dict.selective_markup.grid.df.cannot_add_rows = false;
+            frm.fields_dict.selective_markup.grid.refresh();
+        }
+    },
+
     by_vendor_: function(frm) {
     (frm.doc.tour_itinerary || []).forEach(row => {
         row.amount = 0;

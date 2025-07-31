@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:CST-{YYYY}-{#########}",
+ "autoname": "format:{customer_name}-{travel_date}-{pax_quantity}-{full_route}-{#########}",
  "creation": "2025-01-01 13:47:56.962161",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -10,14 +10,19 @@
   "pax_quantity",
   "column_break_ughk",
   "currency",
+  "full_route",
+  "customer_name",
+  "travel_date",
   "section_break_rmpt",
   "locations",
   "section_break_htuv",
   "hotels",
   "extra",
   "section_break_rmyc",
+  "selective_markup_",
   "final_markup",
   "column_break_vadk",
+  "selective_markup",
   "section_break_kndz",
   "final",
   "section_break_qsli",
@@ -191,6 +196,8 @@
    "options": "Costing Optional cdt"
   },
   {
+   "default": "0",
+   "depends_on": "eval:doc.selective_markup_ === 0;",
    "fieldname": "final_markup",
    "fieldtype": "Currency",
    "label": "Markup",
@@ -272,11 +279,43 @@
    "fieldtype": "Table",
    "label": "Vendor Cost",
    "options": "Vendor Itinerary cdt"
+  },
+  {
+   "default": "0",
+   "fieldname": "selective_markup_",
+   "fieldtype": "Check",
+   "label": "Selective Markup ?"
+  },
+  {
+   "depends_on": "eval:doc.selective_markup_ === 1;",
+   "fieldname": "selective_markup",
+   "fieldtype": "Table",
+   "label": "Selective Markup",
+   "mandatory_depends_on": "eval:doc.selective_markup_ === 1;",
+   "options": "Markup Table cdt"
+  },
+  {
+   "fetch_from": "opportunity.custom_full_route",
+   "fieldname": "full_route",
+   "fieldtype": "Data",
+   "label": "Full Route"
+  },
+  {
+   "fetch_from": "opportunity.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name"
+  },
+  {
+   "fetch_from": "opportunity.custom_group_travel_date",
+   "fieldname": "travel_date",
+   "fieldtype": "Date",
+   "label": "Travel Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-17 04:22:56.469359",
+ "modified": "2025-07-31 12:34:54.472358",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",
