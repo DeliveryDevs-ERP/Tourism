@@ -10,13 +10,14 @@ frappe.ui.form.on('Costing', {
 
     onload: function(frm) {
     if (frm.doc.opportunity) {
-        frm.set_value("currency", 'USD');
             if (frm.is_new()) {
                 if (frm.doc.hotels && frm.doc.hotels.length === 0) {
                     calculate_pax(frm);
                     create_hotel_rows(frm);
                     fetch_package_clauses(frm);
+                    set_airport_query_for_all_location_rows(frm);
                     Create_Itinerary(frm);
+                    change_currency_from_opportunity(frm);
                 }
 
                 if (frm.doc.proposal) {
@@ -24,22 +25,6 @@ frappe.ui.form.on('Costing', {
                 }
             }
         }
-        // console.log("on load called");
-        // frm.fields_dict['tour_itinerary'].grid.get_field('city').get_query = function(doc, cdt, cdn) {
-        //     let cities = [];
-        //     if (doc.locations && doc.locations.length > 0) {
-        //         cities = doc.locations.map(function(location) {
-        //             return location.city_of_stay;
-        //         });
-        //     }
-        //     return {
-        //         query: 'tourism.tourism.doctype.costing.GetHotels.get_hotels_based_on_city',
-        //         filters: { 
-        //             'cities':cities
-        //         }
-        //     };
-        // };
-
     },
 
     selective_markup_: function(frm) {
@@ -161,7 +146,7 @@ frappe.ui.form.on('Costing', {
 
 
     refresh(frm) {
-
+        set_airport_query_for_all_location_rows(frm);
         if (frm.doc.opportunity) {
             frm.add_custom_button(__('Proposal'), function() {
                 frappe.call({
@@ -752,4 +737,41 @@ function calculate_pax(frm) {
             }
         }
     });
+}
+
+
+function set_airport_query_for_all_location_rows(frm) {
+    const grid = frm.fields_dict['locations']?.grid;
+    if (!grid) return;
+
+    grid.get_field('airport').get_query = function (doc, cdt, cdn) {
+        const row = locals[cdt][cdn] || {};
+        // If no city chosen yet, return an empty list (or omit filters to show all)
+        if (!row.city_of_stay) {
+            return { filters: { name: ['in', []] } };
+        }
+        return {
+            filters: {
+                // Airport.attached_city is a Link to City
+                attached_city: row.city_of_stay
+            }
+        };
+    };
+
+    // Refresh visible rows so the new query is active immediately
+    grid.refresh();
+}
+
+async function change_currency_from_opportunity(frm) {
+    if (!frm.doc.opportunity) return;
+
+    try {
+        const r = await frappe.db.get_value('Opportunity', frm.doc.opportunity, 'currency');
+        const opp_currency = r?.message?.currency;
+        if (opp_currency && frm.doc.currency !== opp_currency) {
+            await frm.set_value('currency', opp_currency);
+        }
+    } catch (e) {
+        console.error('Error fetching currency from Opportunity:', e);
+    }
 }

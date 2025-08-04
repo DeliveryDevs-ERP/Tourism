@@ -168,7 +168,6 @@
    "options": "Package visa charges cdt"
   },
   {
-   "default": "USD",
    "fieldname": "currency",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -315,7 +314,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-31 12:34:54.472358",
+ "modified": "2025-08-04 10:23:03.204641",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",

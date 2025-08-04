@@ -2,40 +2,35 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "prompt",
- "creation": "2025-01-01 12:48:03.804091",
+ "creation": "2025-08-04 07:53:37.188379",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "country",
-  "short_name",
-  "airports"
+  "airport_code",
+  "attached_city"
  ],
  "fields": [
   {
-   "fieldname": "country",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Country",
-   "options": "Country"
-  },
-  {
-   "fieldname": "short_name",
+   "fieldname": "airport_code",
    "fieldtype": "Data",
-   "label": "City Code"
+   "in_list_view": 1,
+   "label": "Airport Code",
+   "reqd": 1
   },
   {
-   "fieldname": "airports",
-   "fieldtype": "Table",
-   "label": "Airports",
-   "options": "Airport cdt"
+   "fieldname": "attached_city",
+   "fieldtype": "Link",
+   "label": "Attached City",
+   "options": "City",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-04 07:56:55.079691",
+ "modified": "2025-08-04 07:56:22.447943",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "City",
+ "name": "Airport",
  "naming_rule": "Set by user",
  "owner": "Administrator",
  "permissions": [

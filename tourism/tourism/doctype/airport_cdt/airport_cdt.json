@@ -1,0 +1,42 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-04 07:54:30.871920",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "airport",
+  "airport_code"
+ ],
+ "fields": [
+  {
+   "fieldname": "airport",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Airport",
+   "link_filters": "[[\"Airport\",\"attached_city\",\"is\",\"not set\"]]",
+   "options": "Airport",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "airport.airport_code",
+   "fieldname": "airport_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Airport Code"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-08-04 08:28:31.037746",
+ "modified_by": "Administrator",
+ "module": "Tourism",
+ "name": "Airport cdt",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -205,7 +205,8 @@ def make_costing(source_name, target_doc=None):
                 "field_map": {
                     "party_name": "customer",
                     "custom_group_travel_date" : "travel_date",
-                    "custom_full_route" : "full_route"
+                    "custom_full_route" : "full_route",
+                    "currency" : "currency"
                 }
             },
             "Opportunity cdt": {

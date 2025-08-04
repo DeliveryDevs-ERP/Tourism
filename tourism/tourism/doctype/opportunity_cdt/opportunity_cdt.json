@@ -11,7 +11,9 @@
   "to_date",
   "days",
   "hotel",
-  "hotel_category"
+  "hotel_category",
+  "airport",
+  "airport_code"
  ],
  "fields": [
   {
@@ -55,12 +57,26 @@
    "fieldtype": "Int",
    "in_standard_filter": 1,
    "label": "Nights"
+  },
+  {
+   "fieldname": "airport",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Airport",
+   "options": "Airport"
+  },
+  {
+   "fetch_from": "airport.airport_code",
+   "fieldname": "airport_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Airport Code"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-20 05:12:24.868084",
+ "modified": "2025-08-04 09:41:48.740526",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Opportunity cdt",
