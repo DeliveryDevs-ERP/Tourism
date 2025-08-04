@@ -727,7 +727,7 @@ function calculate_pax(frm) {
         callback: function(r) {
             if (r.message) {
                 const opp = r.message;
-                const passengers = parseInt(opp.custom_no_of_passengers) || 0;
+                const passengers = parseInt(opp.custom_nos_of_passengers) || 0;
                 const infants = parseInt(opp.custom_no_of_infants) || 0;
                 const children = parseInt(opp.custom_no_of_childs) || 0;
 
