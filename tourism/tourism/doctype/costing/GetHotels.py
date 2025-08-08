@@ -20,7 +20,7 @@ def filter_packages_by_city(*args, **kwargs):
         query = f"""
         SELECT `parent`
         FROM `tabPackage stay cdt`
-        WHERE `parenttype` = 'Package'
+        WHERE `parenttype` = 'Costing'
         GROUP BY `parent`
         HAVING COUNT(DISTINCT `city_of_stay`) = {len(city_of_stay)}
         AND SUM(CASE WHEN `city_of_stay` IN ({placeholders}) THEN 1 ELSE 0 END) = {len(city_of_stay)}
