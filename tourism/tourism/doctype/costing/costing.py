@@ -45,7 +45,7 @@ class Costing(Document):
                 # per city room type rate = vendor room type wise cost / city count + iterary_sum / city count
                 # matching against room type then allot net_total
                 hotel_sum += hotel_row.cost if hotel_row.cost else 0 # added for client req for allowing hotel rate in by vendor tick
-                room_type_rate = (sum(row.amount or 0 for row in self.vendor_cost if row.room_type == hotel_room_type) / total_cities) + (iterary_sum / total_cities)
+                room_type_rate = (sum(row.amount or 0 for row in self.vendor_cost if row.room_type == hotel_room_type and row.option == hotel_row.option) / total_cities) + (iterary_sum / total_cities)
                 hotel_row.net_cost =  room_type_rate
         hotel_row.net_cost = hotel_row.net_cost + hotel_sum  # added for client req for allowing hotel rate in by vendor tick
 

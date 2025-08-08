@@ -8,6 +8,7 @@
  "field_order": [
   "city",
   "room_type",
+  "option",
   "vendor",
   "amount"
  ],
@@ -42,12 +43,18 @@
    "label": "Room Type",
    "options": "Room Type",
    "reqd": 1
+  },
+  {
+   "fieldname": "option",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Option"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-12 08:58:28.322537",
+ "modified": "2025-08-07 08:27:12.328212",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Vendor Itinerary cdt",

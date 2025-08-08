@@ -6,7 +6,6 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "by_vendor_",
   "pax_quantity",
   "column_break_ughk",
   "currency",
@@ -15,6 +14,9 @@
   "travel_date",
   "section_break_rmpt",
   "locations",
+  "section_break_qwph",
+  "by_vendor_",
+  "vendor_cost",
   "section_break_htuv",
   "hotels",
   "extra",
@@ -44,7 +46,6 @@
   "package_includes",
   "package_excludes",
   "itinerary_tab",
-  "vendor_cost",
   "section_break_qccz",
   "create_itinerary",
   "section_break_wqhc",
@@ -310,11 +311,15 @@
    "fieldname": "travel_date",
    "fieldtype": "Date",
    "label": "Travel Date"
+  },
+  {
+   "fieldname": "section_break_qwph",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-04 10:23:03.204641",
+ "modified": "2025-08-07 08:28:02.281564",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",
