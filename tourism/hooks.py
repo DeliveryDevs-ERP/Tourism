@@ -178,9 +178,9 @@ doc_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "tourism.event.get_events"
-# }
+override_whitelisted_methods = {
+    "frappe.utils.print_format.download_pdf": "tourism.overrides.pdf_generator.get_pdf_puppeteer"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

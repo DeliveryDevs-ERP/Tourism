@@ -65,10 +65,9 @@
   },
   {
    "fieldname": "purchase_invoice",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Purchase Invoice",
-   "options": "Purchase Invoice",
    "read_only": 1
   },
   {
@@ -94,7 +93,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-24 08:36:29.874687",
+ "modified": "2025-09-02 16:12:36.836333",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Sales Invoice Ticket cdt",
