@@ -30,7 +30,8 @@ def get_ticket_purchase_invoices(project):
             "custom_net_fare",
             "custom_route",
             "custom_full_route",
-            "custom_sectors"
+            "custom_sectors",
+            "custom_ticket_margin"
         ],
         limit_page_length=100
     )
