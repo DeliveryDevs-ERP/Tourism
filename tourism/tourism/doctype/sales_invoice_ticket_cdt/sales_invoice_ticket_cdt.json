@@ -75,7 +75,8 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Margin",
-   "non_negative": 1
+   "non_negative": 1,
+   "read_only": 1
   },
   {
    "fieldname": "sector",
@@ -93,7 +94,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-02 16:12:36.836333",
+ "modified": "2025-09-03 06:06:16.189047",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Sales Invoice Ticket cdt",

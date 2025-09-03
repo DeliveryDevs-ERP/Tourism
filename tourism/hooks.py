@@ -142,9 +142,9 @@ doc_events = {
         "on_submit": "tourism.tourism.doctype.costing.utils.quotation_on_submit",
         "on_trash": "tourism.tourism.doctype.costing.utils.quotation_on_trash"
     },
-    "Sales Invoice": {
-        "on_submit": "tourism.api.sales_invoice_on_submit"
-    },
+    # "Sales Invoice": {
+    #     "on_submit": "tourism.api.sales_invoice_on_submit"
+    # },
     "Purchase Invoice": {
         "validate": "tourism.api.purchase_invoice_validate"
     }
@@ -178,9 +178,9 @@ doc_events = {
 # Overriding Methods
 # ------------------------------
 #
-override_whitelisted_methods = {
-    "frappe.utils.print_format.download_pdf": "tourism.overrides.pdf_generator.get_pdf_puppeteer"
-}
+# override_whitelisted_methods = {
+#     "frappe.utils.print_format.download_pdf": "tourism.overrides.pdf_generator.get_pdf_puppeteer"
+# }
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
