@@ -88,6 +88,22 @@ def purchase_invoice_validate(doc, method):
                     frappe.throw(_(
                         "A Purchase Invoice for ticket {0} already exists (Invoice {1})."
                     ).format(ticket_no, dup[0].name))
+                    return
+        if is_return:
+            dup = frappe.get_all(
+                    "Purchase Invoice",
+                    filters={
+                        "custom_purchase_invoice_for_": ticket_item_code,
+                        "custom_ticket_number": ticket_no,
+                        "name": ["!=", doc.name]
+                    },
+                )
+            if len(dup) > 1:
+                    frappe.throw(_(
+                        "Cannot create return. 2 Purchase Invoices for ticket {0} already exists."
+                    ).format(ticket_no, dup[0].name))
+                    return
+            
 
 
 @frappe.whitelist()
