@@ -90,6 +90,7 @@ def purchase_invoice_validate(doc, method):
                     ).format(ticket_no, dup[0].name))
                     return
         if is_return:
+            ticket_no = doc.custom_ticket_number
             dup = frappe.get_all(
                     "Purchase Invoice",
                     filters={
