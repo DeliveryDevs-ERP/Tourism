@@ -13,9 +13,10 @@
  "fields": [
   {
    "fieldname": "name1",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Name",
+   "options": "Visa Charge Type",
    "reqd": 1
   },
   {
@@ -38,7 +39,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-02-19 09:25:15.235924",
+ "modified": "2025-09-03 07:04:32.829930",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "visa charges cdt",
