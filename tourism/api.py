@@ -9,12 +9,11 @@ def get_ticket_purchase_invoices(project):
         return []
 
     config = frappe.get_doc("TravelApp Config", "TravelApp Config")
-    ticket_item = config.ticket_item
-
+    ticket_item = getattr(config, "ticket_item", None)
     if not ticket_item:
         return []
 
-    return frappe.get_all(
+    rows = frappe.get_all(
         "Purchase Invoice",
         filters={
             "project": project,
@@ -31,10 +30,32 @@ def get_ticket_purchase_invoices(project):
             "custom_route",
             "custom_full_route",
             "custom_sectors",
-            "custom_ticket_margin"
+            "custom_ticket_margin",
+            "is_return"
         ],
-        limit_page_length=100
+        limit_page_length=100,
+        order_by="is_return desc, name asc"  # prefer returns first
     )
+
+    # Group by ticket number; prefer is_return == 1
+    best = {}
+    for r in rows:
+        ticket = (r.get("custom_ticket_number") or "").strip()
+        # If no ticket number, treat it as unique (use name as key)
+        key = ticket if ticket else f"__no_ticket__::{r['name']}"
+        is_ret = 1 if int(r.get("is_return") or 0) == 1 else 0
+
+        if key not in best:
+            best[key] = r
+        else:
+            # If current best is not a return but this one is, replace
+            if int(best[key].get("is_return") or 0) != 1 and is_ret == 1:
+                best[key] = r
+            # If both are returns or both are non-returns, keep the first (or
+            # add a tie-break rule here if you want latest/earliest)
+
+    return list(best.values())
+
 
 
 
