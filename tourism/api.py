@@ -31,6 +31,11 @@ def get_ticket_purchase_invoices(project):
             "custom_full_route",
             "custom_sectors",
             "custom_ticket_margin",
+            "custom_basic_fare",
+            "custom_airline_tax",
+            "custom_receivable",
+            "custom_payable",
+            "custom_income",
             "is_return"
         ],
         limit_page_length=100,
