@@ -18,7 +18,11 @@
   "sector",
   "basic_fare",
   "airline_tax",
-  "income"
+  "income",
+  "payable",
+  "wht",
+  "commission",
+  "project"
  ],
  "fields": [
   {
@@ -101,18 +105,44 @@
   {
    "fieldname": "airline_tax",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Airline Tax"
   },
   {
    "fieldname": "income",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Income"
+  },
+  {
+   "fieldname": "payable",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Payable"
+  },
+  {
+   "fieldname": "wht",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "WHT"
+  },
+  {
+   "fieldname": "commission",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Commission "
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Project"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-23 08:34:47.761508",
+ "modified": "2025-09-23 11:58:23.332713",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Sales Invoice Ticket cdt",

@@ -36,6 +36,11 @@ def get_ticket_purchase_invoices(project):
             "custom_receivable",
             "custom_payable",
             "custom_income",
+            "custom_wht_amount",
+            "custom_commision",
+            "custom_penalty__margin",
+            "custom_penalty_margin",
+            "project",
             "is_return"
         ],
         limit_page_length=100,
