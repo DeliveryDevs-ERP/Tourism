@@ -39,7 +39,7 @@ def get_ticket_purchase_invoices(project):
             "is_return"
         ],
         limit_page_length=100,
-        order_by="is_return desc, name asc"  # prefer returns first
+        order_by="is_return desc, name asc"
     )
 
     # Group by ticket number; prefer is_return == 1
