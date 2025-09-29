@@ -40,6 +40,9 @@ def get_ticket_purchase_invoices(project):
             "custom_commision",
             "custom_penalty__margin",
             "custom_penalty_margin",
+            "custom_ticket_remarks",
+            "custom_taxes1",
+            "custom_fare_and_airline",
             "project",
             "is_return"
         ],

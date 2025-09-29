@@ -17,12 +17,15 @@
   "margin",
   "sector",
   "basic_fare",
+  "basic_airline_tax",
   "airline_tax",
+  "taxes",
   "income",
   "payable",
   "wht",
   "commission",
-  "project"
+  "project",
+  "remarks"
  ],
  "fields": [
   {
@@ -106,43 +109,70 @@
    "fieldname": "airline_tax",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Airline Tax"
+   "label": "Airline Tax",
+   "read_only": 1
   },
   {
    "fieldname": "income",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Income"
+   "label": "Income",
+   "read_only": 1
   },
   {
    "fieldname": "payable",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Payable"
+   "label": "Payable",
+   "read_only": 1
   },
   {
    "fieldname": "wht",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "WHT"
+   "label": "WHT",
+   "read_only": 1
   },
   {
    "fieldname": "commission",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Commission "
+   "label": "Commission ",
+   "read_only": 1
   },
   {
    "fieldname": "project",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Project"
+   "label": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "basic_airline_tax",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Basic + Airline Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Text Editor",
+   "in_list_view": 1,
+   "label": "Remarks",
+   "read_only": 1
+  },
+  {
+   "fieldname": "taxes",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Taxes",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-23 11:58:23.332713",
+ "modified": "2025-09-26 07:19:29.894433",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Sales Invoice Ticket cdt",
