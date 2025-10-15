@@ -18,6 +18,7 @@ def get_ticket_purchase_invoices(project):
         filters={
             "project": project,
             "custom_sales_invoice": ["is", "not set"],
+            "custom_ticket_for": ["!=", "For Staff"],
             "custom_purchase_invoice_for_": ticket_item
         },
         fields=[
