@@ -1,5 +1,3 @@
-# travel_app/api/tickets.py
-
 import frappe
 from frappe import _
 

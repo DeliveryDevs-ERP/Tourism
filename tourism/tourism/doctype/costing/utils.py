@@ -229,6 +229,21 @@ def make_costing(source_name, target_doc=None):
     return doc
 
 @frappe.whitelist()
+def make_costing_from_rfq(source_name, target_doc=None):
+    """
+    source_name = RFQ name
+    It will create Costing by mapping from the linked Opportunity (using existing make_costing()).
+    """
+    rfq = frappe.get_doc("Request for Quotation", source_name)
+
+    if not rfq.opportunity:
+        frappe.throw("RFQ has no linked Opportunity.")
+
+    # Reuse your existing Opportunity -> Costing mapping
+    return make_costing(rfq.opportunity, target_doc)
+
+
+@frappe.whitelist()
 def make_quotation_from_costing(source_name, target_doc=None, costing_name=None):
     from frappe.model.mapper import get_mapped_doc
     from erpnext.controllers.accounts_controller import get_default_taxes_and_charges

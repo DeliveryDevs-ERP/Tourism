@@ -1,7 +1,6 @@
-# travel_app/api/tickets.py
-
 import frappe
 from frappe import _
+from frappe.utils import cint
 
 @frappe.whitelist()
 def get_ticket_purchase_invoices(project):
