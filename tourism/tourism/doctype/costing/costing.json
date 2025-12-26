@@ -29,6 +29,7 @@
   "final",
   "section_break_qsli",
   "opportunity",
+  "rfq",
   "column_break_tcgm",
   "proposal",
   "visa_requirements_tab",
@@ -315,11 +316,18 @@
   {
    "fieldname": "section_break_qwph",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "rfq",
+   "fieldtype": "Link",
+   "label": "RFQ",
+   "options": "Request for Quotation",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-07 08:28:02.281564",
+ "modified": "2025-12-26 04:42:39.850015",
  "modified_by": "Administrator",
  "module": "Tourism",
  "name": "Costing",

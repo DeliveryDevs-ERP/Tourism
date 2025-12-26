@@ -11,6 +11,17 @@ frappe.ui.form.on('Costing', {
     onload: function(frm) {
     if (frm.doc.opportunity) {
             if (frm.is_new()) {
+
+                frappe.db.get_value(
+                    "Request for Quotation",
+                    { opportunity: frm.doc.opportunity },
+                    "name"
+                ).then(r => {
+                    if (r && r.message && r.message.name) {
+                        frm.set_value("rfq", r.message.name);
+                    }
+                });
+
                 if (frm.doc.hotels && frm.doc.hotels.length === 0) {
                     calculate_pax(frm);
                     create_hotel_rows(frm);

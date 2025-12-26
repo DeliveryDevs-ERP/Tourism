@@ -299,6 +299,7 @@ def make_quotation_from_costing(source_name, target_doc=None, costing_name=None)
                 "field_map": {
                     "opportunity_from": "quotation_to",
                     "name": "enq_no",
+                    "custom_operation_person_" : "custom_operation_person",
                     "custom_group_travel_date": "custom_group_travel_date",
                     "custom_group_travel_estimated_date": "custom_expected_group_travel_date",
                     "custom_proposal_submission_before": "custom_proposal_submission_before"
