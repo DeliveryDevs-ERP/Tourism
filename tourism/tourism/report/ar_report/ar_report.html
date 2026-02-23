@@ -1,0 +1,151 @@
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; font-size: 9px; color: #000; }
+.page { padding: 15mm; }
+.header { text-align: center; margin-bottom: 8px; }
+.header h1 { font-size: 14px; font-weight: bold; text-transform: uppercase; }
+.header p { font-size: 9px; }
+.report-title { font-size: 13px; font-weight: bold; font-style: italic; margin: 6px 0 2px; }
+.highlight { background: #ffff00; padding: 0 2px; }
+.customer-name { font-size: 10px; font-weight: bold; text-decoration: underline; margin-top: 2px; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 8px; }
+thead tr { background-color: #000; color: #fff; }
+thead th {
+    border: 1px solid #000;
+    padding: 3px 4px;
+    text-align: center;
+    font-weight: bold;
+    white-space: nowrap;
+}
+tbody tr { background: #fff; }
+tbody tr:nth-child(even) { background: #f5f5f5; }
+tbody td { border: 1px solid #aaa; padding: 2px 4px; vertical-align: top; }
+td.num { text-align: right; white-space: nowrap; }
+td.center { text-align: center; white-space: nowrap; }
+.tfoot-row td {
+    border: 1px solid #000;
+    font-weight: bold;
+    background: #e0e0e0;
+    padding: 3px 4px;
+}
+.summary-section { margin-top: 8px; overflow: hidden; }
+.summary-left {
+    float: left;
+    border: 1px solid #000;
+    padding: 4px 8px;
+    font-size: 9px;
+}
+.summary-right {
+    float: right;
+    border: 1px solid #000;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: right;
+}
+</style>
+
+<%
+// Helper: format currency
+function fmt(val) {
+    val = parseFloat(val) || 0;
+    return "PKR\u00a0" + val.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// Accumulate totals
+var total_invoiced   = 0;
+var total_credit     = 0;
+var total_paid       = 0;
+var total_outstanding = 0;
+
+for (var i = 0; i < data.length; i++) {
+    total_invoiced    += parseFloat(data[i].invoiced)    || 0;
+    total_credit      += parseFloat(data[i].credit_note) || 0;
+    total_paid        += parseFloat(data[i].paid)        || 0;
+    total_outstanding += parseFloat(data[i].outstanding) || 0;
+}
+
+// Report date from filters
+var report_date = filters.report_date || "";
+var date_parts  = report_date.split("-");
+var display_date = date_parts.length === 3
+    ? date_parts[2] + "." + date_parts[1] + "." + date_parts[0]
+    : report_date;
+
+var day   = date_parts[2] || "";
+var month = date_parts[1] || "";
+var year  = date_parts[0] || "";
+%>
+
+<div class="page">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Travel App Events and Destinations Pvt Ltd.</h1>
+        <p>Office # 1501, 15th Floor Kashif Center 1103 Naval Private Rd, Karachi - Pakistan</p>
+        <p>Phone: 021-3565992-2</p>
+        <p class="report-title">
+            Invoice Wise Aging Till
+            <span class="highlight"><%=day%></span>.<%=month%>.<%=year%>
+        </p>
+        <% if (filters.party && filters.party.length === 1) { %>
+        <p class="customer-name"><%=filters.party[0]%></p>
+        <% } %>
+    </div>
+
+    <!-- Table -->
+    <table>
+        <thead>
+            <tr>
+                <th style="width:60px;">Date</th>
+                <th style="width:60px;">Inv. No</th>
+                <th>Description</th>
+                <th style="width:105px;">SaleAmt (Net)</th>
+                <th style="width:75px;">Refund Amt</th>
+                <th style="width:105px;">Receipt</th>
+                <th style="width:95px;">Balance</th>
+                <th style="width:45px;">Days Over</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (var i = 0; i < data.length; i++) { var r = data[i]; %>
+            <tr>
+                <td class="center"><%=r.posting_date || ""  %></td>
+                <td class="center"><%=r.voucher_no   || ""  %></td>
+                <td>
+                    <%=(r.party || "")%>
+                    <%=(r.custom_party_description ? " " + r.custom_party_description : "")%>
+                    <%=(r.project ? " - " + r.project : "")%>
+                </td>
+                <td class="num"><%=fmt(r.invoiced)%></td>
+                <td class="num"><%=(parseFloat(r.credit_note) ? fmt(r.credit_note) : "-")%></td>
+                <td class="num"><%=fmt(r.paid)%></td>
+                <td class="num"><%=fmt(r.outstanding)%></td>
+                <td class="center"><%=r.age || ""  %></td>
+            </tr>
+            <% } %>
+        </tbody>
+        <tfoot>
+            <tr class="tfoot-row">
+                <td colspan="3" style="text-align:center;">TOTAL</td>
+                <td class="num"><%=fmt(total_invoiced)%></td>
+                <td class="num"><%=fmt(total_credit)%></td>
+                <td class="num"><%=fmt(total_paid)%></td>
+                <td class="num"><%=fmt(total_outstanding)%></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Summary Footer -->
+    <div class="summary-section">
+        <div class="summary-left">
+            <p>Date : <%=frappe.datetime.get_today()%> &nbsp; Payment received AGT This</p>
+            <p>Outstanding (Closing)(TOTAL PKR <%=total_outstanding.toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>)</p>
+        </div>
+        <div class="summary-right">
+            PKR &nbsp;(<%=total_outstanding.toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g, ",")%>)
+        </div>
+    </div>
+
+</div>

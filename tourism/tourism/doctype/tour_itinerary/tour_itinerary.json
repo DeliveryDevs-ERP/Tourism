@@ -4,6 +4,7 @@
  "allow_rename": 1,
  "autoname": "format:TI-{city}-{day}-{######}",
  "creation": "2025-01-01 13:14:51.326745",
+ "default_view": "Report",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -60,8 +61,8 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-15 06:19:07.461176",
- "modified_by": "Administrator",
+ "modified": "2026-02-06 14:41:03.072441",
+ "modified_by": "muhammad.hunaid@deliverydevs.com",
  "module": "Tourism",
  "name": "Tour Itinerary",
  "naming_rule": "Expression",
@@ -80,6 +81,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

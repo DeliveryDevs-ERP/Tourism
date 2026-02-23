@@ -78,6 +78,11 @@ app_license = "mit"
 # 	"methods": "tourism.utils.jinja_methods",
 # 	"filters": "tourism.utils.jinja_filters"
 # }
+jinja = {
+    "methods": [
+        "tourism.utils.convert_number_to_words"
+    ]
+}
 
 # Installation
 # ------------
