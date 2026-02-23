@@ -22,6 +22,16 @@ frappe.ui.form.on('Costing', {
                     }
                 });
 
+                frappe.db.get_value(
+                    "Opportunity",
+                    { opportunity: frm.doc.opportunity },
+                    "custom_group_code_for_customer"
+                ).then(r => {
+                    if (r && r.message && r.message.custom_group_code_for_customer) {
+                        frm.set_value("title", r.message.custom_group_code_for_customer);
+                    }
+                });
+
                 if (frm.doc.hotels && frm.doc.hotels.length === 0) {
                     calculate_pax(frm);
                     create_hotel_rows(frm);
