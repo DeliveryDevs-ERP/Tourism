@@ -1,0 +1,280 @@
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .print-format {
+        padding: 5mm 6mm;
+        font-family: Arial, sans-serif;
+        font-size: 7px;
+        color: #000;
+    }
+
+    /* ── HEADER ── */
+    .report-header {
+        text-align: center;
+        margin-bottom: 3px;
+    }
+
+    .report-header h2 {
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 0 0 1px 0;
+        letter-spacing: 0.2px;
+    }
+
+    .report-header .address {
+        font-size: 7px;
+        line-height: 1.4;
+    }
+
+    .report-header .title {
+        font-size: 10px;
+        font-weight: bold;
+        font-style: italic;
+        margin: 4px 0 1px 0;
+    }
+
+    .highlight {
+        background: #ffff00;
+        padding: 0 2px;
+        font-weight: bold;
+    }
+
+    .customer-name {
+        font-size: 8px;
+        font-weight: bold;
+        text-decoration: underline;
+        margin-top: 2px;
+    }
+
+    /* ── MAIN TABLE ── */
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 6.2px;
+        table-layout: fixed;
+        margin-top: 3px;
+        border: 0.5px solid #000;
+        line-height: 1.0;
+    }
+
+    .report-table col.col-date    { width: 5.5%; }
+    .report-table col.col-invno   { width: 5.5%; }
+    .report-table col.col-desc    { width: 41%;  }
+    .report-table col.col-sale    { width: 11%;  }
+    .report-table col.col-refund  { width: 9%;   }
+    .report-table col.col-receipt { width: 11%;  }
+    .report-table col.col-balance { width: 10%;  }
+    .report-table col.col-days    { width: 7%;   }
+
+    .report-table th,
+    .report-table td {
+        border: 0.3px solid #888;
+        padding: 0.8px 2px;
+        vertical-align: middle;
+    }
+
+    /* BLACK header */
+    .report-table thead tr {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .report-table th {
+        font-weight: bold;
+        text-align: center;
+        font-size: 6.2px;
+        padding: 1.5px 2px;
+        white-space: nowrap;
+    }
+
+    /* Alternating rows */
+    .report-table tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    .report-table tbody tr:nth-child(even) {
+        background-color: #efefef;
+    }
+
+    /* TOTAL footer row */
+    .report-table tfoot td {
+        background-color: #cccccc;
+        font-weight: bold;
+        border-top: 0.8px solid #000;
+        padding: 1px 2px;
+    }
+
+    .desc-cell {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+    }
+
+    .text-right  { text-align: right;  }
+    .text-left   { text-align: left;   }
+    .text-center { text-align: center; }
+    .no-wrap     { white-space: nowrap; }
+    .fw-bold     { font-weight: bold;  }
+
+    /* ── SUMMARY TABLE ── */
+    .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2px;
+        font-size: 7px;
+    }
+
+    .summary-table tr > td {
+        border: 0.5px solid #000;
+        padding: 2px 5px;
+        vertical-align: middle;
+    }
+
+    .summary-left {
+        text-align: left;
+        line-height: 1.7;
+        width: 62%;
+        font-size: 7px;
+    }
+
+    .summary-gap {
+        border: none !important;
+        width: 2%;
+    }
+
+    .summary-right {
+        text-align: right;
+        font-size: 8px;
+        font-weight: bold;
+        width: 36%;
+    }
+</style>
+{%
+function fmt(val) {
+    val = parseFloat(val) || 0;
+    var abs = Math.abs(val).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (val < 0 ? "-" : "") + abs;
+}
+
+function fmtAbs(val) {
+    return Math.abs(parseFloat(val) || 0)
+        .toFixed(3)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function fmtDate(d) {
+    if (!d) return "";
+    var p = d.split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : d;
+}
+
+function cleanDesc(val) {
+    if (!val) return "";
+    return val.replace(/\bnull\b/g, "").replace(/\s{2,}/g, " ").trim();
+}
+
+var total_invoiced    = 0;
+var total_credit      = 0;
+var total_paid        = 0;
+var total_outstanding = 0;
+
+for (var i = 0; i < data.length; i++) {
+    total_invoiced    += parseFloat(data[i].invoiced)    || 0;
+    total_credit      += parseFloat(data[i].credit_note) || 0;
+    total_paid        += parseFloat(data[i].paid)        || 0;
+    total_outstanding += parseFloat(data[i].outstanding) || 0;
+}
+
+var dp    = (filters.report_date || "").split("-");
+var day   = dp[2] || "";
+var month = dp[1] || "";
+var year  = dp[0] || "";
+var today = fmtDate(frappe.datetime.get_today());
+var outstanding_display = fmtAbs(total_outstanding);
+%}
+
+<div class="print-format">
+
+    <div class="report-header">
+        <h2>Travel App Events and Destinations Pvt Ltd.</h2>
+        <p class="address">
+            Office # 1501, 15th Floor Kashif Center 1103 Naval Private Rd, Karachi - Pakistan<br>
+            Phone: 021-3565992-2
+        </p>
+        <p class="title">
+            Invoice Wise Aging Till
+            <span class="highlight">{%= day %}</span>.{%= month %}.{%= year %}
+        </p>
+        {% if (filters.party && filters.party.length) { %}
+            {% for (var p = 0; p < filters.party.length; p++) { %}
+                <p class="customer-name">{%= filters.party[p] %}</p>
+            {% } %}
+        {% } %}
+    </div>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th class="text-center">Date</th>
+                <th class="text-center">Inv. No</th>
+                <th class="text-center">Description</th>
+                <th class="text-center">SaleAmt (Net)</th>
+                <th class="text-center">Refund Amt</th>
+                <th class="text-center">Receipt</th>
+                <th class="text-center">Balance</th>
+                <th class="text-center">Days Over</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for (var j = 0; j < data.length; j++) {
+                var r   = data[j];
+                var inv = parseFloat(r.invoiced)    || 0;
+                var cr  = parseFloat(r.credit_note) || 0;
+                var pd  = parseFloat(r.paid)        || 0;
+                var bal = parseFloat(r.outstanding) || 0;
+                var desc = cleanDesc(r.description || r.party || "");
+            %}
+            <tr>
+                <td class="text-center no-wrap">{%= fmtDate(r.posting_date) %}</td>
+                <td class="text-center no-wrap" style="font-weight:bold;">{%= r.voucher_no || "" %}</td>
+                <td class="text-left desc-cell">{%= desc %}</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(inv) %}</td>
+                <td class="text-right no-wrap">{% if (cr) { %}PKR&nbsp;{%= fmt(cr) %}{% } else { %}PKR&nbsp;-{% } %}</td>
+                <td class="text-right no-wrap">{% if (pd) { %}PKR&nbsp;{%= fmt(pd) %}{% } else { %}PKR&nbsp;-{% } %}</td>
+                <td class="text-right no-wrap">{% if (bal) { %}PKR&nbsp;{%= fmt(bal) %}{% } else { %}PKR&nbsp;-{% } %}</td>
+                <td class="text-center no-wrap">{%= r.age || "" %}</td>
+            </tr>
+            {% } %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-center">TOTAL</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_invoiced) %}</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_credit) %}</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_paid) %}</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_outstanding) %}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <table class="summary-table">
+        <tr>
+            <td class="summary-left">
+                <div>Date : {%= today %} &nbsp; Payment received AGT This</div>
+                <div>Outstanding (Closing)(TOTAL PKR {%= outstanding_display %})</div>
+            </td>
+            <td class="summary-gap"></td>
+            <td class="summary-right">
+                PKR&nbsp;({%= outstanding_display %})
+            </td>
+        </tr>
+    </table>
+
+</div>
