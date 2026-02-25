@@ -75,6 +75,7 @@ def get_custom_columns(original_columns):
 			"label": _("Project"),
 			"fieldname": "project",
 			"fieldtype": "Link",
+   			"options": "Project",
 			"width": 120,
 		},  
 		{
