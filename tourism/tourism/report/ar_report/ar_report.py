@@ -60,6 +60,18 @@ def get_custom_columns(original_columns):
 			"width": 120,
 		},
 		{
+			"label": _("Notes"),
+			"fieldname": "custom_notes",
+			"fieldtype": "Small Text",
+			"width": 400,
+		},
+		{
+			"label": _("Voucher Type"),
+			"fieldname": "payment_type",
+			"fieldtype": "Data",
+			"width": 400,
+		},  
+		{
 			"label": _("Description"),
 			"fieldname": "description",
 			"fieldtype": "Data",
