@@ -71,8 +71,16 @@ def get_data(filters):
     conditions = ""
     values = {}
 
-    # ── Base Condition: Only show Air Fare Purchase Invoices ──
-    conditions += " AND pi.custom_purchase_invoice_for_ = 'Air Fare'"
+    # ── Block report if NO filter is selected at all ──
+    if not any([
+        filters.get("airline"),
+        filters.get("passenger"),
+        filters.get("supplier"),
+        filters.get("status"),
+        filters.get("ticket_date"),
+        filters.get("project")
+    ]):
+        return []
 
     # ── Airline Filter ──
     if filters.get("airline"):
@@ -97,12 +105,13 @@ def get_data(filters):
     # ── Ticket Date Filter (DateRange) ──
     if filters.get("ticket_date"):
         ticket_date = filters.get("ticket_date")
-        if ticket_date[0]:
-            conditions += " AND pi.posting_date >= %(from_date)s"
-            values["from_date"] = ticket_date[0]
-        if ticket_date[1]:
-            conditions += " AND pi.posting_date <= %(to_date)s"
-            values["to_date"] = ticket_date[1]
+        if isinstance(ticket_date, list):
+            if ticket_date[0]:
+                conditions += " AND pi.posting_date >= %(from_date)s"
+                values["from_date"] = ticket_date[0]
+            if ticket_date[1]:
+                conditions += " AND pi.posting_date <= %(to_date)s"
+                values["to_date"] = ticket_date[1]
 
     # ── Project Filter ──
     if filters.get("project"):
@@ -111,39 +120,40 @@ def get_data(filters):
 
     data = frappe.db.sql("""
         SELECT
-            pi.name                         AS name,
-            pi.posting_date                 AS posting_date,
-            pi.supplier                     AS supplier,
-            pi.custom_passenger             AS custom_passenger,
-            pi.project                      AS project,
-            pi.status                       AS status,
-            pi.grand_total                  AS grand_total,
-            pi.outstanding_amount           AS outstanding_amount
+            pi.name                       AS name,
+            pi.posting_date               AS posting_date,
+            pi.supplier                   AS supplier,
+            pi.custom_passenger           AS custom_passenger,
+            pi.project                    AS project,
+            pi.status                     AS status,
+            pi.grand_total                AS grand_total,
+            pi.outstanding_amount         AS outstanding_amount
         FROM
             `tabPurchase Invoice` pi
         WHERE
             pi.docstatus = 1
+            AND pi.custom_purchase_invoice_for_ = 'Air Fare'
             {conditions}
         ORDER BY
             pi.posting_date DESC
     """.format(conditions=conditions), values, as_dict=1)
 
     # ── Calculate Totals ──
-    total_grand_total       = sum(row.get("grand_total", 0) or 0 for row in data)
-    total_outstanding       = sum(row.get("outstanding_amount", 0) or 0 for row in data)
+    total_grand_total = sum(row.get("grand_total", 0) or 0 for row in data)
+    total_outstanding = sum(row.get("outstanding_amount", 0) or 0 for row in data)
 
-    # ── Append Total Row at the Bottom ──
+    # ── Append Total Row ──
     if data:
         data.append({
-            "name":                 "Total",
-            "posting_date":         "",
-            "supplier":             "",
-            "custom_passenger":     "",
-            "project":              "",
-            "status":               "",
-            "grand_total":          total_grand_total,
-            "outstanding_amount":   total_outstanding,
-            "bold":                 1
+            "name":               "Total",
+            "posting_date":       "",
+            "supplier":           "",
+            "custom_passenger":   "",
+            "project":            "",
+            "status":             "TOTAL",
+            "grand_total":        total_grand_total,
+            "outstanding_amount": total_outstanding,
+            "bold":               1
         })
 
     return data
