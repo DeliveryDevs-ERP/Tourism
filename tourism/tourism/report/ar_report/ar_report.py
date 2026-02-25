@@ -63,13 +63,19 @@ def get_custom_columns(original_columns):
 			"label": _("Notes"),
 			"fieldname": "custom_notes",
 			"fieldtype": "Small Text",
-			"width": 400,
+			"width": 200,
 		},
 		{
 			"label": _("Voucher Type"),
 			"fieldname": "payment_type",
 			"fieldtype": "Data",
-			"width": 400,
+			"width": 120,
+		},  
+		{
+			"label": _("Project"),
+			"fieldname": "project",
+			"fieldtype": "Link",
+			"width": 120,
 		},  
 		{
 			"label": _("Description"),
