@@ -62,14 +62,18 @@
         line-height: 1.0;
     }
 
-    .report-table col.col-date    { width: 5.5%; }
-    .report-table col.col-invno   { width: 5.5%; }
-    .report-table col.col-desc    { width: 41%;  }
-    .report-table col.col-sale    { width: 11%;  }
-    .report-table col.col-refund  { width: 9%;   }
-    .report-table col.col-receipt { width: 11%;  }
-    .report-table col.col-balance { width: 10%;  }
-    .report-table col.col-days    { width: 7%;   }
+    /* ── 11 columns ── */
+    .report-table col.col-date         { width: 5%;  }
+    .report-table col.col-invno        { width: 5%;  }
+    .report-table col.col-voucher-type { width: 7%;  }
+    .report-table col.col-notes        { width: 9%;  }
+    .report-table col.col-project      { width: 8%;  }
+    .report-table col.col-desc         { width: 22%; }
+    .report-table col.col-sale         { width: 9%;  }
+    .report-table col.col-refund       { width: 8%;  }
+    .report-table col.col-receipt      { width: 9%;  }
+    .report-table col.col-balance      { width: 9%;  }
+    .report-table col.col-days         { width: 9%;  }
 
     .report-table th,
     .report-table td {
@@ -93,13 +97,8 @@
     }
 
     /* Alternating rows */
-    .report-table tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
-
-    .report-table tbody tr:nth-child(even) {
-        background-color: #efefef;
-    }
+    .report-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
+    .report-table tbody tr:nth-child(even) { background-color: #efefef; }
 
     /* TOTAL footer row */
     .report-table tfoot td {
@@ -155,6 +154,7 @@
         width: 36%;
     }
 </style>
+
 {%
 function fmt(val) {
     val = parseFloat(val) || 0;
@@ -195,7 +195,9 @@ var dp    = (filters.report_date || "").split("-");
 var day   = dp[2] || "";
 var month = dp[1] || "";
 var year  = dp[0] || "";
-var today = fmtDate(frappe.datetime.get_today());
+
+// ── FIX: frappe.datetime.get_today() → frappe.utils.today() ──
+var today = fmtDate(frappe.utils.today());
 var outstanding_display = fmtAbs(total_outstanding);
 %}
 
@@ -219,10 +221,25 @@ var outstanding_display = fmtAbs(total_outstanding);
     </div>
 
     <table class="report-table">
+        <col class="col-date">
+        <col class="col-invno">
+        <col class="col-voucher-type">
+        <col class="col-notes">
+        <col class="col-project">
+        <col class="col-desc">
+        <col class="col-sale">
+        <col class="col-refund">
+        <col class="col-receipt">
+        <col class="col-balance">
+        <col class="col-days">
+
         <thead>
             <tr>
                 <th class="text-center">Date</th>
                 <th class="text-center">Inv. No</th>
+                <th class="text-center">Voucher Type</th>
+                <th class="text-center">Notes</th>
+                <th class="text-center">Project</th>
                 <th class="text-center">Description</th>
                 <th class="text-center">SaleAmt (Net)</th>
                 <th class="text-center">Refund Amt</th>
@@ -231,6 +248,7 @@ var outstanding_display = fmtAbs(total_outstanding);
                 <th class="text-center">Days Over</th>
             </tr>
         </thead>
+
         <tbody>
             {% for (var j = 0; j < data.length; j++) {
                 var r   = data[j];
@@ -242,7 +260,10 @@ var outstanding_display = fmtAbs(total_outstanding);
             %}
             <tr>
                 <td class="text-center no-wrap">{%= fmtDate(r.posting_date) %}</td>
-                <td class="text-center no-wrap" style="font-weight:bold;">{%= r.voucher_no || "" %}</td>
+                <td class="text-center no-wrap fw-bold">{%= r.voucher_no || "" %}</td>
+                <td class="text-center no-wrap">{%= r.voucher_type || "" %}</td>
+                <td class="text-left desc-cell">{%= r.remarks || "" %}</td>
+                <td class="text-left desc-cell">{%= r.project || "" %}</td>
                 <td class="text-left desc-cell">{%= desc %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(inv) %}</td>
                 <td class="text-right no-wrap">{% if (cr) { %}PKR&nbsp;{%= fmt(cr) %}{% } else { %}PKR&nbsp;-{% } %}</td>
@@ -252,9 +273,10 @@ var outstanding_display = fmtAbs(total_outstanding);
             </tr>
             {% } %}
         </tbody>
+
         <tfoot>
             <tr>
-                <td colspan="3" class="text-center">TOTAL</td>
+                <td colspan="6" class="text-center">TOTAL</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_invoiced) %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_credit) %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_paid) %}</td>
