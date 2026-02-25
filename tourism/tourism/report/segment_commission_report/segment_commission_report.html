@@ -1,0 +1,301 @@
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .print-format {
+        padding: 5mm 6mm;
+        font-family: Arial, sans-serif;
+        font-size: 7px;
+        color: #000;
+    }
+
+    /* ── HEADER ── */
+    .report-header {
+        text-align: center;
+        margin-bottom: 3px;
+    }
+
+    .report-header h2 {
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 0 0 1px 0;
+        letter-spacing: 0.2px;
+    }
+
+    .report-header .address {
+        font-size: 7px;
+        line-height: 1.4;
+    }
+
+    .report-header .title {
+        font-size: 10px;
+        font-weight: bold;
+        font-style: italic;
+        margin: 4px 0 1px 0;
+    }
+
+    .filter-info {
+        font-size: 7px;
+        margin-top: 2px;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    /* ── MAIN TABLE ── */
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 6.2px;
+        table-layout: fixed;
+        margin-top: 3px;
+        border: 0.5px solid #000;
+        line-height: 1.0;
+    }
+
+    .report-table col.col-invno       { width: 13%; }
+    .report-table col.col-date        { width: 7%;  }
+    .report-table col.col-airline     { width: 11%; }
+    .report-table col.col-passenger   { width: 12%; }
+    .report-table col.col-project     { width: 9%;  }
+    .report-table col.col-segment     { width: 9%;  }
+    .report-table col.col-commission  { width: 9%;  }
+    .report-table col.col-status      { width: 7%;  }
+    .report-table col.col-grand       { width: 11%; }
+    .report-table col.col-outstanding { width: 12%; }
+
+    .report-table th,
+    .report-table td {
+        border: 0.3px solid #888;
+        padding: 0.8px 2px;
+        vertical-align: middle;
+    }
+
+    /* BLACK header */
+    .report-table thead tr {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .report-table th {
+        font-weight: bold;
+        text-align: center;
+        font-size: 6.2px;
+        padding: 1.5px 2px;
+        white-space: nowrap;
+    }
+
+    /* Alternating rows */
+    .report-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
+    .report-table tbody tr:nth-child(even) { background-color: #efefef; }
+
+    /* TOTAL footer row */
+    .report-table tfoot td {
+        background-color: #ffffff;
+        font-weight: bold;
+        border-top: 0.8px solid #000;
+        padding: 1px 2px;
+    }
+
+    .text-right  { text-align: right;  }
+    .text-left   { text-align: left;   }
+    .text-center { text-align: center; }
+    .no-wrap     { white-space: nowrap; }
+    .fw-bold     { font-weight: bold;  }
+
+    .desc-cell {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+    }
+
+    /* ── SUMMARY TABLE ── */
+    .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2px;
+        font-size: 7px;
+    }
+
+    .summary-table tr > td {
+        border: 0.5px solid #000;
+        padding: 2px 5px;
+        vertical-align: middle;
+    }
+
+    .summary-left {
+        text-align: left;
+        line-height: 1.7;
+        width: 62%;
+        font-size: 7px;
+    }
+
+    .summary-gap {
+        border: none !important;
+        width: 2%;
+    }
+
+    .summary-right {
+        text-align: right;
+        font-size: 8px;
+        font-weight: bold;
+        width: 36%;
+    }
+</style>
+
+{%
+function fmt(val) {
+    val = parseFloat(val) || 0;
+    var abs = Math.abs(val).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (val < 0 ? "-" : "") + abs;
+}
+
+function fmtAbs(val) {
+    return Math.abs(parseFloat(val) || 0)
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function fmtDate(d) {
+    if (!d) return "";
+    var p = d.split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : d;
+}
+
+function parseDateRange(val) {
+    if (!val) return null;
+    if (typeof val === "string") {
+        try { val = JSON.parse(val); } catch(e) { return null; }
+    }
+    return Array.isArray(val) ? val : null;
+}
+
+var total_commission  = 0;
+var total_grand_total = 0;
+var total_outstanding = 0;
+
+for (var i = 0; i < data.length; i++) {
+    total_commission  += parseFloat(data[i].custom_commission)   || 0;
+    total_grand_total += parseFloat(data[i].grand_total)         || 0;
+    total_outstanding += parseFloat(data[i].outstanding_amount)  || 0;
+}
+
+// ── FIX: Use frappe.utils.today() for server-side date ──
+var today = fmtDate(frappe.utils.today());
+
+// ── Collect active filters for display ──
+var filter_parts = [];
+if (filters.airline)         filter_parts.push("Airline: "         + filters.airline);
+if (filters.passenger)       filter_parts.push("Passenger: "       + filters.passenger);
+if (filters.customer)        filter_parts.push("Customer: "        + filters.customer);
+if (filters.supplier)        filter_parts.push("Supplier: "        + filters.supplier);
+if (filters.commission_type) filter_parts.push("Commission Type: " + filters.commission_type);
+if (filters.status)          filter_parts.push("Status: "          + filters.status);
+if (filters.project)         filter_parts.push("Project: "         + filters.project);
+
+var td = parseDateRange(filters.ticket_date);
+if (td && td[0] && td[1]) {
+    filter_parts.push("Ticket Date: " + fmtDate(td[0]) + " to " + fmtDate(td[1]));
+}
+
+var dr = parseDateRange(filters.date_range);
+if (dr && dr[0] && dr[1]) {
+    filter_parts.push("Date Range: " + fmtDate(dr[0]) + " to " + fmtDate(dr[1]));
+}
+
+var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All Records";
+%}
+
+<div class="print-format">
+
+    <!-- ── HEADER ── -->
+    <div class="report-header">
+        <h2>Travel App Events and Destinations Pvt Ltd.</h2>
+        <p class="address">
+            Office # 1501, 15th Floor Kashif Center 1103 Naval Private Rd, Karachi - Pakistan<br>
+            Phone: 021-3565992-2
+        </p>
+        <p class="title">Segment Commission Report</p>
+        <p class="filter-info">{%= filter_display %}</p>
+        <p class="address">Printed On: {%= today %}</p>
+    </div>
+
+    <!-- ── MAIN TABLE ── -->
+    <table class="report-table">
+        <col class="col-invno">
+        <col class="col-date">
+        <col class="col-airline">
+        <col class="col-passenger">
+        <col class="col-project">
+        <col class="col-segment">
+        <col class="col-commission">
+        <col class="col-status">
+        <col class="col-grand">
+        <col class="col-outstanding">
+
+        <thead>
+            <tr>
+                <th class="text-center">Invoice No</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Airline / Supplier</th>
+                <th class="text-center">Passenger</th>
+                <th class="text-center">Project</th>
+                <th class="text-center">Segment</th>
+                <th class="text-center">Commission</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Grand Total</th>
+                <th class="text-center">Outstanding Amt</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for (var j = 0; j < data.length; j++) {
+                var r = data[j];
+            %}
+            <tr>
+                <td class="text-left no-wrap fw-bold">{%= r.name || "" %}</td>
+                <td class="text-center no-wrap">{%= fmtDate(r.posting_date) %}</td>
+                <td class="text-left desc-cell">{%= r.supplier || "" %}</td>
+                <td class="text-left desc-cell">{%= r.custom_passenger || "" %}</td>
+                <td class="text-left desc-cell">{%= r.project || "" %}</td>
+                <td class="text-left desc-cell">{%= r.custom_segment || "" %}</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(r.custom_commission) %}</td>
+                <td class="text-center no-wrap">{%= r.status || "" %}</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(r.grand_total) %}</td>
+                <td class="text-right no-wrap">PKR&nbsp;{%= fmt(r.outstanding_amount) %}</td>
+            </tr>
+            {% } %}
+        </tbody>
+
+        <!-- ── TOTAL ROW ── -->
+        <tfoot>
+            <tr>
+                <td colspan="6" class="text-center fw-bold">TOTAL</td>
+                <td class="text-right no-wrap fw-bold">PKR&nbsp;{%= fmt(total_commission) %}</td>
+                <td></td>
+                <td class="text-right no-wrap fw-bold">PKR&nbsp;{%= fmt(total_grand_total) %}</td>
+                <td class="text-right no-wrap fw-bold">PKR&nbsp;{%= fmt(total_outstanding) %}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- ── SUMMARY TABLE ── -->
+    <table class="summary-table">
+        <tr>
+            <td class="summary-left">
+                <div>Date: {%= today %}</div>
+                <div>Total Commission (PKR {%= fmtAbs(total_commission) %})</div>
+                <div>Total Outstanding (PKR {%= fmtAbs(total_outstanding) %})</div>
+            </td>
+            <td class="summary-gap"></td>
+            <td class="summary-right">
+                PKR&nbsp;({%= fmtAbs(total_outstanding) %})
+            </td>
+        </tr>
+    </table>
+
+</div>
