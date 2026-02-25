@@ -162,7 +162,7 @@ def enrich_data(data):
 		pe_records = frappe.get_all(
 			"Payment Entry",
 			filters={"name": ["in", list(payment_entries)]},
-			fields=["name", "custom_party_description", "payment_type", "custom_notes"],
+			fields=["name", "project", "custom_party_description", "payment_type", "custom_notes"],
 		)
 		for pe in pe_records:
 			pe_data[pe.name] = pe
@@ -188,6 +188,7 @@ def enrich_data(data):
 
 		if voucher_type == "Payment Entry" and voucher_no in pe_data:
 			pe = pe_data[voucher_no]
+			row["project"] = pe.get("project", "")
 			row["custom_party_description"] = pe.get("custom_party_description", "")
 			row["payment_type"] = pe.get("payment_type", "")
 			row["custom_notes"] = pe.get("custom_notes", "")
