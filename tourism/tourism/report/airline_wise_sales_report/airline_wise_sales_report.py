@@ -71,17 +71,6 @@ def get_data(filters):
     conditions = ""
     values = {}
 
-    # ── Block report if NO filter is selected at all ──
-    if not any([
-        filters.get("airline"),
-        filters.get("passenger"),
-        filters.get("supplier"),
-        filters.get("status"),
-        filters.get("ticket_date"),
-        filters.get("project")
-    ]):
-        return []
-
     # ── Airline Filter ──
     if filters.get("airline"):
         conditions += " AND pi.supplier = %(airline)s"
@@ -131,11 +120,12 @@ def get_data(filters):
         FROM
             `tabPurchase Invoice` pi
         WHERE
-            pi.docstatus = 1
+            pi.docstatus != 2
             AND pi.custom_purchase_invoice_for_ = 'Air Fare'
             {conditions}
         ORDER BY
             pi.posting_date DESC
+        LIMIT 999999
     """.format(conditions=conditions), values, as_dict=1)
 
     # ── Calculate Totals ──
