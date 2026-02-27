@@ -85,7 +85,7 @@ def send_custom_rfq_emails(doc):
 
         # Build custom subject with custom_group_vendor_code
         group_vendor_code = doc.get("custom_group_vendor_code") or ""
-        subject = f"Request for Quotation - {doc.name} | Group Vendor Code: {group_vendor_code}"
+        subject = f"RFQ - {group_vendor_code}"
 
         # Handle sender
         sender = (
