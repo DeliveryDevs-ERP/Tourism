@@ -13,21 +13,18 @@ STANDARD_USERS = ("Guest", "Administrator")
 def on_submit(doc, method):
     """
     Custom on_submit hook for Request for Quotation.
-    Reads custom_send_email checkbox.
-    If 1, sends email to all suppliers using 'Email Template for RFQ 02'
-    with a custom subject that includes custom_group_vendor_code.
+    Loops through suppliers and sends email to those
+    where custom_send_email_custom = 1.
     """
-    if not doc.custom_send_email:
-        return
-
     send_custom_rfq_emails(doc)
 
 
 def send_custom_rfq_emails(doc):
     """
     Loops through all suppliers in the RFQ and sends
-    email using 'Email Template for RFQ 02' template.
-    Subject is modified to include custom_group_vendor_code.
+    email using 'Email Template for RFQ 02' template
+    only if custom_send_email_custom = 1 on the supplier row.
+    Subject includes custom_group_vendor_code.
     """
     template_name = "Email Template for RFQ 02"
 
@@ -39,10 +36,14 @@ def send_custom_rfq_emails(doc):
 
     email_template = frappe.get_doc("Email Template", template_name)
 
-    # Get the portal link (same as original)
+    # Get the portal link
     rfq_link = get_rfq_portal_link(doc)
 
     for rfq_supplier in doc.suppliers:
+
+        # Check our custom checkbox on the supplier row
+        if not rfq_supplier.get("custom_send_email_custom"):
+            continue
 
         # Validate email exists
         if not rfq_supplier.email_id:
