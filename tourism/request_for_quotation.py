@@ -1,4 +1,4 @@
-# tourism/custom/request_for_quotation.py
+# tourism/request_for_quotation.py
 
 import frappe
 from frappe import _
@@ -29,7 +29,7 @@ def send_custom_rfq_emails(doc):
     email using 'Email Template for RFQ 02' template.
     Subject is modified to include custom_group_vendor_code.
     """
-    template_name = doc.email_template
+    template_name = "Email Template for RFQ 02"
 
     # Validate template exists
     if not frappe.db.exists("Email Template", template_name):
