@@ -197,6 +197,15 @@ def enrich_data(data):
 			si = si_data[voucher_no]
 			row["project"] = si.get("project", "")
 
+		if not row.get("payment_type"):
+			if voucher_type == "Sales Invoice":
+				row["payment_type"] = "Sales Invoice"
+			elif voucher_type == "Purchase Invoice":
+				row["payment_type"] = "Purchase Invoice"
+			elif voucher_type == "Journal Entry":
+				row["payment_type"] = "Journal Entry"
+
+
 		# Build description: party + party_description + project
 		desc_parts = []
 		if row.get("party"):

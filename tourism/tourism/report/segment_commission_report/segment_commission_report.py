@@ -28,10 +28,52 @@ def get_columns():
         },
         {
             "fieldname": "supplier",
-            "label": _("Airline / Supplier"),
+            "label": _("Supplier"),
             "fieldtype": "Link",
             "options": "Supplier",
             "width": 160
+        },
+        {
+            "fieldname": "custom_airline",
+            "label": _("Airline"),
+            "fieldtype": "Data",
+            "width": 140
+        },
+        {
+            "fieldname": "custom_gds1",
+            "label": _("GDS"),
+            "fieldtype": "Data",
+            "width": 100
+        },
+        {
+            "fieldname": "custom_sectors",
+            "label": _("Sectors"),
+            "fieldtype": "Data",
+            "width": 100
+        },
+        {
+            "fieldname": "custom_full_route",
+            "label": _("Full Route"),
+            "fieldtype": "Data",
+            "width": 150
+        },
+        {
+            "fieldname": "custom_ticket_for",
+            "label": _("Ticket For"),
+            "fieldtype": "Data",
+            "width": 130
+        },
+        {
+            "fieldname": "custom_tour_from",
+            "label": _("Tour From"),
+            "fieldtype": "Data",
+            "width": 120
+        },
+        {
+            "fieldname": "custom_tour_to",
+            "label": _("Tour To"),
+            "fieldtype": "Data",
+            "width": 120
         },
         {
             "fieldname": "custom_passenger",
@@ -45,12 +87,6 @@ def get_columns():
             "fieldtype": "Link",
             "options": "Project",
             "width": 150
-        },
-        {
-            "fieldname": "custom_segment",
-            "label": _("Segment"),
-            "fieldtype": "Data",
-            "width": 120
         },
         {
             "fieldname": "custom_commission",
@@ -142,16 +178,22 @@ def get_data(filters):
 
     data = frappe.db.sql("""
         SELECT
-            pi.name                     AS name,
-            pi.posting_date             AS posting_date,
-            pi.supplier                 AS supplier,
-            pi.custom_passenger         AS custom_passenger,
-            pi.project                  AS project,
-            pi.custom_segment           AS custom_segment,
-            pi.custom_commission        AS custom_commission,
-            pi.status                   AS status,
-            pi.grand_total              AS grand_total,
-            pi.outstanding_amount       AS outstanding_amount
+            pi.name                 AS name,
+            pi.posting_date         AS posting_date,
+            pi.supplier             AS supplier,
+            pi.custom_airline       AS custom_airline,
+            pi.custom_gds1          AS custom_gds1,
+            pi.custom_sectors       AS custom_sectors,
+            pi.custom_full_route    AS custom_full_route,
+            pi.custom_ticket_for    AS custom_ticket_for,
+            pi.custom_tour_from     AS custom_tour_from,
+            pi.custom_tour_to       AS custom_tour_to,
+            pi.custom_passenger     AS custom_passenger,
+            pi.project              AS project,
+            pi.custom_commission    AS custom_commission,
+            pi.status               AS status,
+            pi.grand_total          AS grand_total,
+            pi.outstanding_amount   AS outstanding_amount
         FROM
             `tabPurchase Invoice` pi
         WHERE
@@ -159,27 +201,34 @@ def get_data(filters):
             {conditions}
         ORDER BY
             pi.posting_date DESC
+        LIMIT 999999
     """.format(conditions=conditions), values, as_dict=1)
 
     # ── Calculate Totals ──
-    total_commission    = sum(row.get("custom_commission", 0) or 0 for row in data)
-    total_grand_total   = sum(row.get("grand_total", 0) or 0 for row in data)
-    total_outstanding   = sum(row.get("outstanding_amount", 0) or 0 for row in data)
+    total_commission  = sum(row.get("custom_commission", 0) or 0 for row in data)
+    total_grand_total = sum(row.get("grand_total", 0) or 0 for row in data)
+    total_outstanding = sum(row.get("outstanding_amount", 0) or 0 for row in data)
 
     # ── Append Total Row ──
     if data:
         data.append({
-            "name":                 "Total",
-            "posting_date":         "",
-            "supplier":             "",
-            "custom_passenger":     "",
-            "project":              "",
-            "custom_segment":       "",
-            "custom_commission":    total_commission,
-            "status":               "TOTAL",
-            "grand_total":          total_grand_total,
-            "outstanding_amount":   total_outstanding,
-            "bold":                 1
+            "name":               "Total",
+            "posting_date":       "",
+            "supplier":           "",
+            "custom_airline":     "",
+            "custom_gds1":        "",
+            "custom_sectors":     "",
+            "custom_full_route":  "",
+            "custom_ticket_for":  "",
+            "custom_tour_from":   "",
+            "custom_tour_to":     "",
+            "custom_passenger":   "",
+            "project":            "",
+            "custom_commission":  total_commission,
+            "status":             "TOTAL",
+            "grand_total":        total_grand_total,
+            "outstanding_amount": total_outstanding,
+            "bold":               1
         })
 
     return data

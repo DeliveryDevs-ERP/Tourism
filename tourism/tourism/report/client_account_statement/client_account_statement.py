@@ -28,9 +28,16 @@ def get_columns():
         },
         {
             "fieldname": "description",
-            "label": _("Description"),
+            "label": _("Customer"),        # ── Changed from Description to Customer ──
             "fieldtype": "Data",
             "width": 200
+        },
+        {
+            "fieldname": "project",
+            "label": _("Project"),         # ── New Project Column ──
+            "fieldtype": "Link",
+            "options": "Project",
+            "width": 150
         },
         {
             "fieldname": "invoiced",
@@ -78,6 +85,7 @@ def get_data(filters):
             si.posting_date                          AS posting_date,
             si.name                                  AS voucher_no,
             si.title                                 AS description,
+            si.project                               AS project,
             si.grand_total                           AS invoiced,
             0                                        AS credit_note,
             (si.grand_total - si.outstanding_amount) AS paid,
