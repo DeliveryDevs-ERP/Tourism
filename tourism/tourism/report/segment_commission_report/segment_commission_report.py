@@ -208,6 +208,8 @@ def get_data(filters):
     total_commission  = sum(row.get("custom_commission", 0) or 0 for row in data)
     total_grand_total = sum(row.get("grand_total", 0) or 0 for row in data)
     total_outstanding = sum(row.get("outstanding_amount", 0) or 0 for row in data)
+    total_sectors     = sum(int(row.get("custom_sectors") or 0) for row in data)
+
 
     # ── Append Total Row ──
     if data:
@@ -217,7 +219,7 @@ def get_data(filters):
             "supplier":           "",
             "custom_airline":     "",
             "custom_gds1":        "",
-            "custom_sectors":     "",
+            "custom_sectors":     str(total_sectors),
             "custom_full_route":  "",
             "custom_ticket_for":  "",
             "custom_tour_from":   "",
