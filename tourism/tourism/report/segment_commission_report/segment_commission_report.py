@@ -198,6 +198,7 @@ def get_data(filters):
             `tabPurchase Invoice` pi
         WHERE
             pi.docstatus = 1
+            AND pi.custom_purchase_invoice_for_ = 'Air Fare'
             {conditions}
         ORDER BY
             pi.posting_date DESC
