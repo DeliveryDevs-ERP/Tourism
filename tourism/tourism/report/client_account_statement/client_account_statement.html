@@ -93,13 +93,8 @@
     }
 
     /* Alternating rows */
-    .report-table tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
-
-    .report-table tbody tr:nth-child(even) {
-        background-color: #efefef;
-    }
+    .report-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
+    .report-table tbody tr:nth-child(even) { background-color: #efefef; }
 
     /* TOTAL footer row */
     .report-table tfoot td {
@@ -155,6 +150,7 @@
         width: 36%;
     }
 </style>
+
 {%
 function fmt(val) {
     val = parseFloat(val) || 0;
@@ -162,9 +158,10 @@ function fmt(val) {
     return (val < 0 ? "-" : "") + abs;
 }
 
+// ── BUG 2 FIX: .toFixed(3) → .toFixed(2) ──
 function fmtAbs(val) {
     return Math.abs(parseFloat(val) || 0)
-        .toFixed(3)
+        .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -195,8 +192,20 @@ var dp    = (filters.report_date || "").split("-");
 var day   = dp[2] || "";
 var month = dp[1] || "";
 var year  = dp[0] || "";
-var today = fmtDate(frappe.datetime.get_today());
+
+// ── BUG 1 FIX: frappe.datetime.get_today() → frappe.utils.today() ──
+var today = fmtDate(frappe.utils.today());
 var outstanding_display = fmtAbs(total_outstanding);
+
+// ── BUG 3 FIX: Safe party_list with Array/String check ──
+var party_list = [];
+if (filters.party) {
+    if (Array.isArray(filters.party)) {
+        party_list = filters.party;
+    } else if (typeof filters.party === "string") {
+        party_list = [filters.party];
+    }
+}
 %}
 
 <div class="print-format">
@@ -211,14 +220,24 @@ var outstanding_display = fmtAbs(total_outstanding);
             Invoice Wise Aging Till
             <span class="highlight">{%= day %}</span>.{%= month %}.{%= year %}
         </p>
-        {% if (filters.party && filters.party.length) { %}
-            {% for (var p = 0; p < filters.party.length; p++) { %}
-                <p class="customer-name">{%= filters.party[p] %}</p>
+        {% if (party_list.length) { %}
+            {% for (var p = 0; p < party_list.length; p++) { %}
+                <p class="customer-name">{%= party_list[p] %}</p>
             {% } %}
         {% } %}
     </div>
 
     <table class="report-table">
+        <!-- ── BUG 4 FIX: Added missing <col> tags ── -->
+        <col class="col-date">
+        <col class="col-invno">
+        <col class="col-desc">
+        <col class="col-sale">
+        <col class="col-refund">
+        <col class="col-receipt">
+        <col class="col-balance">
+        <col class="col-days">
+
         <thead>
             <tr>
                 <th class="text-center">Date</th>
@@ -231,6 +250,7 @@ var outstanding_display = fmtAbs(total_outstanding);
                 <th class="text-center">Days Over</th>
             </tr>
         </thead>
+
         <tbody>
             {% for (var j = 0; j < data.length; j++) {
                 var r   = data[j];
@@ -242,7 +262,7 @@ var outstanding_display = fmtAbs(total_outstanding);
             %}
             <tr>
                 <td class="text-center no-wrap">{%= fmtDate(r.posting_date) %}</td>
-                <td class="text-center no-wrap" style="font-weight:bold;">{%= r.voucher_no || "" %}</td>
+                <td class="text-center no-wrap fw-bold">{%= r.voucher_no || "" %}</td>
                 <td class="text-left desc-cell">{%= desc %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(inv) %}</td>
                 <td class="text-right no-wrap">{% if (cr) { %}PKR&nbsp;{%= fmt(cr) %}{% } else { %}PKR&nbsp;-{% } %}</td>
@@ -252,6 +272,7 @@ var outstanding_display = fmtAbs(total_outstanding);
             </tr>
             {% } %}
         </tbody>
+
         <tfoot>
             <tr>
                 <td colspan="3" class="text-center">TOTAL</td>

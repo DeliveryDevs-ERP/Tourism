@@ -56,14 +56,14 @@
         line-height: 1.0;
     }
 
-    .report-table col.col-invno       { width: 13%; }
-    .report-table col.col-date        { width: 7%;  }
-    .report-table col.col-airline     { width: 11%; }
-    .report-table col.col-passenger   { width: 12%; }
-    .report-table col.col-project     { width: 9%;  }
-    .report-table col.col-segment     { width: 9%;  }
-    .report-table col.col-commission  { width: 9%;  }
-    .report-table col.col-status      { width: 7%;  }
+    /* ── 9 columns after removing Segment ── */
+    .report-table col.col-invno       { width: 15%; }
+    .report-table col.col-date        { width: 8%;  }
+    .report-table col.col-airline     { width: 13%; }
+    .report-table col.col-passenger   { width: 13%; }
+    .report-table col.col-project     { width: 10%; }
+    .report-table col.col-commission  { width: 10%; }
+    .report-table col.col-status      { width: 8%;  }
     .report-table col.col-grand       { width: 11%; }
     .report-table col.col-outstanding { width: 12%; }
 
@@ -179,12 +179,11 @@ var total_grand_total = 0;
 var total_outstanding = 0;
 
 for (var i = 0; i < data.length; i++) {
-    total_commission  += parseFloat(data[i].custom_commission)   || 0;
-    total_grand_total += parseFloat(data[i].grand_total)         || 0;
-    total_outstanding += parseFloat(data[i].outstanding_amount)  || 0;
+    total_commission  += parseFloat(data[i].custom_commission)  || 0;
+    total_grand_total += parseFloat(data[i].grand_total)        || 0;
+    total_outstanding += parseFloat(data[i].outstanding_amount) || 0;
 }
 
-// ── FIX: Use frappe.utils.today() for server-side date ──
 var today = fmtDate(frappe.utils.today());
 
 // ── Collect active filters for display ──
@@ -231,7 +230,6 @@ var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All
         <col class="col-airline">
         <col class="col-passenger">
         <col class="col-project">
-        <col class="col-segment">
         <col class="col-commission">
         <col class="col-status">
         <col class="col-grand">
@@ -244,7 +242,6 @@ var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All
                 <th class="text-center">Airline / Supplier</th>
                 <th class="text-center">Passenger</th>
                 <th class="text-center">Project</th>
-                <th class="text-center">Segment</th>
                 <th class="text-center">Commission</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Grand Total</th>
@@ -262,7 +259,6 @@ var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All
                 <td class="text-left desc-cell">{%= r.supplier || "" %}</td>
                 <td class="text-left desc-cell">{%= r.custom_passenger || "" %}</td>
                 <td class="text-left desc-cell">{%= r.project || "" %}</td>
-                <td class="text-left desc-cell">{%= r.custom_segment || "" %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(r.custom_commission) %}</td>
                 <td class="text-center no-wrap">{%= r.status || "" %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(r.grand_total) %}</td>
@@ -274,7 +270,8 @@ var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All
         <!-- ── TOTAL ROW ── -->
         <tfoot>
             <tr>
-                <td colspan="6" class="text-center fw-bold">TOTAL</td>
+                <!-- ── BUG FIX: colspan updated from 6 to 5 after Segment removed ── -->
+                <td colspan="5" class="text-center fw-bold">TOTAL</td>
                 <td class="text-right no-wrap fw-bold">PKR&nbsp;{%= fmt(total_commission) %}</td>
                 <td></td>
                 <td class="text-right no-wrap fw-bold">PKR&nbsp;{%= fmt(total_grand_total) %}</td>
