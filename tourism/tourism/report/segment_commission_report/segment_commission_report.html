@@ -56,7 +56,6 @@
         line-height: 1.0;
     }
 
-    /* ── 9 columns after removing Segment ── */
     .report-table col.col-invno       { width: 15%; }
     .report-table col.col-date        { width: 8%;  }
     .report-table col.col-airline     { width: 13%; }
@@ -74,7 +73,6 @@
         vertical-align: middle;
     }
 
-    /* BLACK header */
     .report-table thead tr {
         background-color: #000;
         color: #fff;
@@ -88,11 +86,9 @@
         white-space: nowrap;
     }
 
-    /* Alternating rows */
     .report-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
     .report-table tbody tr:nth-child(even) { background-color: #efefef; }
 
-    /* TOTAL footer row */
     .report-table tfoot td {
         background-color: #ffffff;
         font-weight: bold;
@@ -166,14 +162,6 @@ function fmtDate(d) {
     return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : d;
 }
 
-function parseDateRange(val) {
-    if (!val) return null;
-    if (typeof val === "string") {
-        try { val = JSON.parse(val); } catch(e) { return null; }
-    }
-    return Array.isArray(val) ? val : null;
-}
-
 var total_commission  = 0;
 var total_grand_total = 0;
 var total_outstanding = 0;
@@ -184,29 +172,45 @@ for (var i = 0; i < data.length; i++) {
     total_outstanding += parseFloat(data[i].outstanding_amount) || 0;
 }
 
-var today = fmtDate(frappe.utils.today());
+var now = new Date();
+var yyyy = now.getFullYear();
+var mm = ("0" + (now.getMonth() + 1)).slice(-2);
+var dd = ("0" + now.getDate()).slice(-2);
+var today = fmtDate(yyyy + "-" + mm + "-" + dd);
 
-// ── Collect active filters for display ──
-var filter_parts = [];
-if (filters.airline)         filter_parts.push("Airline: "         + filters.airline);
-if (filters.passenger)       filter_parts.push("Passenger: "       + filters.passenger);
-if (filters.customer)        filter_parts.push("Customer: "        + filters.customer);
-if (filters.supplier)        filter_parts.push("Supplier: "        + filters.supplier);
-if (filters.commission_type) filter_parts.push("Commission Type: " + filters.commission_type);
-if (filters.status)          filter_parts.push("Status: "          + filters.status);
-if (filters.project)         filter_parts.push("Project: "         + filters.project);
+var filter_display = "All Records";
+try {
+    var filter_parts = [];
+    var f = (typeof filters !== "undefined" && filters) ? filters : {};
 
-var td = parseDateRange(filters.ticket_date);
-if (td && td[0] && td[1]) {
-    filter_parts.push("Ticket Date: " + fmtDate(td[0]) + " to " + fmtDate(td[1]));
+    if (f.airline)         filter_parts.push("Airline: "         + f.airline);
+    if (f.passenger)       filter_parts.push("Passenger: "       + f.passenger);
+    if (f.customer)        filter_parts.push("Customer: "        + f.customer);
+    if (f.supplier)        filter_parts.push("Supplier: "        + f.supplier);
+    if (f.commission_type) filter_parts.push("Commission Type: " + f.commission_type);
+    if (f.status)          filter_parts.push("Status: "          + f.status);
+    if (f.project)         filter_parts.push("Project: "         + f.project);
+
+    if (f.ticket_date) {
+        var td = f.ticket_date;
+        if (typeof td === "string") { try { td = JSON.parse(td); } catch(e) { td = null; } }
+        if (Array.isArray(td) && td[0] && td[1]) {
+            filter_parts.push("Ticket Date: " + fmtDate(td[0]) + " to " + fmtDate(td[1]));
+        }
+    }
+
+    if (f.date_range) {
+        var dr = f.date_range;
+        if (typeof dr === "string") { try { dr = JSON.parse(dr); } catch(e) { dr = null; } }
+        if (Array.isArray(dr) && dr[0] && dr[1]) {
+            filter_parts.push("Date Range: " + fmtDate(dr[0]) + " to " + fmtDate(dr[1]));
+        }
+    }
+
+    if (filter_parts.length > 0) { filter_display = filter_parts.join("  |  "); }
+} catch(e) {
+    filter_display = "All Records";
 }
-
-var dr = parseDateRange(filters.date_range);
-if (dr && dr[0] && dr[1]) {
-    filter_parts.push("Date Range: " + fmtDate(dr[0]) + " to " + fmtDate(dr[1]));
-}
-
-var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All Records";
 %}
 
 <div class="print-format">
@@ -267,10 +271,8 @@ var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All
             {% } %}
         </tbody>
 
-        <!-- ── TOTAL ROW ── -->
         <tfoot>
             <tr>
-                <!-- ── BUG FIX: colspan updated from 6 to 5 after Segment removed ── -->
                 <td colspan="5" class="text-center fw-bold">TOTAL</td>
                 <td class="text-right no-wrap fw-bold">PKR&nbsp;{%= fmt(total_commission) %}</td>
                 <td></td>

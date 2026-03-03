@@ -93,13 +93,8 @@
     }
 
     /* Alternating rows */
-    .report-table tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
-
-    .report-table tbody tr:nth-child(even) {
-        background-color: #efefef;
-    }
+    .report-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
+    .report-table tbody tr:nth-child(even) { background-color: #efefef; }
 
     /* TOTAL footer row */
     .report-table tfoot td {
@@ -175,27 +170,43 @@ function fmtDate(d) {
     return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : d;
 }
 
-var total_grand_total     = 0;
-var total_outstanding     = 0;
+var total_grand_total = 0;
+var total_outstanding = 0;
 
 for (var i = 0; i < data.length; i++) {
     total_grand_total += parseFloat(data[i].grand_total)        || 0;
     total_outstanding += parseFloat(data[i].outstanding_amount) || 0;
 }
 
-var today = fmtDate(frappe.datetime.get_today());
+var now = new Date();
+var yyyy = now.getFullYear();
+var mm = ("0" + (now.getMonth() + 1)).slice(-2);
+var dd = ("0" + now.getDate()).slice(-2);
+var today = fmtDate(yyyy + "-" + mm + "-" + dd);
 
-// ── Collect active filters for display ──
-var filter_parts = [];
-if (filters.airline)    filter_parts.push("Airline: " + filters.airline);
-if (filters.passenger)  filter_parts.push("Passenger: " + filters.passenger);
-if (filters.supplier)   filter_parts.push("Supplier: " + filters.supplier);
-if (filters.status)     filter_parts.push("Status: " + filters.status);
-if (filters.project)    filter_parts.push("Project: " + filters.project);
-if (filters.ticket_date && filters.ticket_date[0] && filters.ticket_date[1]) {
-    filter_parts.push("Ticket Date: " + fmtDate(filters.ticket_date[0]) + " to " + fmtDate(filters.ticket_date[1]));
+var filter_display = "All Records";
+try {
+    var filter_parts = [];
+    var f = (typeof filters !== "undefined" && filters) ? filters : {};
+
+    if (f.airline)    filter_parts.push("Airline: " + f.airline);
+    if (f.passenger)  filter_parts.push("Passenger: " + f.passenger);
+    if (f.supplier)   filter_parts.push("Supplier: " + f.supplier);
+    if (f.status)     filter_parts.push("Status: " + f.status);
+    if (f.project)    filter_parts.push("Project: " + f.project);
+
+    if (f.ticket_date) {
+        var td = f.ticket_date;
+        if (typeof td === "string") { try { td = JSON.parse(td); } catch(e) { td = null; } }
+        if (Array.isArray(td) && td[0] && td[1]) {
+            filter_parts.push("Ticket Date: " + fmtDate(td[0]) + " to " + fmtDate(td[1]));
+        }
+    }
+
+    if (filter_parts.length > 0) { filter_display = filter_parts.join("  |  "); }
+} catch(e) {
+    filter_display = "All Records";
 }
-var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All Records";
 %}
 
 <div class="print-format">
@@ -253,7 +264,7 @@ var filter_display = filter_parts.length > 0 ? filter_parts.join("  |  ") : "All
             {% } %}
         </tbody>
 
-        <!-- ── TOTAL ROW - Bold Only ── -->
+        <!-- ── TOTAL ROW ── -->
         <tfoot>
             <tr>
                 <td colspan="6" class="text-center fw-bold">TOTAL</td>

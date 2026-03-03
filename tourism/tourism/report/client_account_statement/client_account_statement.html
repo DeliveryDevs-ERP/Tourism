@@ -60,14 +60,14 @@
         line-height: 1.0;
     }
 
-    .report-table col.col-date    { width: 5.5%; }
-    .report-table col.col-invno   { width: 5.5%; }
-    .report-table col.col-desc    { width: 41%;  }
+    .report-table col.col-date    { width: 6%;   }
+    .report-table col.col-invno   { width: 13%;  }
+    .report-table col.col-desc    { width: 30%;  }
     .report-table col.col-sale    { width: 11%;  }
     .report-table col.col-refund  { width: 9%;   }
     .report-table col.col-receipt { width: 11%;  }
-    .report-table col.col-balance { width: 10%;  }
-    .report-table col.col-days    { width: 7%;   }
+    .report-table col.col-balance { width: 12%;  }
+    .report-table col.col-days    { width: 8%;   }
 
     .report-table th,
     .report-table td {
@@ -169,6 +169,14 @@ function cleanDesc(val) {
     return val.replace(/\bnull\b/g, "").replace(/\s{2,}/g, " ").trim();
 }
 
+function getTodayStr() {
+    var now = new Date();
+    var yyyy = now.getFullYear();
+    var mm = ("0" + (now.getMonth() + 1)).slice(-2);
+    var dd = ("0" + now.getDate()).slice(-2);
+    return yyyy + "-" + mm + "-" + dd;
+}
+
 var total_invoiced    = 0;
 var total_credit      = 0;
 var total_paid        = 0;
@@ -181,24 +189,36 @@ for (var i = 0; i < data.length; i++) {
     total_outstanding += parseFloat(data[i].outstanding) || 0;
 }
 
-// ── FIX: Safe fallback if report_date is not selected ──
-var report_date_val = (filters && filters.report_date) ? filters.report_date : frappe.utils.today();
-var dp    = report_date_val.split("-");
-var day   = dp[2] || "";
-var month = dp[1] || "";
-var year  = dp[0] || "";
+var _today_str = getTodayStr();
+var day   = _today_str.split("-")[2];
+var month = _today_str.split("-")[1];
+var year  = _today_str.split("-")[0];
 
-var today = fmtDate(frappe.utils.today());
+try {
+    if (typeof filters !== "undefined" && filters && filters.report_date) {
+        var dp = filters.report_date.split("-");
+        if (dp.length === 3) {
+            day   = dp[2];
+            month = dp[1];
+            year  = dp[0];
+        }
+    }
+} catch(e) {}
+
+var today = fmtDate(_today_str);
 var outstanding_display = fmtAbs(total_outstanding);
 
-// ── Safe party_list with Array/String check ──
 var party_list = [];
-if (filters && filters.party) {
-    if (Array.isArray(filters.party)) {
-        party_list = filters.party;
-    } else if (typeof filters.party === "string") {
-        party_list = [filters.party];
+try {
+    if (typeof filters !== "undefined" && filters && filters.party) {
+        if (Array.isArray(filters.party)) {
+            party_list = filters.party;
+        } else if (typeof filters.party === "string") {
+            party_list = [filters.party];
+        }
     }
+} catch(e) {
+    party_list = [];
 }
 %}
 
