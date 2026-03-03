@@ -5,7 +5,6 @@ function fmt(val) {
     return (val < 0 ? "-" : "") + abs;
 }
 
-// ── BUG 1 FIX: Changed .toFixed(3) to .toFixed(2) ──
 function fmtAbs(val) {
     return Math.abs(parseFloat(val) || 0)
         .toFixed(2)
@@ -35,22 +34,39 @@ for (var i = 0; i < data.length; i++) {
     total_outstanding += parseFloat(data[i].outstanding) || 0;
 }
 
-var dp    = (filters.report_date || "").split("-");
-var day   = dp[2] || "";
-var month = dp[1] || "";
-var year  = dp[0] || "";
+// ── FIX: Safe fallback if filters or report_date is null/undefined ──
+var day   = "";
+var month = "";
+var year  = "";
+
+try {
+    var _rd = (filters && filters.report_date) ? filters.report_date : frappe.utils.today();
+    var dp  = _rd.split("-");
+    day     = dp[2] || "";
+    month   = dp[1] || "";
+    year    = dp[0] || "";
+} catch(e) {
+    var _td = frappe.utils.today().split("-");
+    day   = _td[2] || "";
+    month = _td[1] || "";
+    year  = _td[0] || "";
+}
 
 var today = fmtDate(frappe.utils.today());
 var outstanding_display = fmtAbs(total_outstanding);
 
-// ── BUG 2 FIX: Safely convert party to array if it comes as string ──
+// ── Safe party_list with Array/String check ──
 var party_list = [];
-if (filters.party) {
-    if (Array.isArray(filters.party)) {
-        party_list = filters.party;
-    } else if (typeof filters.party === "string") {
-        party_list = [filters.party];
+try {
+    if (filters && filters.party) {
+        if (Array.isArray(filters.party)) {
+            party_list = filters.party;
+        } else if (typeof filters.party === "string") {
+            party_list = [filters.party];
+        }
     }
+} catch(e) {
+    party_list = [];
 }
 %}
 
@@ -66,7 +82,6 @@ if (filters.party) {
             Invoice Wise Aging Till
             <span class="highlight">{%= day %}</span>.{%= month %}.{%= year %}
         </p>
-        <!-- ── BUG 2 FIX: Use safe party_list instead of filters.party directly ── -->
         {% if (party_list.length) { %}
             {% for (var p = 0; p < party_list.length; p++) { %}
                 <p class="customer-name">{%= party_list[p] %}</p>

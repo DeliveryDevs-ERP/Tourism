@@ -12,7 +12,6 @@
         color: #000;
     }
 
-    /* ── HEADER ── */
     .report-header {
         text-align: center;
         margin-bottom: 3px;
@@ -51,7 +50,6 @@
         margin-top: 2px;
     }
 
-    /* ── MAIN TABLE ── */
     .report-table {
         width: 100%;
         border-collapse: collapse;
@@ -78,7 +76,6 @@
         vertical-align: middle;
     }
 
-    /* BLACK header */
     .report-table thead tr {
         background-color: #000;
         color: #fff;
@@ -92,11 +89,9 @@
         white-space: nowrap;
     }
 
-    /* Alternating rows */
     .report-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
     .report-table tbody tr:nth-child(even) { background-color: #efefef; }
 
-    /* TOTAL footer row */
     .report-table tfoot td {
         background-color: #cccccc;
         font-weight: bold;
@@ -117,7 +112,6 @@
     .no-wrap     { white-space: nowrap; }
     .fw-bold     { font-weight: bold;  }
 
-    /* ── SUMMARY TABLE ── */
     .summary-table {
         width: 100%;
         border-collapse: collapse;
@@ -158,7 +152,6 @@ function fmt(val) {
     return (val < 0 ? "-" : "") + abs;
 }
 
-// ── BUG 2 FIX: .toFixed(3) → .toFixed(2) ──
 function fmtAbs(val) {
     return Math.abs(parseFloat(val) || 0)
         .toFixed(2)
@@ -188,18 +181,19 @@ for (var i = 0; i < data.length; i++) {
     total_outstanding += parseFloat(data[i].outstanding) || 0;
 }
 
-var dp    = (filters.report_date || "").split("-");
+// ── FIX: Safe fallback if report_date is not selected ──
+var report_date_val = (filters && filters.report_date) ? filters.report_date : frappe.utils.today();
+var dp    = report_date_val.split("-");
 var day   = dp[2] || "";
 var month = dp[1] || "";
 var year  = dp[0] || "";
 
-// ── BUG 1 FIX: frappe.datetime.get_today() → frappe.utils.today() ──
 var today = fmtDate(frappe.utils.today());
 var outstanding_display = fmtAbs(total_outstanding);
 
-// ── BUG 3 FIX: Safe party_list with Array/String check ──
+// ── Safe party_list with Array/String check ──
 var party_list = [];
-if (filters.party) {
+if (filters && filters.party) {
     if (Array.isArray(filters.party)) {
         party_list = filters.party;
     } else if (typeof filters.party === "string") {
@@ -228,7 +222,6 @@ if (filters.party) {
     </div>
 
     <table class="report-table">
-        <!-- ── BUG 4 FIX: Added missing <col> tags ── -->
         <col class="col-date">
         <col class="col-invno">
         <col class="col-desc">
