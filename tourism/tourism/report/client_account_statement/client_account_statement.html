@@ -251,6 +251,7 @@ try {
         <col class="col-date">
         <col class="col-invno">
         <col class="col-desc">
+        <col class="col-project">
         <col class="col-sale">
         <col class="col-refund">
         <col class="col-receipt">
@@ -262,6 +263,7 @@ try {
                 <th class="text-center">Date</th>
                 <th class="text-center">Inv. No</th>
                 <th class="text-center">Description</th>
+                <th class="text-center">Project</th>
                 <th class="text-center">SaleAmt (Net)</th>
                 <th class="text-center">Refund Amt</th>
                 <th class="text-center">Receipt</th>
@@ -295,7 +297,7 @@ try {
 
         <tfoot>
             <tr>
-                <td colspan="3" class="text-center">TOTAL</td>
+                <td colspan="4" class="text-center">TOTAL</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_invoiced) %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_credit) %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(total_paid) %}</td>
