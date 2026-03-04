@@ -205,6 +205,22 @@ def get_data(filters):
         LIMIT 999999
     """.format(conditions=conditions), values, as_dict=1)
 
+        # ── Batch fetch project names ──
+    project_ids = set(row.get("project") for row in data if row.get("project"))
+    project_name_map = {}
+    if project_ids:
+        project_records = frappe.get_all(
+            "Project",
+            filters={"name": ["in", list(project_ids)]},
+            fields=["name", "project_name"],
+        )
+        for proj in project_records:
+            project_name_map[proj.name] = proj.project_name or proj.name
+
+    for row in data:
+        project_id = row.get("project", "")
+        row["project_display"] = project_name_map.get(project_id, project_id)
+
     # ── Calculate Totals ──
     total_commission  = sum(row.get("custom_commission", 0) or 0 for row in data)
     total_grand_total = sum(row.get("grand_total", 0) or 0 for row in data)
@@ -227,6 +243,7 @@ def get_data(filters):
             "custom_tour_to":     "",
             "custom_passenger":   "",
             "project":            "",
+            "project_display":    "",
             "custom_commission":  total_commission,
             "status":             "TOTAL",
             "grand_total":        total_grand_total,

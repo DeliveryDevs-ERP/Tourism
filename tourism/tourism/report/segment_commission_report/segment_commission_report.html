@@ -55,12 +55,17 @@
         border: 0.5px solid #000;
         line-height: 1.0;
     }
+    .project-cell {
+    white-space: normal;
+    word-break: break-word;
+    text-align: left;
+    }
 
     .report-table col.col-invno       { width: 15%; }
     .report-table col.col-date        { width: 8%;  }
     .report-table col.col-airline     { width: 13%; }
     .report-table col.col-passenger   { width: 13%; }
-    .report-table col.col-project     { width: 10%; }
+    .report-table col.col-project     { width: 16%; }
     .report-table col.col-commission  { width: 10%; }
     .report-table col.col-status      { width: 8%;  }
     .report-table col.col-grand       { width: 11%; }
@@ -262,7 +267,7 @@ try {
                 <td class="text-center no-wrap">{%= fmtDate(r.posting_date) %}</td>
                 <td class="text-left desc-cell">{%= r.supplier || "" %}</td>
                 <td class="text-left desc-cell">{%= r.custom_passenger || "" %}</td>
-                <td class="text-left desc-cell">{%= r.project || "" %}</td>
+                <td class="text-left project-cell">{%= r.project_display || r.project || "" %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(r.custom_commission) %}</td>
                 <td class="text-center no-wrap">{%= r.status || "" %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(r.grand_total) %}</td>
