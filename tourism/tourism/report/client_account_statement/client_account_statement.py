@@ -104,4 +104,19 @@ def get_data(filters):
         "report_date": report_date
     }, as_dict=1)
 
+    project_ids = set(row.get("project") for row in data if row.get("project"))
+    project_name_map = {}
+    if project_ids:
+        project_records = frappe.get_all(
+            "Project",
+            filters={"name": ["in", list(project_ids)]},
+            fields=["name", "project_name"],
+        )
+        for proj in project_records:
+            project_name_map[proj.name] = proj.project_name or proj.name
+
+    for row in data:
+        project_id = row.get("project", "")
+        row["project_display"] = project_name_map.get(project_id, project_id)
+
     return data

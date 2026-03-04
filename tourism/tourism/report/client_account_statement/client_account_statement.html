@@ -68,6 +68,7 @@
     .report-table col.col-receipt { width: 11%;  }
     .report-table col.col-balance { width: 12%;  }
     .report-table col.col-days    { width: 8%;   }
+    .report-table col.col-project { width: 16%; }
 
     .report-table th,
     .report-table td {
@@ -104,6 +105,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: left;
+    }
+    .project-cell {
+    white-space: normal;
+    word-break: break-word;
+    text-align: left;
     }
 
     .text-right  { text-align: right;  }
@@ -277,6 +283,7 @@ try {
                 <td class="text-center no-wrap">{%= fmtDate(r.posting_date) %}</td>
                 <td class="text-center no-wrap fw-bold">{%= r.voucher_no || "" %}</td>
                 <td class="text-left desc-cell">{%= desc %}</td>
+                <td class="text-left project-cell">{%= r.project_display || r.project || "" %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(inv) %}</td>
                 <td class="text-right no-wrap">{% if (cr) { %}PKR&nbsp;{%= fmt(cr) %}{% } else { %}PKR&nbsp;-{% } %}</td>
                 <td class="text-right no-wrap">{% if (pd) { %}PKR&nbsp;{%= fmt(pd) %}{% } else { %}PKR&nbsp;-{% } %}</td>
