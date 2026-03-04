@@ -301,8 +301,8 @@ try {
                 <td class="text-center no-wrap fw-bold">{%= r.voucher_no || "" %}</td>
                 <td class="text-center no-wrap">{%= r.voucher_type || "" %}</td>
                 <td class="text-left desc-cell">{%= r.remarks || "" %}</td>
-                <!-- ── FIX: project-cell class used instead of desc-cell ── -->
-                <td class="text-left project-cell">{%= r.project || "" %}</td>
+                
+                <td class="text-left project-cell">{%= r.project_display || r.project || "" %}</td>
                 <td class="text-left desc-cell">{%= desc %}</td>
                 <td class="text-right no-wrap">PKR&nbsp;{%= fmt(inv) %}</td>
                 <td class="text-right no-wrap">{% if (cr) { %}PKR&nbsp;{%= fmt(cr) %}{% } else { %}PKR&nbsp;-{% } %}</td>
