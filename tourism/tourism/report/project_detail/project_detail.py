@@ -49,7 +49,7 @@ def get_columns():
             "label": _("Costing"),
             "fieldtype": "Link",
             "options": "Costing",
-            "width": 210
+            "width": 310
         },
     ]
 
