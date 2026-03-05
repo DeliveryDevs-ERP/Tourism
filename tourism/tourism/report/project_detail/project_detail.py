@@ -21,35 +21,35 @@ def get_columns():
             "label": _("Sales Order"),
             "fieldtype": "Link",
             "options": "Sales Order",
-            "width": 180
+            "width": 210
         },
         {
             "fieldname": "quotation",
             "label": _("Quotation"),
             "fieldtype": "Link",
             "options": "Quotation",
-            "width": 180
+            "width": 210
         },
         {
             "fieldname": "opportunity",
             "label": _("Opportunity"),
             "fieldtype": "Link",
             "options": "Opportunity",
-            "width": 180
+            "width": 210
         },
         {
             "fieldname": "rfq",
             "label": _("RFQ"),
             "fieldtype": "Link",
             "options": "Request for Quotation",
-            "width": 180
+            "width": 210
         },
         {
             "fieldname": "costing",
             "label": _("Costing"),
             "fieldtype": "Link",
             "options": "Costing",
-            "width": 180
+            "width": 210
         },
     ]
 
