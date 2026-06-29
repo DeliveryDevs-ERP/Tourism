@@ -40,6 +40,12 @@ def get_columns():
             "width": 160
         },
         {
+            "fieldname": "passenger_name",
+            "label": _("Passenger Name"),
+            "fieldtype": "Data",
+            "width": 160
+        },
+        {
             "fieldname": "project",
             "label": _("Project"),
             "fieldtype": "Link",
@@ -71,27 +77,22 @@ def get_data(filters):
     conditions = ""
     values = {}
 
-    # ── Airline Filter ──
     if filters.get("airline"):
         conditions += " AND pi.supplier = %(airline)s"
         values["airline"] = filters.get("airline")
 
-    # ── Passenger Filter ──
     if filters.get("passenger"):
         conditions += " AND pi.custom_passenger = %(passenger)s"
         values["passenger"] = filters.get("passenger")
 
-    # ── Supplier Filter ──
     if filters.get("supplier"):
         conditions += " AND pi.supplier = %(supplier)s"
         values["supplier"] = filters.get("supplier")
 
-    # ── Status Filter ──
     if filters.get("status"):
         conditions += " AND pi.status = %(status)s"
         values["status"] = filters.get("status")
 
-    # ── Ticket Date Filter (DateRange) ──
     if filters.get("ticket_date"):
         ticket_date = filters.get("ticket_date")
         if isinstance(ticket_date, list):
@@ -102,7 +103,6 @@ def get_data(filters):
                 conditions += " AND pi.posting_date <= %(to_date)s"
                 values["to_date"] = ticket_date[1]
 
-    # ── Project Filter ──
     if filters.get("project"):
         conditions += " AND pi.project = %(project)s"
         values["project"] = filters.get("project")
@@ -113,12 +113,15 @@ def get_data(filters):
             pi.posting_date               AS posting_date,
             pi.supplier                   AS supplier,
             pi.custom_passenger           AS custom_passenger,
+            p.full_name                   AS passenger_name,
             pi.project                    AS project,
             pi.status                     AS status,
             pi.grand_total                AS grand_total,
             pi.outstanding_amount         AS outstanding_amount
         FROM
             `tabPurchase Invoice` pi
+        LEFT JOIN
+            `tabPassenger` p ON p.name = pi.custom_passenger
         WHERE
             pi.docstatus != 2
             AND pi.custom_purchase_invoice_for_ = 'Air Fare'
@@ -148,13 +151,13 @@ def get_data(filters):
     total_grand_total = sum(row.get("grand_total", 0) or 0 for row in data)
     total_outstanding = sum(row.get("outstanding_amount", 0) or 0 for row in data)
 
-    # ── Append Total Row ──
     if data:
         data.append({
             "name":               "Total",
             "posting_date":       "",
             "supplier":           "",
             "custom_passenger":   "",
+            "passenger_name":     "",
             "project":            "",
             "project_display":    "",
             "status":             "TOTAL",

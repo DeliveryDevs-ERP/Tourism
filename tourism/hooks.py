@@ -152,7 +152,6 @@ doc_events = {
     # },
     "Purchase Invoice": {
         "validate": "tourism.api.purchase_invoice_validate"
-
     },
     "Request for Quotation": {
         "on_submit": "tourism.request_for_quotation.on_submit"

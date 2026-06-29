@@ -2,6 +2,86 @@ import frappe
 from frappe import _
 from frappe.utils import cint
 
+
+@frappe.whitelist()
+def get_suppliers_by_multiple_filters(supplier_group=None, tag=None, city=None, country=None):
+	"""
+	Returns suppliers matching ALL provided filter conditions (AND logic).
+	Uses custom_city field for city filtering.
+	Returns list of dicts with supplier name, contact, and email.
+	"""
+	filters = {"disabled": 0}
+
+	# Handle "null" string from JavaScript
+	if supplier_group and supplier_group != "null":
+		filters["supplier_group"] = supplier_group
+
+	if city and city != "null":
+		filters["custom_city"] = city
+
+	if country and country != "null":
+		filters["country"] = country
+
+	# Get suppliers matching the basic filters
+	suppliers = frappe.get_all("Supplier", filters=filters, pluck="name")
+
+	# If tag filter is provided, intersect with tagged suppliers
+	if tag and tag != "null":
+		tagged_suppliers = frappe.get_all(
+			"Tag Link",
+			filters={"document_type": "Supplier", "tag": ["like", f"%{tag}%"]},
+			pluck="document_name"
+		)
+		# Intersect: keep only suppliers that are in both lists
+		suppliers = [s for s in suppliers if s in tagged_suppliers]
+
+	# Fetch contact details for each supplier
+	result = []
+	for supplier in suppliers:
+		contact_info = get_supplier_contact(supplier)
+		result.append({
+			"supplier": supplier,
+			"contact": contact_info.get("contact"),
+			"email_id": contact_info.get("email_id")
+		})
+
+	return result
+
+
+@frappe.whitelist()
+def get_supplier_contact(supplier):
+	"""
+	Get contact and email for a supplier from Dynamic Link.
+	"""
+	if not supplier:
+		return {"contact": None, "email_id": None}
+
+	# First check if supplier has a primary contact set
+	supplier_doc = frappe.get_value("Supplier", supplier, ["supplier_primary_contact", "email_id"], as_dict=True)
+	if supplier_doc and supplier_doc.get("supplier_primary_contact"):
+		contact = frappe.get_value("Contact", supplier_doc.supplier_primary_contact, "email_id")
+		return {
+			"contact": supplier_doc.supplier_primary_contact,
+			"email_id": contact or supplier_doc.get("email_id")
+		}
+
+	# Otherwise, find contact via Dynamic Link
+	contact = frappe.db.sql("""
+		SELECT c.name, c.email_id
+		FROM `tabContact` c
+		JOIN `tabDynamic Link` dl ON dl.parent = c.name
+		WHERE dl.link_doctype = 'Supplier' AND dl.link_name = %s
+		LIMIT 1
+	""", supplier, as_dict=True)
+
+	if contact:
+		return {
+			"contact": contact[0].name,
+			"email_id": contact[0].email_id
+		}
+
+	return {"contact": None, "email_id": None}
+
 @frappe.whitelist()
 def get_ticket_purchase_invoices(project):
     if not project:
