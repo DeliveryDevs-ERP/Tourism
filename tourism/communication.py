@@ -1,6 +1,7 @@
 # tourism/communication.py
 
 import frappe
+from frappe.desk.doctype.notification_log.notification_log import enqueue_create_notification
 from frappe.utils import get_url
 
 # User groups whose members get notified about received RFQ emails.
@@ -66,6 +67,21 @@ def after_insert(doc, method=None):
         message=message,
         reference_doctype=doc.reference_doctype,
         reference_name=doc.reference_name,
+    )
+
+    # Bell-icon (System) notification. Clicking it opens the RFQ because
+    # document_type / document_name are set. type="Alert" so it shows even
+    # when the recipient happens to be the sender.
+    enqueue_create_notification(
+        recipients,
+        {
+            "type": "Alert",
+            "document_type": doc.reference_doctype,
+            "document_name": doc.reference_name,
+            "subject": subject,
+            "from_user": doc.sender or frappe.session.user,
+            "email_content": message,
+        },
     )
 
 
