@@ -155,6 +155,9 @@ doc_events = {
     },
     "Request for Quotation": {
         "on_submit": "tourism.request_for_quotation.on_submit"
+    },
+    "Communication": {
+        "after_insert": "tourism.communication.after_insert"
     }
 }
 
