@@ -46,6 +46,12 @@ def get_columns():
             "width": 160
         },
         {
+            "fieldname": "custom_ticket_number",
+            "label": _("Ticket Number"),
+            "fieldtype": "Data",
+            "width": 130
+        },
+        {
             "fieldname": "project",
             "label": _("Project"),
             "fieldtype": "Link",
@@ -114,6 +120,7 @@ def get_data(filters):
             pi.supplier                   AS supplier,
             pi.custom_passenger           AS custom_passenger,
             p.full_name                   AS passenger_name,
+            pi.custom_ticket_number       AS custom_ticket_number,
             pi.project                    AS project,
             pi.status                     AS status,
             pi.grand_total                AS grand_total,
@@ -158,6 +165,7 @@ def get_data(filters):
             "supplier":           "",
             "custom_passenger":   "",
             "passenger_name":     "",
+            "custom_ticket_number": "",
             "project":            "",
             "project_display":    "",
             "status":             "TOTAL",
