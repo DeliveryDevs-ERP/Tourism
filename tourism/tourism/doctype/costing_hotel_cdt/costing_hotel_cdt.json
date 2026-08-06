@@ -9,6 +9,7 @@
  "field_order": [
   "option",
   "hotel",
+  "supplier",
   "days",
   "star",
   "city",
@@ -37,6 +38,13 @@
    "label": "Hotel",
    "options": "Hotel",
    "reqd": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Supplier",
+   "options": "Supplier"
   },
   {
    "fetch_from": "hotel.star",

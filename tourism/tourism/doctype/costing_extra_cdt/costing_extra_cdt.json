@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "cost_name",
+  "supplier",
   "amount",
   "pax",
   "per_person_amount"
@@ -19,6 +20,13 @@
    "label": "Cost Name",
    "options": "Costing Types",
    "reqd": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Supplier",
+   "options": "Supplier"
   },
   {
    "fieldname": "amount",
