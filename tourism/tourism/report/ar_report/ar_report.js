@@ -12,12 +12,6 @@ frappe.query_reports["AR Report"] = {
 			default: frappe.defaults.get_user_default("Company"),
 		},
 		{
-			fieldname: "report_date",
-			label: __("Posting Date"),
-			fieldtype: "Date",
-			default: frappe.datetime.get_today(),
-		},
-		{
 			fieldname: "project",
 			label: __("Project"),
 			fieldtype: "Link",
@@ -35,11 +29,13 @@ frappe.query_reports["AR Report"] = {
 			fieldname: "from_date",
 			label: __("From Date"),
 			fieldtype: "Date",
+			default: frappe.datetime.month_start(),
 		},
 		{
 			fieldname: "to_date",
 			label: __("To Date"),
 			fieldtype: "Date",
+			default: frappe.datetime.get_today(),
 		},
 		{
 			fieldname: "finance_book",
