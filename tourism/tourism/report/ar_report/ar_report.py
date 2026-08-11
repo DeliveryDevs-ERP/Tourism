@@ -31,8 +31,11 @@ def execute(filters=None):
 
 	columns, data, *rest = ar_execute(filters)
 
-	# Enrich data with custom fields
+	# Enrich data with custom fields (populates row["project"] and posting_date)
 	data = enrich_data(data)
+
+	# Apply the custom Project and date-range filters on the enriched rows
+	data = apply_custom_filters(data, filters)
 
 	# Build custom columns (insert custom ones into existing)
 	custom_columns = get_custom_columns(columns)
@@ -41,6 +44,49 @@ def execute(filters=None):
 	report_summary = get_report_summary(data)
 
 	return custom_columns, data, None, chart, report_summary
+
+
+def apply_custom_filters(data, filters):
+	"""Filter the enriched invoice rows by Project and posting-date range.
+
+	The standard Accounts Receivable report supports neither, so we apply them
+	here on the per-voucher rows (each row already carries `project` and
+	`posting_date` after enrichment).
+	"""
+	if not data:
+		return data
+
+	project = filters.get("project")
+	from_date = frappe.utils.getdate(filters.get("from_date")) if filters.get("from_date") else None
+	to_date = frappe.utils.getdate(filters.get("to_date")) if filters.get("to_date") else None
+
+	if not (project or from_date or to_date):
+		return data
+
+	filtered = []
+	for row in data:
+		if not isinstance(row, dict):
+			# Keep any non-dict rows (e.g. spacers) untouched
+			filtered.append(row)
+			continue
+
+		if project and row.get("project") != project:
+			continue
+
+		posting_date = row.get("posting_date")
+		if (from_date or to_date) and posting_date:
+			posting_date = frappe.utils.getdate(posting_date)
+			if from_date and posting_date < from_date:
+				continue
+			if to_date and posting_date > to_date:
+				continue
+		elif (from_date or to_date) and not posting_date:
+			# Row has no posting date but a date range is requested - exclude it
+			continue
+
+		filtered.append(row)
+
+	return filtered
 
 
 def get_custom_columns(original_columns):

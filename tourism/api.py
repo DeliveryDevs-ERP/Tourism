@@ -180,51 +180,59 @@ def sales_invoice_on_submit(doc, method):
 @frappe.whitelist()
 def purchase_invoice_validate(doc, method):
     """
-    Prevent creating more than one Purchase Invoice for the same ticket
-    (unless it's a return).
+    Enforce that a ticket number has at most one *live* (draft or submitted)
+    non-return Purchase Invoice.
+
+    Cancelled invoices (docstatus 2) do NOT count. This is what makes the
+    cancel-and-amend flow work: when a ticket invoice is cancelled and amended,
+    the cancelled original is ignored, so the amendment is allowed - but a
+    genuinely duplicate ticket number still cannot be posted, because any other
+    live invoice with the same ticket is caught.
     """
     # Get the configured ticket item code
     ticket_item_code = frappe.db.get_single_value("TravelApp Config", "ticket_item")
 
     # Only apply this check for invoices marked against the ticket item
-    if doc.custom_purchase_invoice_for_ == ticket_item_code:
-        # Skip if this invoice is a return or already linked to a return
-        is_return = getattr(doc, "is_return", False)
-        has_return_against = bool(getattr(doc, "return_against", None))
-        if not is_return and not has_return_against:
-            ticket_no = doc.custom_ticket_number
-            if ticket_no:
-                # Look for any other PI with the same ticket number
-                dup = frappe.get_all(
-                    "Purchase Invoice",
-                    filters={
-                        "custom_purchase_invoice_for_": ticket_item_code,
-                        "custom_ticket_number": ticket_no,
-                        "name": ["!=", doc.name]
-                    },
-                    limit_page_length=1
-                )
-                if dup:
-                    frappe.throw(_(
-                        "A Purchase Invoice for ticket {0} already exists (Invoice {1})."
-                    ).format(ticket_no, dup[0].name))
-                    return
-        if is_return:
-            ticket_no = doc.custom_ticket_number
-            dup = frappe.get_all(
-                    "Purchase Invoice",
-                    filters={
-                        "custom_purchase_invoice_for_": ticket_item_code,
-                        "custom_ticket_number": ticket_no,
-                        "name": ["!=", doc.name]
-                    },
-                )
-            if len(dup) > 1:
-                    frappe.throw(_(
-                        "Cannot create return. 2 Purchase Invoices for ticket {0} already exists."
-                    ).format(ticket_no, dup[0].name))
-                    return
-            
+    if doc.custom_purchase_invoice_for_ != ticket_item_code:
+        return
+
+    ticket_no = (doc.custom_ticket_number or "").strip()
+    if not ticket_no:
+        return
+
+    # Any other *live* (docstatus < 2), non-return Purchase Invoice that already
+    # holds this ticket number. Cancelled invoices - including the amendment's
+    # own cancelled original - are excluded by the docstatus filter.
+    live_dups = frappe.get_all(
+        "Purchase Invoice",
+        filters={
+            "custom_purchase_invoice_for_": ticket_item_code,
+            "custom_ticket_number": ticket_no,
+            "docstatus": ["<", 2],
+            "is_return": 0,
+            "name": ["!=", doc.name],
+        },
+        pluck="name",
+    )
+
+    is_return = getattr(doc, "is_return", False)
+    has_return_against = bool(getattr(doc, "return_against", None))
+
+    # A return / debit note is allowed against a single live original invoice.
+    if is_return or has_return_against:
+        if len(live_dups) > 1:
+            frappe.throw(_(
+                "Cannot create return: multiple live Purchase Invoices exist "
+                "for ticket {0} ({1})."
+            ).format(ticket_no, ", ".join(live_dups)))
+        return
+
+    # A normal (non-return) invoice must be the only live one for this ticket.
+    if live_dups:
+        frappe.throw(_(
+            "A Purchase Invoice for ticket {0} already exists (Invoice {1})."
+        ).format(ticket_no, live_dups[0]))
+
 
 
 @frappe.whitelist()
