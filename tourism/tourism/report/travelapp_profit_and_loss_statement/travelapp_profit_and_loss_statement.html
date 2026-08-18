@@ -1,0 +1,155 @@
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .print-format {
+        padding: 6mm 7mm;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        color: #000;
+    }
+
+    /* ── HEADER ── */
+    .report-header { text-align: center; margin-bottom: 8px; }
+    .report-header h2 {
+        font-size: 13px; font-weight: bold; text-transform: uppercase;
+        margin: 0 0 1px 0; letter-spacing: 0.2px;
+    }
+    .report-header .address { font-size: 8px; line-height: 1.4; }
+    .report-header .title {
+        font-size: 11px; font-weight: bold; font-style: italic; margin: 5px 0 1px 0;
+    }
+    .report-header .filter-info {
+        font-size: 8px; margin-top: 2px; font-weight: bold;
+    }
+
+    /* ── PROJECT SECTION ── */
+    .section-title {
+        font-size: 10px; font-weight: bold; color: #fff; background: #34495e;
+        padding: 4px 8px; margin: 12px 0 0 0; border-radius: 2px;
+    }
+
+    .pl-table {
+        width: 100%; border-collapse: collapse; margin-bottom: 4px;
+        table-layout: fixed;
+    }
+    .pl-table th, .pl-table td {
+        border: 0.4px solid #999; padding: 3px 6px; font-size: 9px;
+        vertical-align: top;
+    }
+    .pl-table thead th {
+        background: #ecf0f1; font-weight: bold; text-align: right;
+    }
+    .pl-table thead th.acc { text-align: left; }
+    .pl-table td.acc {
+        text-align: left; white-space: normal; word-break: break-word;
+    }
+    .pl-table td.num {
+        text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums;
+    }
+    .pl-table tr.total-row td { font-weight: bold; background: #f7f9fa; }
+    .pl-table tr.net-row td {
+        font-weight: bold; background: #eafaf1; border-top: 1px solid #333;
+    }
+    .neg { color: #c0392b; }
+    .printed-on { font-size: 8px; text-align: right; margin-top: 6px; color: #555; }
+</style>
+
+{%
+function fmt(v) {
+    if (v === undefined || v === null || v === "") return "";
+    v = parseFloat(v);
+    if (isNaN(v)) return "";
+    var a = Math.abs(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return v < 0 ? "(" + a + ")" : a;
+}
+function clean(name) {
+    return (name || "").toString().replace(/^\x27+|\x27+$/g, "");
+}
+function fmtDate(d) {
+    if (!d) return "";
+    var p = d.split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : d;
+}
+
+/* Period (value) columns = everything except the account link + hidden currency */
+var pcols = [];
+for (var i = 0; i < columns.length; i++) {
+    var c = columns[i];
+    if (!c || c.hidden) continue;
+    if (c.fieldname === "account" || c.fieldname === "currency") continue;
+    pcols.push(c);
+}
+
+var f = (typeof filters !== "undefined" && filters) ? filters : {};
+
+var period_txt = "";
+if (f.period_start_date && f.period_end_date) {
+    period_txt = "Period: " + fmtDate(f.period_start_date) + " to " + fmtDate(f.period_end_date);
+} else if (f.from_fiscal_year) {
+    period_txt = "Fiscal Year: " + f.from_fiscal_year + (f.to_fiscal_year && f.to_fiscal_year !== f.from_fiscal_year ? " to " + f.to_fiscal_year : "");
+}
+
+var now = new Date();
+var today = ("0" + now.getDate()).slice(-2) + "/" + ("0" + (now.getMonth() + 1)).slice(-2) + "/" + now.getFullYear();
+%}
+
+<div class="print-format">
+
+    <div class="report-header">
+        <h2>Travel App Events and Destinations Pvt Ltd.</h2>
+        <p class="address">
+            Office # 1501, 15th Floor Kashif Center 1103 Naval Private Rd, Karachi - Pakistan<br>
+            Phone: 021-3565992-2
+        </p>
+        <p class="title">Group Wise Profit &amp; Loss</p>
+        {% if (period_txt) { %}<p class="filter-info">{%= period_txt %}</p>{% } %}
+    </div>
+
+    {% var opened = false; %}
+    {% for (var r = 0; r < data.length; r++) {
+        var row = data[r];
+        if (!row || Object.keys(row).length === 0) { continue; }
+
+        if (row.is_project_header) {
+            if (opened) { %}
+                </tbody></table>
+            {% }
+            opened = true;
+    %}
+            <div class="section-title">Project: {%= clean(row.project_name || row.account_name) %}</div>
+            <table class="pl-table">
+                <colgroup>
+                    <col style="width:34%">
+                    {% for (var p = 0; p < pcols.length; p++) { %}<col>{% } %}
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="acc">Account</th>
+                        {% for (var p = 0; p < pcols.length; p++) { %}
+                            <th class="num">{%= pcols[p].label %}</th>
+                        {% } %}
+                    </tr>
+                </thead>
+                <tbody>
+    {% } else {
+            var name = clean(row.account_name || row.account);
+            var indent = parseFloat(row.indent) || 0;
+            var isNet = row.warn_if_negative ? true : false;
+            var isTotal = (!isNet && indent === 0);
+            var rowcls = isNet ? "net-row" : (isTotal ? "total-row" : "");
+    %}
+                <tr class="{%= rowcls %}">
+                    <td class="acc" style="padding-left:{%= 4 + indent * 12 %}px">{%= name %}</td>
+                    {% for (var p = 0; p < pcols.length; p++) {
+                        var val = row[pcols[p].fieldname];
+                        var neg = (parseFloat(val) || 0) < 0;
+                    %}
+                        <td class="num {%= neg ? 'neg' : '' %}">{%= fmt(val) %}</td>
+                    {% } %}
+                </tr>
+    {% }
+    } %}
+    {% if (opened) { %}</tbody></table>{% } %}
+
+    <p class="printed-on">Printed On: {%= today %}</p>
+</div>

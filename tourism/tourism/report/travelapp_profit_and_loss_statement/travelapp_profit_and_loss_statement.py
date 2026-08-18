@@ -16,13 +16,14 @@ from erpnext.accounts.report.financial_statements import (
 
 
 def execute(filters=None):
+    filters = frappe._dict(filters or {})
 
-    # ── Handle Project MultiSelect Filter ──
-    if filters.get("project"):
-        projects = filters.get("project")
-        if isinstance(projects, str):
-            projects = [p.strip() for p in projects.split(",") if p.strip()]
-        filters["project"] = projects
+    # ── Normalise the Project MultiSelect filter into a list ──
+    projects = filters.get("project")
+    if isinstance(projects, str):
+        projects = [p.strip() for p in projects.split(",") if p.strip()]
+    projects = projects or []
+    filters["project"] = projects
 
     period_list = get_period_list(
         filters.from_fiscal_year,
@@ -34,38 +35,6 @@ def execute(filters=None):
         company=filters.company,
     )
 
-    income = get_data(
-        filters.company,
-        "Income",
-        "Credit",
-        period_list,
-        filters=filters,
-        accumulated_values=filters.accumulated_values,
-        ignore_closing_entries=True,
-        ignore_accumulated_values_for_fy=True,
-    )
-
-    expense = get_data(
-        filters.company,
-        "Expense",
-        "Debit",
-        period_list,
-        filters=filters,
-        accumulated_values=filters.accumulated_values,
-        ignore_closing_entries=True,
-        ignore_accumulated_values_for_fy=True,
-    )
-
-    net_profit_loss = get_net_profit_loss(
-        income, expense, period_list, filters.company, filters.presentation_currency
-    )
-
-    data = []
-    data.extend(income or [])
-    data.extend(expense or [])
-    if net_profit_loss:
-        data.append(net_profit_loss)
-
     columns = get_columns(
         filters.periodicity, period_list, filters.accumulated_values, filters.company
     )
@@ -74,17 +43,85 @@ def execute(filters=None):
         "Company", filters.company, "default_currency"
     )
 
-    chart = get_chart_data(filters, columns, income, expense, net_profit_loss, currency)
+    # Map project id -> display name for the section headings / print
+    project_name_map = {}
+    if projects:
+        for p in frappe.get_all(
+            "Project", filters={"name": ["in", projects]}, fields=["name", "project_name"]
+        ):
+            project_name_map[p.name] = p.project_name or p.name
 
-    report_summary, primitive_summary = get_report_summary(
-        period_list, filters.periodicity, income, expense, net_profit_loss, currency, filters
+    # One P&L section per selected project; a single combined section otherwise.
+    section_projects = projects if projects else [None]
+
+    data = []
+    for proj in section_projects:
+        section_filters = frappe._dict(filters)
+        section_filters["project"] = [proj] if proj else []
+
+        income = get_data(
+            filters.company, "Income", "Credit", period_list, filters=section_filters,
+            accumulated_values=filters.accumulated_values, ignore_closing_entries=True,
+            ignore_accumulated_values_for_fy=True,
+        )
+        expense = get_data(
+            filters.company, "Expense", "Debit", period_list, filters=section_filters,
+            accumulated_values=filters.accumulated_values, ignore_closing_entries=True,
+            ignore_accumulated_values_for_fy=True,
+        )
+        net_profit_loss = get_net_profit_loss(
+            income, expense, period_list, filters.company, filters.presentation_currency
+        )
+
+        # Section header row - marks the start of a project's P&L block and
+        # carries the project name shown on screen and in the print/PDF.
+        label = project_name_map.get(proj, proj) if proj else _("All Projects")
+        data.append({
+            "account": label,
+            "account_name": label,
+            "is_project_header": 1,
+            "project": proj or "",
+            "project_name": label,
+        })
+
+        for row in (income or []):
+            row["project"] = proj or ""
+            data.append(row)
+        for row in (expense or []):
+            row["project"] = proj or ""
+            data.append(row)
+        if net_profit_loss:
+            net_profit_loss["project"] = proj or ""
+            data.append(net_profit_loss)
+
+        data.append({})  # blank spacer between sections
+
+    # ── Chart + summary use the combined figures across all selected projects ──
+    combined_income = get_data(
+        filters.company, "Income", "Credit", period_list, filters=filters,
+        accumulated_values=filters.accumulated_values, ignore_closing_entries=True,
+        ignore_accumulated_values_for_fy=True,
+    )
+    combined_expense = get_data(
+        filters.company, "Expense", "Debit", period_list, filters=filters,
+        accumulated_values=filters.accumulated_values, ignore_closing_entries=True,
+        ignore_accumulated_values_for_fy=True,
+    )
+    combined_net = get_net_profit_loss(
+        combined_income, combined_expense, period_list, filters.company, filters.presentation_currency
     )
 
-    if filters.get("selected_view") == "Growth":
-        compute_growth_view_data(data, period_list)
+    chart = get_chart_data(filters, columns, combined_income, combined_expense, combined_net, currency)
+    report_summary, primitive_summary = get_report_summary(
+        period_list, filters.periodicity, combined_income, combined_expense, combined_net, currency, filters
+    )
 
-    if filters.get("selected_view") == "Margin":
-        compute_margin_view_data(data, period_list, filters.accumulated_values)
+    # Growth / Margin views only apply to the plain (single, non-sectioned) statement.
+    if not projects:
+        if filters.get("selected_view") == "Growth":
+            compute_growth_view_data(data, period_list)
+        if filters.get("selected_view") == "Margin":
+            compute_margin_view_data(data, period_list, filters.accumulated_values)
 
     return columns, data, None, chart, report_summary, primitive_summary
 
