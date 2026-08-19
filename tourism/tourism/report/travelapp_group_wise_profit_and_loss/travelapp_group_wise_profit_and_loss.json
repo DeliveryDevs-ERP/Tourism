@@ -12,11 +12,11 @@
  "modified": "2026-02-24 11:46:56.938436",
  "modified_by": "Administrator",
  "module": "Tourism",
- "name": "TravelApp Profit and Loss Statement",
+ "name": "TravelApp Group wise Profit and Loss",
  "owner": "Administrator",
  "prepared_report": 0,
  "ref_doctype": "GL Entry",
- "report_name": "TravelApp Profit and Loss Statement",
+ "report_name": "TravelApp Group wise Profit and Loss",
  "report_type": "Script Report",
  "roles": [
   {

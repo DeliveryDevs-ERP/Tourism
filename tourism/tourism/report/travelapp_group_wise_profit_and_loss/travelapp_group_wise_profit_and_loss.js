@@ -1,25 +1,25 @@
 // Copyright (c) 2026, OsamaASidd and contributors
 // For license information, please see license.txt
 
-frappe.query_reports["TravelApp Profit and Loss Statement"] = {
+frappe.query_reports["TravelApp Group wise Profit and Loss"] = {
     "filters": []
 };
 
-frappe.query_reports["TravelApp Profit and Loss Statement"] = $.extend(
+frappe.query_reports["TravelApp Group wise Profit and Loss"] = $.extend(
     {},
     erpnext.financial_statements
 );
 
-erpnext.utils.add_dimensions("TravelApp Profit and Loss Statement", 10);
+erpnext.utils.add_dimensions("TravelApp Group wise Profit and Loss", 10);
 
 // ── STEP 1: Remove the built-in Project filter to avoid duplicate ──
-var existing_filters = frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"];
-frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"] = existing_filters.filter(
+var existing_filters = frappe.query_reports["TravelApp Group wise Profit and Loss"]["filters"];
+frappe.query_reports["TravelApp Group wise Profit and Loss"]["filters"] = existing_filters.filter(
     f => f.fieldname !== "project"
 );
 
 // ── STEP 2: Add Customer Filter ──
-frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
+frappe.query_reports["TravelApp Group wise Profit and Loss"]["filters"].push({
     fieldname: "customer",
     label: __("Customer"),
     fieldtype: "Link",
@@ -56,7 +56,7 @@ frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
 });
 
 // ── STEP 3: Add Project MultiSelect Filter ──
-frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
+frappe.query_reports["TravelApp Group wise Profit and Loss"]["filters"].push({
     fieldname: "project",
     label: __("Project"),
     fieldtype: "MultiSelectList",
@@ -64,30 +64,35 @@ frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
     get_data: function(txt) {
         var customer = frappe.query_report.get_filter_value("customer");
         var filters = {};
+        var query = {
+            filters: filters,
+            fields: ["name", "project_name"],
+            limit: 20
+        };
 
         if (customer) {
             filters["customer"] = customer;
         }
 
+        // Search by project id (name) or the descriptive project_name
         if (txt) {
-            filters["name"] = ["like", "%" + txt + "%"];
+            query["or_filters"] = [
+                ["name", "like", "%" + txt + "%"],
+                ["project_name", "like", "%" + txt + "%"]
+            ];
         }
 
-        return frappe.db.get_list("Project", {
-            filters: filters,
-            fields: ["name"],
-            limit: 20
-        }).then(function(projects) {
+        return frappe.db.get_list("Project", query).then(function(projects) {
             return projects.map(p => ({
                 value: p.name,
-                description: p.name
+                description: p.project_name || p.name
             }));
         });
     }
 });
 
 // ── STEP 4: Checkboxes come AFTER Customer and Project ──
-frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
+frappe.query_reports["TravelApp Group wise Profit and Loss"]["filters"].push({
     fieldname: "selected_view",
     label: __("Select View"),
     fieldtype: "Select",
@@ -100,14 +105,14 @@ frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
     reqd: 1,
 });
 
-frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
+frappe.query_reports["TravelApp Group wise Profit and Loss"]["filters"].push({
     fieldname: "accumulated_values",
     label: __("Accumulated Values"),
     fieldtype: "Check",
     default: 1,
 });
 
-frappe.query_reports["TravelApp Profit and Loss Statement"]["filters"].push({
+frappe.query_reports["TravelApp Group wise Profit and Loss"]["filters"].push({
     fieldname: "include_default_book_entries",
     label: __("Include Default FB Entries"),
     fieldtype: "Check",
